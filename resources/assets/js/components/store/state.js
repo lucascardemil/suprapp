@@ -936,6 +936,11 @@ export default { //data
         id: '',
         direccion: ''
     },
+    fillFacebookShipping: {
+        id: '',
+        url: ''
+    },
+    facebookshipping: [],
     checkedRoles: [],
     permissions: [],
     checkedSpecialRole: '',

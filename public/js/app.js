@@ -6322,6 +6322,67 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['fillFacebookShipping', 'errorsLaravel'])), Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])([])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['updateFacebookShipping']))
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/QuotationShipping/EliminarShipping.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/QuotationShipping/EliminarShipping.vue?vue&type=script&lang=js& ***!
@@ -6451,6 +6512,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -8260,11 +8326,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _QuotationShipping_EliminarShipping__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../QuotationShipping/EliminarShipping */ "./resources/assets/js/components/QuotationShipping/EliminarShipping.vue");
 /* harmony import */ var _QuotationShipping_EnvioShipping__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../QuotationShipping/EnvioShipping */ "./resources/assets/js/components/QuotationShipping/EnvioShipping.vue");
-/* harmony import */ var axios_progress_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios-progress-bar */ "./node_modules/axios-progress-bar/dist/index.js");
-/* harmony import */ var axios_progress_bar__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios_progress_bar__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _QuotationShipping_EditFacebook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../QuotationShipping/EditFacebook */ "./resources/assets/js/components/QuotationShipping/EditFacebook.vue");
+/* harmony import */ var axios_progress_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios-progress-bar */ "./node_modules/axios-progress-bar/dist/index.js");
+/* harmony import */ var axios_progress_bar__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios_progress_bar__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_5__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -8384,6 +8451,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -8392,10 +8465,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     EliminarShipping: _QuotationShipping_EliminarShipping__WEBPACK_IMPORTED_MODULE_0__["default"],
-    EnvioShipping: _QuotationShipping_EnvioShipping__WEBPACK_IMPORTED_MODULE_1__["default"]
+    EnvioShipping: _QuotationShipping_EnvioShipping__WEBPACK_IMPORTED_MODULE_1__["default"],
+    EditFacebook: _QuotationShipping_EditFacebook__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapState"])(['quotationshipping', 'linkenvio', 'errorsLaravel', 'pagination_shipping', 'offset_shipping', 'searchShipping'])), Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])(['isActived_shipping', 'pagesNumber_shipping'])),
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapActions"])(['getQuotationShipping', 'pdfQuotationShipping', 'showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping'])), {}, {
+  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapState"])(['quotationshipping', 'linkenvio', 'errorsLaravel', 'pagination_shipping', 'offset_shipping', 'searchShipping'])), Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])(['isActived_shipping', 'pagesNumber_shipping'])),
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapActions"])(['getQuotationShipping', 'pdfQuotationShipping', 'showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping', 'editFacebook'])), {}, {
     copyTestingCode: function copyTestingCode() {
       var testingCodeToCopy = document.querySelector('#testing-code');
       testingCodeToCopy.setAttribute('type', 'text'); // 不是 hidden 才能複製
@@ -8405,9 +8479,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       try {
         var successful = document.execCommand('copy');
         var msg = successful ? ' con exito' : ' sin exito';
-        toastr__WEBPACK_IMPORTED_MODULE_4___default.a.success('Se copio el link' + msg);
+        toastr__WEBPACK_IMPORTED_MODULE_5___default.a.success('Se copio el link' + msg);
       } catch (err) {
-        toastr__WEBPACK_IMPORTED_MODULE_4___default.a.error('No se pudo copiar el link');
+        toastr__WEBPACK_IMPORTED_MODULE_5___default.a.error('No se pudo copiar el link');
       }
       /* unselect the range */
 
@@ -55580,6 +55654,120 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=template&id=17074d1c&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=template&id=17074d1c& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    {
+      attrs: { action: "POST" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.updateFacebookShipping({ id: _vm.fillFacebookShipping.id })
+        }
+      }
+    },
+    [
+      _c(
+        "div",
+        { staticClass: "modal fade", attrs: { id: "modalEditFacebook" } },
+        [
+          _c("div", { staticClass: "modal-dialog" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-body" }, [
+                _c("label", { attrs: { for: "url" } }, [_vm._v("URL")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "input-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.fillFacebookShipping.url,
+                        expression: "fillFacebookShipping.url"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { required: "", type: "url", name: "url" },
+                    domProps: { value: _vm.fillFacebookShipping.url },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.fillFacebookShipping,
+                          "url",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "input-group-append" }, [
+                    _vm.fillFacebookShipping.url != null
+                      ? _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: {
+                              href: _vm.fillFacebookShipping.url,
+                              target: "_blank",
+                              type: "button"
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fab fa-facebook-messenger"
+                            })
+                          ]
+                        )
+                      : _vm._e()
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(0)
+            ])
+          ])
+        ]
+      )
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [_vm._v("\n                        Actualizar\n                    ")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/QuotationShipping/EliminarShipping.vue?vue&type=template&id=25644c1b&":
 /*!********************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/QuotationShipping/EliminarShipping.vue?vue&type=template&id=25644c1b& ***!
@@ -55963,57 +56151,61 @@ var render = function() {
                     _vm._v("Telefono*")
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "validate",
-                        rawName: "v-validate",
-                        value: "required|min:3|max:60",
-                        expression: "'required|min:3|max:60'"
-                      },
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.formQuotationShipping.telefono,
-                        expression: "formQuotationShipping.telefono"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    class: {
-                      input: true,
-                      "is-invalid": _vm.errors.has("telefono")
-                    },
-                    attrs: { type: "text", name: "telefono" },
-                    domProps: { value: _vm.formQuotationShipping.telefono },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(
-                          _vm.formQuotationShipping,
-                          "telefono",
-                          $event.target.value
-                        )
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    {
+                  _c("div", { staticClass: "input-group" }, [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("input", {
                       directives: [
                         {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.errors.has("telefono"),
-                          expression: "errors.has('telefono')"
+                          name: "validate",
+                          rawName: "v-validate",
+                          value: "required|min:3|max:60",
+                          expression: "'required|min:3|max:60'"
+                        },
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.formQuotationShipping.telefono,
+                          expression: "formQuotationShipping.telefono"
                         }
                       ],
-                      staticClass: "text-danger"
-                    },
-                    [_vm._v(_vm._s(_vm.errors.first("telefono")))]
-                  )
+                      staticClass: "form-control",
+                      class: {
+                        input: true,
+                        "is-invalid": _vm.errors.has("telefono")
+                      },
+                      attrs: { type: "text", name: "telefono" },
+                      domProps: { value: _vm.formQuotationShipping.telefono },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.formQuotationShipping,
+                            "telefono",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.errors.has("telefono"),
+                            expression: "errors.has('telefono')"
+                          }
+                        ],
+                        staticClass: "text-danger"
+                      },
+                      [_vm._v(_vm._s(_vm.errors.first("telefono")))]
+                    )
+                  ])
                 ]),
                 _vm._v(" "),
                 _c(
@@ -56077,7 +56269,20 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text", attrs: { id: "basic-addon1" } },
+        [_vm._v("+569")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -60432,7 +60637,39 @@ var render = function() {
                       _c(
                         "a",
                         {
+                          staticClass: "btn btn-primary btn-sm",
+                          attrs: { href: "#", role: "button" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.editFacebook({
+                                quotationshippingLocal: quotationshippingLocal
+                              })
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fab fa-facebook-f" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
                           staticClass: "btn btn-success btn-sm",
+                          attrs: {
+                            href:
+                              "https://wa.me/+569" +
+                              quotationshippingLocal.telefono,
+                            target: "_blank",
+                            role: "button"
+                          }
+                        },
+                        [_c("i", { staticClass: "fab fa-whatsapp" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "btn btn-secondary btn-sm",
                           attrs: { href: "#", role: "button" },
                           on: {
                             click: function($event) {
@@ -60443,10 +60680,7 @@ var render = function() {
                             }
                           }
                         },
-                        [
-                          _c("i", { staticClass: "fas fa-shipping-fast" }),
-                          _vm._v(" Domicilio\r\n                        ")
-                        ]
+                        [_c("i", { staticClass: "fas fa-shipping-fast" })]
                       ),
                       _vm._v(" "),
                       _c(
@@ -60463,10 +60697,7 @@ var render = function() {
                             }
                           }
                         },
-                        [
-                          _c("i", { staticClass: "far fa-file-alt" }),
-                          _vm._v(" Generar\r\n                        ")
-                        ]
+                        [_c("i", { staticClass: "far fa-file-alt" })]
                       ),
                       _vm._v(" "),
                       _c(
@@ -60624,7 +60855,9 @@ var render = function() {
         _vm._v(" "),
         _c("EliminarShipping"),
         _vm._v(" "),
-        _c("EnvioShipping")
+        _c("EnvioShipping"),
+        _vm._v(" "),
+        _c("EditFacebook")
       ],
       1
     )
@@ -101825,6 +102058,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/QuotationShipping/EditFacebook.vue":
+/*!***************************************************************************!*\
+  !*** ./resources/assets/js/components/QuotationShipping/EditFacebook.vue ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EditFacebook_vue_vue_type_template_id_17074d1c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditFacebook.vue?vue&type=template&id=17074d1c& */ "./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=template&id=17074d1c&");
+/* harmony import */ var _EditFacebook_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditFacebook.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EditFacebook_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditFacebook_vue_vue_type_template_id_17074d1c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditFacebook_vue_vue_type_template_id_17074d1c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/QuotationShipping/EditFacebook.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFacebook_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFacebook.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFacebook_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=template&id=17074d1c&":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=template&id=17074d1c& ***!
+  \**********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFacebook_vue_vue_type_template_id_17074d1c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFacebook.vue?vue&type=template&id=17074d1c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/QuotationShipping/EditFacebook.vue?vue&type=template&id=17074d1c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFacebook_vue_vue_type_template_id_17074d1c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFacebook_vue_vue_type_template_id_17074d1c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/QuotationShipping/EliminarShipping.vue":
 /*!*******************************************************************************!*\
   !*** ./resources/assets/js/components/QuotationShipping/EliminarShipping.vue ***!
@@ -107606,6 +107908,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   showQuotationShipping: function showQuotationShipping(context, data) {
     context.commit('showQuotationShipping', data.id);
   },
+  editFacebook: function editFacebook(context, data) {
+    context.commit('editFacebook', data.quotationshippingLocal);
+  },
   deleteQuotationclient: function deleteQuotationclient(context, data) {
     context.commit('deleteQuotationclient', data.id);
     setTimeout(function () {
@@ -108217,6 +108522,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   updateQuotationShipping: function updateQuotationShipping(context, data) {
     context.commit('updateQuotationShipping', data.id);
+    setTimeout(function () {
+      context.commit('getQuotationShipping', 1);
+    }, 1000);
+  },
+  updateFacebookShipping: function updateFacebookShipping(context, data) {
+    context.commit('updateFacebookShipping', data.id);
     setTimeout(function () {
       context.commit('getQuotationShipping', 1);
     }, 1000);
@@ -108986,6 +109297,7 @@ var urlCreateQuotationUser = 'quotationuser';
 var urlCreateQuotationUserExpress = 'quotationuserexpress';
 var urlPendingQuotations = 'pendingquotations';
 var urlCreateQuotationShipping = 'quotationshipping';
+var urlCreateFacebookShipping = 'facebookshipping';
 var urlNote = 'notes';
 var urlQuotation = 'quotations';
 var urlQuotationDetails = 'quotation-details';
@@ -110009,6 +110321,11 @@ var urlDescuentoDefect = 'descuento-defect';
   showQuotationShipping: function showQuotationShipping(state, id) {
     state.fillQuotationShipping.id = id;
     $('#modalQuotationShipping').modal('show');
+  },
+  editFacebook: function editFacebook(state, facebookshipping) {
+    state.fillFacebookShipping.id = facebookshipping.id;
+    state.fillFacebookShipping.url = facebookshipping.url;
+    $('#modalEditFacebook').modal('show');
   },
   deleteQuotationclient: function deleteQuotationclient(state, id) {
     var url = urlQuotationclient + '/' + state.idQuotationclient;
@@ -111254,6 +111571,18 @@ var urlDescuentoDefect = 'descuento-defect';
     state.errorsLaravel = [];
     $('#modalQuotationShipping').modal('hide');
     toastr__WEBPACK_IMPORTED_MODULE_1___default.a.success('Se agrego la dirección correctamente');
+  })["catch"](function (error) {
+    state.errorsLaravel = error.response.data;
+  });
+}), _defineProperty(_getVehicles$getVehic, "updateFacebookShipping", function updateFacebookShipping(state, id) {
+  var url = urlCreateFacebookShipping + '/' + id;
+  axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(url, state.fillFacebookShipping).then(function (response) {
+    state.fillFacebookShipping = {
+      url: ''
+    };
+    state.errorsLaravel = [];
+    $('#modalEditFacebook').modal('hide');
+    toastr__WEBPACK_IMPORTED_MODULE_1___default.a.success('Se agrego la url correctamente');
   })["catch"](function (error) {
     state.errorsLaravel = error.response.data;
   });
@@ -113051,7 +113380,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 }), _defineProperty(_options$optionsUser$, "fillQuotationShipping", {
   id: '',
   direccion: ''
-}), _defineProperty(_options$optionsUser$, "checkedRoles", []), _defineProperty(_options$optionsUser$, "permissions", []), _defineProperty(_options$optionsUser$, "checkedSpecialRole", ''), _defineProperty(_options$optionsUser$, "checkedSelect1", ''), _defineProperty(_options$optionsUser$, "checkedSelect2", []), _defineProperty(_options$optionsUser$, "checkedPermissions", []), _defineProperty(_options$optionsUser$, "newAllUtilidad", {
+}), _defineProperty(_options$optionsUser$, "fillFacebookShipping", {
+  id: '',
+  url: ''
+}), _defineProperty(_options$optionsUser$, "facebookshipping", []), _defineProperty(_options$optionsUser$, "checkedRoles", []), _defineProperty(_options$optionsUser$, "permissions", []), _defineProperty(_options$optionsUser$, "checkedSpecialRole", ''), _defineProperty(_options$optionsUser$, "checkedSelect1", ''), _defineProperty(_options$optionsUser$, "checkedSelect2", []), _defineProperty(_options$optionsUser$, "checkedPermissions", []), _defineProperty(_options$optionsUser$, "newAllUtilidad", {
   check: [],
   pago: '',
   utilidad: ''

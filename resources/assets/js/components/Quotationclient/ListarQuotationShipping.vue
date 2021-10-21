@@ -51,11 +51,15 @@
                     <td>{{ quotationshippingLocal.sucursal }}</td>
                     <td>{{ quotationshippingLocal.created_at }}</td>
                     <td class="text-right">
-                        <a class="btn btn-success btn-sm" href="#" role="button"
-                            @click.prevent="showQuotationShipping({ id: quotationshippingLocal.id })"><i class="fas fa-shipping-fast"></i> Domicilio
+                        <a class="btn btn-primary btn-sm" href="#" role="button"
+                            @click.prevent="editFacebook({ quotationshippingLocal })"><i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="btn btn-success btn-sm" :href="'https://wa.me/+569'+quotationshippingLocal.telefono" target="_blank" role="button"><i class="fab fa-whatsapp"></i></a>
+                        <a class="btn btn-secondary btn-sm" href="#" role="button"
+                            @click.prevent="showQuotationShipping({ id: quotationshippingLocal.id })"><i class="fas fa-shipping-fast"></i>
                         </a>
                         <a class="btn btn-info btn-sm" href="#" role="button"
-                            @click.prevent="pdfQuotationShipping({ id: quotationshippingLocal.id })"><i class="far fa-file-alt"></i> Generar
+                            @click.prevent="pdfQuotationShipping({ id: quotationshippingLocal.id })"><i class="far fa-file-alt"></i>
                         </a>
                         <a class="btn btn-danger btn-sm" href="#" role="button"
                             @click.prevent="showdeleteQuotationShipping({ id: quotationshippingLocal.id })"><i class="far fa-trash-alt"></i>
@@ -107,6 +111,7 @@
         </nav>
         <EliminarShipping></EliminarShipping>
         <EnvioShipping></EnvioShipping>
+        <EditFacebook></EditFacebook>
     </div>
 </div>
 </template>
@@ -115,18 +120,19 @@
 
 import EliminarShipping from '../QuotationShipping/EliminarShipping'
 import EnvioShipping from '../QuotationShipping/EnvioShipping'
+import EditFacebook from '../QuotationShipping/EditFacebook'
 import { loadProgressBar } from 'axios-progress-bar'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 
 export default {
-    components: { EliminarShipping, EnvioShipping },
+    components: { EliminarShipping, EnvioShipping, EditFacebook },
     computed:{
         ...mapState(['quotationshipping','linkenvio','errorsLaravel', 'pagination_shipping', 'offset_shipping', 'searchShipping']),
         ...mapGetters(['isActived_shipping', 'pagesNumber_shipping'])
     },
     methods:{
-        ...mapActions(['getQuotationShipping','pdfQuotationShipping','showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping']),
+        ...mapActions(['getQuotationShipping','pdfQuotationShipping','showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping', 'editFacebook']),
         copyTestingCode () {
           let testingCodeToCopy = document.querySelector('#testing-code')
           testingCodeToCopy.setAttribute('type', 'text')    // 不是 hidden 才能複製

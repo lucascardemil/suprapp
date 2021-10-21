@@ -189,6 +189,7 @@ Route::get('quotationlinkenvio', 'QuotationShippingController@user');
 Route::ApiResource('quotationshipping', 'QuotationShippingController');
 Route::get('/cotizar-envio/{id}', 'QuotationShippingController@cotizar_envio');
 Route::get('quotationshipping-pdf/{id}', 'QuotationShippingController@pdf');
+Route::put('facebookshipping/{id}', 'QuotationShippingController@updateFacebook');
 
 Route::get('/cotizar-envio/enviado/{id}', 'QuotationShippingController@cotizacion_envio_enviada');
 

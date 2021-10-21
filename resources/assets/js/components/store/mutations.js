@@ -60,6 +60,7 @@ var urlCreateQuotationUserExpress = 'quotationuserexpress'
 var urlPendingQuotations = 'pendingquotations'
 
 var urlCreateQuotationShipping = 'quotationshipping'
+var urlCreateFacebookShipping = 'facebookshipping'
 
 var urlNote = 'notes'
 
@@ -1138,6 +1139,11 @@ export default { //used for changing the state
     showQuotationShipping(state, id) {
         state.fillQuotationShipping.id = id
         $('#modalQuotationShipping').modal('show')
+    },
+    editFacebook(state, facebookshipping) {
+        state.fillFacebookShipping.id = facebookshipping.id
+        state.fillFacebookShipping.url = facebookshipping.url
+        $('#modalEditFacebook').modal('show')
     },
     deleteQuotationclient(state, id) {
         var url = urlQuotationclient + '/' + state.idQuotationclient
@@ -2449,6 +2455,19 @@ export default { //used for changing the state
             state.errorsLaravel = [];
             $('#modalQuotationShipping').modal('hide')
             toastr.success('Se agrego la dirección correctamente')
+        }).catch(error => {
+            state.errorsLaravel = error.response.data
+        })
+    },
+    updateFacebookShipping(state, id) {
+        var url = urlCreateFacebookShipping + '/' + id
+        axios.put(url, state.fillFacebookShipping).then(response => {
+            state.fillFacebookShipping = {
+                url: ''
+            }
+            state.errorsLaravel = [];
+            $('#modalEditFacebook').modal('hide')
+            toastr.success('Se agrego la url correctamente')
         }).catch(error => {
             state.errorsLaravel = error.response.data
         })

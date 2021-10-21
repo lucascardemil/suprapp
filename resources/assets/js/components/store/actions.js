@@ -335,6 +335,9 @@ export default { //methods
     showQuotationShipping(context, data) {
         context.commit('showQuotationShipping', data.id)
     },
+    editFacebook(context, data) {
+        context.commit('editFacebook', data.quotationshippingLocal)
+    },
     deleteQuotationclient(context, data) {
         context.commit('deleteQuotationclient', data.id)
         setTimeout(function () {
@@ -920,6 +923,12 @@ export default { //methods
     },
     updateQuotationShipping(context, data) {
         context.commit('updateQuotationShipping', data.id)
+        setTimeout(function () {
+            context.commit('getQuotationShipping', 1)
+        }, 1000)
+    },
+    updateFacebookShipping(context, data) {
+        context.commit('updateFacebookShipping', data.id)
         setTimeout(function () {
             context.commit('getQuotationShipping', 1)
         }, 1000)

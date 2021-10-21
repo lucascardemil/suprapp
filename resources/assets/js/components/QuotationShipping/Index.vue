@@ -39,13 +39,18 @@
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-light">Telefono*</label>
-                                <input v-validate="'required|min:3|max:60'" 
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">+569</span>
+                                    </div>
+                                    <input v-validate="'required|min:3|max:60'" 
                                         :class="{'input': true, 'is-invalid': errors.has('telefono')}"
                                         class="form-control"
                                         type="text"
                                         name="telefono"
                                         v-model="formQuotationShipping.telefono" />
-                                <p v-show="errors.has('telefono')" class="text-danger">{{ errors.first('telefono') }}</p>
+                                    <p v-show="errors.has('telefono')" class="text-danger">{{ errors.first('telefono') }}</p>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-light">Localidad*</label>
