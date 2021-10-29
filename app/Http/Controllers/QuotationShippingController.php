@@ -52,7 +52,8 @@ class QuotationShippingController extends Controller
                                         'quotation_shippings.direccion',
                                         'quotation_shippings.sucursal',
                                         'quotation_shippings.created_at',
-                                        'quotation_shippings.url'
+                                        'quotation_shippings.url',
+                                        'quotation_shippings.enviado',
                                     )
                                     ->orderBy('quotation_shippings.id', 'DESC')
                                     ->when($id, function ($query, $id) {
@@ -114,6 +115,24 @@ class QuotationShippingController extends Controller
         QuotationShipping::find($id)->update($request->all());
 
         return;
+    }
+
+    public function checkEnviado(Request $request)
+    {
+        $data = $request->all();
+
+        QuotationShipping::where('id', $data['check'])->update([
+            'enviado' => 1
+        ]);
+    }
+
+    public function NocheckEnviado(Request $request)
+    {
+        $data = $request->all();
+
+        QuotationShipping::where('id', $data['check'])->update([
+            'enviado' => 0
+        ]);
     }
 
 

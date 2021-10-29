@@ -1009,16 +1009,41 @@ export default { //used for changing the state
         axios.get(url).then(response => {
             state.quotationshipping = response.data.quotationshipping.data
             state.pagination_shipping = response.data.pagination_shipping
+
+            // state.quotationshipping.forEach(shipping => {  
+            //     if(shipping.enviado > 0){
+            //         state.checkEnviado = shipping.id
+            //     }else{
+            //         state.checkEnviado = 0
+            //     }
+            // })
+            
         });
     },
 
+    setCheckEnviado(state, value) {
+        state.checkEnviado = value
 
-    // getQuotationShipping(state) {
-    //     var url = 'quotationshipping'
-    //     axios.get(url).then(response => {
-    //         state.quotationshipping = response.data
-    //     });
-    // },
+        var url = 'checkEnviado'
+        axios.post(url, {
+            check: state.checkEnviado
+        }).then(response => {
+            state.checkEnviado = [];
+            state.errorsLaravel = [];
+            toastr.success('El producto se envio correctamente')
+        }).catch(error => {
+            state.errorsLaravel = error.response.data
+        })
+    },
+
+    deleteEnviado(state, id) {
+        var url = 'deleteEnviado/' + id
+        axios.post(url, {
+            check: id
+        }).then(response => {
+            toastr.error('El producto no se a enviado')
+        })
+    },
 
 
 

@@ -306,6 +306,10 @@ export default { //methods
         context.commit('getQuotationShipping', data.page)
     },
 
+    deleteEnviado(context, data) {
+        context.commit('deleteEnviado' , data.id)
+        context.commit('getQuotationShipping', 1)
+    },
     // getQuotationShipping(context, data) {
     //     context.commit('getQuotationShipping', data)
     // },

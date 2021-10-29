@@ -326,6 +326,9 @@ export default { //data
     quotationclients: [],
     quotationclientsform: [],
     quotationshipping: [],
+    checkEnviado: [],
+    
+    
     newQuotationclient: {
         client_id: '',
         state: '',

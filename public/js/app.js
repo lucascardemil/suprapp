@@ -6606,9 +6606,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 
 
@@ -8456,6 +8453,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -8468,8 +8480,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     EnvioShipping: _QuotationShipping_EnvioShipping__WEBPACK_IMPORTED_MODULE_1__["default"],
     EditFacebook: _QuotationShipping_EditFacebook__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapState"])(['quotationshipping', 'linkenvio', 'errorsLaravel', 'pagination_shipping', 'offset_shipping', 'searchShipping'])), Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])(['isActived_shipping', 'pagesNumber_shipping'])),
-  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapActions"])(['getQuotationShipping', 'pdfQuotationShipping', 'showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping', 'editFacebook'])), {}, {
+  computed: _objectSpread(_objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapState"])(['quotationshipping', 'linkenvio', 'errorsLaravel', 'pagination_shipping', 'offset_shipping', 'searchShipping', 'checkEnviado'])), Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapGetters"])(['isActived_shipping', 'pagesNumber_shipping'])), {}, {
+    checkEnviado: {
+      get: function get() {
+        return this.$store.state.checkEnviado;
+      },
+      set: function set(value) {
+        this.$store.commit('setCheckEnviado', value);
+        this.$store.commit('getQuotationShipping', 1);
+      }
+    }
+  }),
+  methods: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_4__["mapActions"])(['getQuotationShipping', 'pdfQuotationShipping', 'showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping', 'editFacebook', 'deleteEnviado'])), {}, {
     copyTestingCode: function copyTestingCode() {
       var testingCodeToCopy = document.querySelector('#testing-code');
       testingCodeToCopy.setAttribute('type', 'text'); // 不是 hidden 才能複製
@@ -19399,6 +19421,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/c
 
 // module
 exports.push([module.i, "\n.table th, .table td {\n    vertical-align: middle;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.button {\r\n  border-radius: 0.2rem;\r\n  background-color: #28a745;\r\n  border: none;\r\n  color: #FFFFFF;\r\n  text-align: center;\r\n  font-size: 0.875rem;\r\n  padding: 0.25rem 0.5rem;\r\n  width: 80px;\r\n  transition: all 0.5s;\r\n  cursor: pointer;\n}\n.button:hover {\r\n  background-color: #dc3545;\n}\n.button:hover span {display:none}\n.button:hover:before {content: '\\26CC'}\n.button:hover span {\r\n  padding-right: 25px;\n}\n.button:hover span:after {\r\n  opacity: 1;\r\n  right: 0;\n}\r\n", ""]);
 
 // exports
 
@@ -34406,6 +34447,36 @@ process.umask = function() { return 0; };
 
 
 var content = __webpack_require__(/*! !../../../../../node_modules/css-loader??ref--6-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--6-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Index.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Quotationclient/Index.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../../node_modules/css-loader??ref--6-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--6-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ListarQuotationShipping.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -56041,12 +56112,6 @@ var render = function() {
                   _c("input", {
                     directives: [
                       {
-                        name: "validate",
-                        rawName: "v-validate",
-                        value: "required|min:3|max:60",
-                        expression: "'required|min:3|max:60'"
-                      },
-                      {
                         name: "model",
                         rawName: "v-model",
                         value: _vm.formQuotationShipping.nombre,
@@ -56054,10 +56119,6 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    class: {
-                      input: true,
-                      "is-invalid": _vm.errors.has("nombre")
-                    },
                     attrs: { type: "text", name: "nombre" },
                     domProps: { value: _vm.formQuotationShipping.nombre },
                     on: {
@@ -56072,23 +56133,7 @@ var render = function() {
                         )
                       }
                     }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.errors.has("nombre"),
-                          expression: "errors.has('nombre')"
-                        }
-                      ],
-                      staticClass: "text-danger"
-                    },
-                    [_vm._v(_vm._s(_vm.errors.first("nombre")))]
-                  )
+                  })
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
@@ -56099,12 +56144,6 @@ var render = function() {
                   _c("input", {
                     directives: [
                       {
-                        name: "validate",
-                        rawName: "v-validate",
-                        value: "required|min:3|max:60",
-                        expression: "'required|min:3|max:60'"
-                      },
-                      {
                         name: "model",
                         rawName: "v-model",
                         value: _vm.formQuotationShipping.rut,
@@ -56112,7 +56151,6 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
-                    class: { input: true, "is-invalid": _vm.errors.has("rut") },
                     attrs: { type: "text", name: "rut" },
                     domProps: { value: _vm.formQuotationShipping.rut },
                     on: {
@@ -56127,23 +56165,7 @@ var render = function() {
                         )
                       }
                     }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "p",
-                    {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.errors.has("rut"),
-                          expression: "errors.has('rut')"
-                        }
-                      ],
-                      staticClass: "text-danger"
-                    },
-                    [_vm._v(_vm._s(_vm.errors.first("rut")))]
-                  )
+                  })
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
@@ -56157,12 +56179,6 @@ var render = function() {
                     _c("input", {
                       directives: [
                         {
-                          name: "validate",
-                          rawName: "v-validate",
-                          value: "required|min:3|max:60",
-                          expression: "'required|min:3|max:60'"
-                        },
-                        {
                           name: "model",
                           rawName: "v-model",
                           value: _vm.formQuotationShipping.telefono,
@@ -56170,11 +56186,7 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control",
-                      class: {
-                        input: true,
-                        "is-invalid": _vm.errors.has("telefono")
-                      },
-                      attrs: { type: "text", name: "telefono" },
+                      attrs: { maxlength: "8", type: "text", name: "telefono" },
                       domProps: { value: _vm.formQuotationShipping.telefono },
                       on: {
                         input: function($event) {
@@ -56188,23 +56200,7 @@ var render = function() {
                           )
                         }
                       }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "p",
-                      {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.errors.has("telefono"),
-                            expression: "errors.has('telefono')"
-                          }
-                        ],
-                        staticClass: "text-danger"
-                      },
-                      [_vm._v(_vm._s(_vm.errors.first("telefono")))]
-                    )
+                    })
                   ])
                 ]),
                 _vm._v(" "),
@@ -60606,6 +60602,8 @@ var render = function() {
                   _vm._v(" "),
                   _c("td"),
                   _vm._v(" "),
+                  _c("td"),
+                  _vm._v(" "),
                   _c("td")
                 ]),
                 _vm._v(" "),
@@ -60614,6 +60612,76 @@ var render = function() {
                     _c("td", { attrs: { width: "10px" } }, [
                       _vm._v(_vm._s(quotationshippingLocal.id))
                     ]),
+                    _vm._v(" "),
+                    quotationshippingLocal.enviado > 0
+                      ? _c("td", { staticClass: "text-center" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "button",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.deleteEnviado({
+                                    id: quotationshippingLocal.id
+                                  })
+                                }
+                              }
+                            },
+                            [_c("span", [_vm._v("Enviado ")])]
+                          )
+                        ])
+                      : _c("td", { staticClass: "text-center" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.checkEnviado,
+                                expression: "checkEnviado"
+                              }
+                            ],
+                            attrs: {
+                              type: "checkbox",
+                              id: quotationshippingLocal.id
+                            },
+                            domProps: {
+                              value: quotationshippingLocal.id,
+                              checked: Array.isArray(_vm.checkEnviado)
+                                ? _vm._i(
+                                    _vm.checkEnviado,
+                                    quotationshippingLocal.id
+                                  ) > -1
+                                : _vm.checkEnviado
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.checkEnviado,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = quotationshippingLocal.id,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.checkEnviado = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.checkEnviado = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.checkEnviado = $$c
+                                }
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("label", {
+                            attrs: { for: quotationshippingLocal.id }
+                          })
+                        ]),
                     _vm._v(" "),
                     _c("td", [_vm._v(_vm._s(quotationshippingLocal.nombre))]),
                     _vm._v(" "),
@@ -60871,6 +60939,8 @@ var staticRenderFns = [
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("ID")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Enviado")]),
         _vm._v(" "),
         _c("th", [_vm._v("Nombre")]),
         _vm._v(" "),
@@ -103053,7 +103123,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ListarQuotationShipping_vue_vue_type_template_id_7f623a8c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ListarQuotationShipping.vue?vue&type=template&id=7f623a8c& */ "./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=template&id=7f623a8c&");
 /* harmony import */ var _ListarQuotationShipping_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ListarQuotationShipping.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _ListarQuotationShipping_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ListarQuotationShipping.vue?vue&type=style&index=0&lang=css& */ "./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -103061,7 +103133,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _ListarQuotationShipping_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _ListarQuotationShipping_vue_vue_type_template_id_7f623a8c___WEBPACK_IMPORTED_MODULE_0__["render"],
   _ListarQuotationShipping_vue_vue_type_template_id_7f623a8c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -103090,6 +103162,22 @@ component.options.__file = "resources/assets/js/components/Quotationclient/Lista
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ListarQuotationShipping.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css&":
+/*!*********************************************************************************************************************!*\
+  !*** ./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css& ***!
+  \*********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader!../../../../../node_modules/css-loader??ref--6-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/src??ref--6-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./ListarQuotationShipping.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Quotationclient/ListarQuotationShipping.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_ListarQuotationShipping_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -107881,6 +107969,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   getQuotationShipping: function getQuotationShipping(context, data) {
     context.commit('getQuotationShipping', data.page);
   },
+  deleteEnviado: function deleteEnviado(context, data) {
+    context.commit('deleteEnviado', data.id);
+    context.commit('getQuotationShipping', 1);
+  },
   // getQuotationShipping(context, data) {
   //     context.commit('getQuotationShipping', data)
   // },
@@ -110194,15 +110286,36 @@ var urlDescuentoDefect = 'descuento-defect';
     var url = 'quotationshipping?page=' + page + '&id=' + id;
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(url).then(function (response) {
       state.quotationshipping = response.data.quotationshipping.data;
-      state.pagination_shipping = response.data.pagination_shipping;
+      state.pagination_shipping = response.data.pagination_shipping; // state.quotationshipping.forEach(shipping => {  
+      //     if(shipping.enviado > 0){
+      //         state.checkEnviado = shipping.id
+      //     }else{
+      //         state.checkEnviado = 0
+      //     }
+      // })
     });
   },
-  // getQuotationShipping(state) {
-  //     var url = 'quotationshipping'
-  //     axios.get(url).then(response => {
-  //         state.quotationshipping = response.data
-  //     });
-  // },
+  setCheckEnviado: function setCheckEnviado(state, value) {
+    state.checkEnviado = value;
+    var url = 'checkEnviado';
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, {
+      check: state.checkEnviado
+    }).then(function (response) {
+      state.checkEnviado = [];
+      state.errorsLaravel = [];
+      toastr__WEBPACK_IMPORTED_MODULE_1___default.a.success('El producto se envio correctamente');
+    })["catch"](function (error) {
+      state.errorsLaravel = error.response.data;
+    });
+  },
+  deleteEnviado: function deleteEnviado(state, id) {
+    var url = 'deleteEnviado/' + id;
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, {
+      check: id
+    }).then(function (response) {
+      toastr__WEBPACK_IMPORTED_MODULE_1___default.a.error('El producto no se a enviado');
+    });
+  },
   showModalDetail: function showModalDetail(state, id) {
     state.idforms = id;
     $('#detalleCliente').modal('show');
@@ -112904,6 +113017,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   quotationclients: [],
   quotationclientsform: [],
   quotationshipping: [],
+  checkEnviado: [],
   newQuotationclient: {
     client_id: '',
     state: '',
