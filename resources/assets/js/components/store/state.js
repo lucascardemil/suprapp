@@ -176,6 +176,13 @@ export default { //data
         km: '',
         note: ''
     },
+    newOrdenTrabajo: {
+        vehicle_id: 0,
+        km: 0,
+        descripcion: ''
+    },
+    ordenestrabajos:[],
+    trabajos:[],
     /**********************************/
     vehiculotipos: [],
     vehiculotipo: {
@@ -327,6 +334,7 @@ export default { //data
     quotationclientsform: [],
     quotationshipping: [],
     checkEnviado: [],
+    checkRealizado: [],
     
     
     newQuotationclient: {
@@ -961,6 +969,8 @@ export default { //data
     optionsCode: [],
     optionsPrice: [],
     cart: [],
+    trabajos: [],
+    orden_trabajo: [],
     formapago: '',
     aplicardescuento: 0,
     selectedCode: {

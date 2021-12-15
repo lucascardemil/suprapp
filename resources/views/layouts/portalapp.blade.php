@@ -148,6 +148,14 @@
             </li>
             @endcan
 
+            @can('orden-trabajos')
+            <li id="orden-trabajos" class="nav-item">
+                <a class="nav-link" href="{{ route('admin-orden-trabajos') }}">
+                <i class="fas fa-wrench"></i>
+                    <span>Ordenes de Trabajos</span></a>
+            </li>
+            @endcan
+
             @can('mechanic-vehicles')
             <li id="vehiculos-m" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-vehiculosM') }}">

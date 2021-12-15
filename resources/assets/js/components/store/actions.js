@@ -61,9 +61,36 @@ export default { //methods
     modalDetailVehicle(context, data) {
         context.commit('modalDetailVehicle', data.vehicleLocal)
     },
+    modalOrdenTrabajo(context, data) {
+      context.commit('modalOrdenTrabajo', data.vehicleLocal)
+    },
+    modalFotosOrdenTrabajo(context, data) {
+        context.commit('modalFotosOrdenTrabajo', data.id)
+        context.commit('getFotosOrdenTrabajo', data.id)
+    },
+    addTrabajo(context, data) {
+        context.commit('addTrabajo', data)
+    },
+    removeFromTrabajo(context, data) {
+        context.commit('removeFromTrabajo', data)
+    },
+    guardarOrdenTrabajo(context, data) {
+        context.commit('guardarOrdenTrabajo', data)
+        // setTimeout(function () {
+        //     context.commit('allSalesCalendar')
+        // }, 1000)
+    },
+    getOrdenesTrabajos(context, data) {
+        context.commit('getOrdenesTrabajos', data)
+    },
+
+    AgregarFotosOrdenTrabajo(context) {
+        context.commit('AgregarFotosOrdenTrabajo')
+    },
     createDetailVehicle(context) {
         context.commit('createDetailVehicle')
     },
+
     createProductsPagos(context) {
         context.commit('createProductsPagos')
         setTimeout(function () {
@@ -201,6 +228,9 @@ export default { //methods
         context.commit('getVehiculoMotors', data.page)
     },
     /********************************** */
+    subirFotosOrdenTrabajo(context, data) {
+        context.commit('subirFotosOrdenTrabajo', data.evt)
+    },
     fileChange(context, data) {
         context.commit('fileChange', data.evt)
     },
@@ -309,6 +339,11 @@ export default { //methods
     deleteEnviado(context, data) {
         context.commit('deleteEnviado' , data.id)
         context.commit('getQuotationShipping', 1)
+    },
+
+    deleteRealizado(context, data) {
+        context.commit('deleteRealizado' , data.id)
+        context.commit('getOrdenesTrabajos')
     },
     // getQuotationShipping(context, data) {
     //     context.commit('getQuotationShipping', data)

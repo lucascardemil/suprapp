@@ -97,6 +97,11 @@ Route::get('/cotizar', 'QuotationUserController@cotizar');
 Route::get('cotizar-express', 'QuotationUserController@cotizar_express');
 
 Route::ApiResource('detailvehicles', 'DetailVehicleController');
+Route::ApiResource('ordentrabajo', 'OrdenTrabajoController');
+Route::post('checkRealizado', 'OrdenTrabajoController@checkRealizado');
+Route::post('deleteRealizado/{id}', 'OrdenTrabajoController@NocheckRealizado');
+Route::post('subirfotosordentrabajo', 'OrdenTrabajoController@SubirFotosOrdenTrabajo');
+Route::get('fotosordentrabajo/{id}', 'OrdenTrabajoController@obtenerFotosOrdenTrabajo');
 
 Route::ApiResource('notes', 'NoteController');
 
@@ -255,6 +260,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin-vehiculos', function () {
         return view('admin.vehiculo');
     })->name('admin-vehiculos'); //->middleware('permission:vehiculos');
+    
+    Route::get('admin-orden-trabajos', function () {
+      return view('admin.orden-trabajos');
+    })->name('admin-orden-trabajos'); //->middleware('permission:vehiculos');
 
     Route::get('admin-vehiculosM', function () {
         return view('admin.vehiculo-mecanico');

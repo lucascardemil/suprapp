@@ -27,6 +27,7 @@
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,6 +47,7 @@
                             <input type="text" class="form-control form-control-sm"
                                     v-model="searchVehicle.year" @keyup="getVehicles">
                         </td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -89,6 +91,15 @@
                                 data-placement="top"
                                 title="Detalle">
                                 <i class="fas fa-plus-circle"></i>
+                            </a>
+                        </td>
+                        <td width="10px">
+                            <a href="#" class="btn btn-success btn-sm"
+                                @click.prevent="modalOrdenTrabajo( { vehicleLocal } )"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Orden de trabajo">
+                                <i class="fas fa-wrench"></i>
                             </a>
                         </td>
                     </tr>
@@ -136,6 +147,7 @@
         <Detalle></Detalle>
         <Imagenes></Imagenes>
         <AgregarDetalle></AgregarDetalle>
+        <OrdenTrabajo></OrdenTrabajo>
     </div>
 
 </template>
@@ -149,17 +161,18 @@ import Editar from './Editar'
 import Detalle from './Detalle'
 import Imagenes from './Imagenes'
 import AgregarDetalle from './AgregarDetalle'
+import OrdenTrabajo from '../OrdenTrabajos/OrdenTrabajo'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle },
+    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle, OrdenTrabajo },
     computed:{
         ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle']),
         ...mapGetters(['isActived', 'pagesNumber'])
     },
     methods:{
         ...mapActions(['getVehicles','getVehiclesUser', 'editVehicle',
-                'detailVehicle', 'modalDetailVehicle', 'changePageVehicle'])
+                'detailVehicle', 'modalDetailVehicle','modalOrdenTrabajo','changePageVehicle'])
     },
     created(){
         loadProgressBar();

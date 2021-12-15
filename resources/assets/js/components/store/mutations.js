@@ -24,6 +24,9 @@ var urlQuotationusers = 'quotationusers'
 var urlVehicle = 'vehicles'
 var urlVehicleUser = 'vehicles-user'
 var urlDetailVehicle = 'detailvehicles'
+var urlOrdenTrabajo = 'ordentrabajo'
+var urlFotosOrdenTrabajo = 'fotosordentrabajo'
+var urlSubirFotosOrdenTrabajo = 'subirfotosordentrabajo'
 var urlUpload = 'upload'
 
 var urlVehicleBrand = 'vehiclebrands'
@@ -232,6 +235,124 @@ export default { //used for changing the state
 
 
     },
+    modalOrdenTrabajo(state, vehicle) {
+        state.newOrdenTrabajo.vehicle_id = vehicle.id
+        state.newOrdenTrabajo.km = vehicle.km
+        $("#createOrdenTrabajo").modal('show')
+    },
+
+
+    modalFotosOrdenTrabajo(state, id) {
+        state.newOrdenTrabajo.vehicle_id = id
+        $("#modalFotosOrdenTrabajo").modal('show')
+    },
+
+    
+    guardarOrdenTrabajo(state) {
+        var url = urlOrdenTrabajo
+
+        let ordenes_trabajos = {
+            orden_trabajo: state.orden_trabajo,
+            trabajos: state.trabajos
+        }
+        axios.post(url, ordenes_trabajos).then(response => {
+            state.trabajos = []
+            toastr.success('Se creo la orden de trabajo correctamente')
+            $('#createOrdenTrabajo').modal('hide')
+        })
+        .catch(error => {
+            toastr.error(error.response.data)
+        })
+    
+    },
+
+
+    addTrabajo(state) {
+        state.orden_trabajo.push({
+            vehicle_id: state.newOrdenTrabajo.vehicle_id,
+            km: state.newOrdenTrabajo.km,
+        })
+        
+        state.trabajos.push({
+            descripcion: state.newOrdenTrabajo.descripcion,
+        })
+    },
+
+    removeFromTrabajo(state, index) {
+        const item = state.trabajos[index];
+            if(item) {
+                state.trabajos.splice(index, 1);
+            }
+    },
+
+    getOrdenesTrabajos(state) {
+        var url = urlOrdenTrabajo
+        axios.get(url).then(response => {
+            state.ordenestrabajos = response.data
+        })
+    },
+
+    getFotosOrdenTrabajo(state, id) {
+        var url = urlFotosOrdenTrabajo + '/' + id
+        axios.get(url).then(response => {
+            state.trabajos = response.data
+        })
+    },
+
+    AgregarFotosOrdenTrabajo(state) {
+        for (let i = 0; i < state.attachment.length; i++) {
+            state.form.append('pics[]', state.attachment[i])
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+
+        //vehicle_id: state.newOrdenTrabajo.vehicle_id = id,
+
+        var url = urlSubirFotosOrdenTrabajo
+        if (state.attachment.length > 0) {
+
+            state.form.append('id', state.newOrdenTrabajo.vehicle_id)
+            $("#files").val(null)
+
+            axios.post(url, state.form, config).then(response => {
+                state.newOrdenTrabajo.vehicle_id = ''
+                state.errorsLaravel = []
+                $('#modalFotosOrdenTrabajo').modal('hide')
+                toastr.success('Imagen(es) subida(s) con éxito')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        }
+
+    },
+
+    subirFotosOrdenTrabajo(state, evt) {
+        //console.log(e)
+        //let selectedFile = e.target.files[0]
+        state.form = new FormData()
+
+        state.images = []
+        state.attachment = []
+        let selectedFiles = evt.target.files
+
+        if (!selectedFiles.length) {
+            return false
+        }
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+            state.attachment.push(selectedFiles[i])
+        }
+    },
+    
+
+
+
+
+
     modalDetailVehicle(state, vehicle) {
         state.newDetailVehicle.vehicle_id = vehicle.id
         $("#createDetail").modal('show')
@@ -1019,6 +1140,31 @@ export default { //used for changing the state
             // })
             
         });
+    },
+
+
+    setcheckRealizado(state, value) {
+        state.checkRealizado = value
+
+        var url = 'checkRealizado'
+        axios.post(url, {
+            check: state.checkRealizado
+        }).then(response => {
+            state.checkRealizado = [];
+            state.errorsLaravel = [];
+            toastr.success('El trabajo se realizo correctamente')
+        }).catch(error => {
+            state.errorsLaravel = error.response.data
+        })
+    },
+
+    deleteRealizado(state, id) {
+        var url = 'deleteRealizado/' + id
+        axios.post(url, {
+            check: id
+        }).then(response => {
+            toastr.error('El trabajo no se a realizado')
+        })
     },
 
     setCheckEnviado(state, value) {

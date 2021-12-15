@@ -63,7 +63,7 @@
                     <td>{{ quotationshippingLocal.telefono }}</td>
                     <td>{{ quotationshippingLocal.ciudad }}</td>
                     <td width="15%">{{ quotationshippingLocal.direccion }}</td>
-                    <td>{{ quotationshippingLocal.sucursal }}</td>
+                    <td width="15%">{{ quotationshippingLocal.sucursal }}</td>
                     <td>{{ quotationshippingLocal.created_at }}</td>
                     <td class="text-right">
                         <a class="btn btn-primary btn-sm" href="#" role="button"
