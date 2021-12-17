@@ -68,9 +68,15 @@
                                                 </a>
                                             
                                                 <a href="#" class="btn btn-warning btn-sm"
-                                                    
+                                                    @click.prevent="modalObservacion({ id: trabajo.id })"
                                                     title="Editar">
                                                     <i class="fas fa-edit"></i>
+                                                </a>
+
+                                                <a href="#" class="btn btn-danger btn-sm"
+                                                    @click.prevent="removeTrabajo({ id: trabajo.id})"
+                                                    title="Eliminar">
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </a>
                                             </td>
                                         </tr>
@@ -125,6 +131,7 @@
         <AgregarDetalle></AgregarDetalle>
         <OrdenTrabajo></OrdenTrabajo> -->
         <AgregarFotosOrdenTrabajo></AgregarFotosOrdenTrabajo>
+        <AgregarObservacion></AgregarObservacion>
     </div>
 
 </template>
@@ -139,10 +146,11 @@ import { loadProgressBar } from 'axios-progress-bar'
 // import Imagenes from './Imagenes'
 // import AgregarDetalle from './AgregarDetalle'
 import AgregarFotosOrdenTrabajo from './AgregarFotosOrdenTrabajo'
+import AgregarObservacion from './AgregarObservacion'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-    components: { AgregarFotosOrdenTrabajo },
+    components: { AgregarFotosOrdenTrabajo, AgregarObservacion },
     computed:{
         // ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle']),
         ...mapState(['ordenestrabajos', 'trabajos', 'checkRealizado']),
@@ -160,7 +168,7 @@ export default {
     methods:{
         // ...mapActions(['getVehicles','getVehiclesUser', 'editVehicle',
         //         'detailVehicle', 'modalDetailVehicle','modalOrdenTrabajo','changePageVehicle'])
-        ...mapActions(['getOrdenesTrabajos','deleteRealizado', 'modalFotosOrdenTrabajo'])
+        ...mapActions(['getOrdenesTrabajos','deleteRealizado', 'modalFotosOrdenTrabajo', 'modalObservacion', 'removeTrabajo'])
     },
     created(){
         loadProgressBar();

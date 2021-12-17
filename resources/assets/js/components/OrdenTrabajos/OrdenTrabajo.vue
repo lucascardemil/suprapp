@@ -13,7 +13,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-12">
-                                <form action="POST" v-on:submit.prevent="addTrabajo">
+                                <form action="POST" v-on:submit.prevent="guardarOrdenTrabajo">
                                     <div class="form-group">
                                         <label for="kilometraje">Kilometraje</label>
                                         <input v-validate="'required|min:2|max:190'"
@@ -50,19 +50,18 @@
                                         </thead>
                                         <tbody>
 
-                                            <tr  v-for="(trabajo, index) in trabajos" :key="index">
-                                                <td>{{index + 1}}</td>
+                                            <tr  v-for="trabajo in trabajos" :key="trabajo.id">
+                                                <td>{{ trabajo.id }}</td>
                                                 <td>{{ trabajo.descripcion }}</td>
-                                                <td>
+                                                <td class="text-right">
                                                     <a 
                                                         href="#" 
                                                         class="btn btn-danger btn-sm"
-                                                        @click.prevent="removeFromTrabajo(index)"
+                                                        @click.prevent="removeTrabajo({ id: trabajo.id })"
                                                         data-toggle="tooltip"
                                                         data-placement="top"
-                                                        title="Eliminar"
-                                                    >
-                                                        <i class="fas fa-ban"></i>
+                                                        title="Eliminar">
+                                                        <i class="fas fa-trash-alt"></i>
                                                     </a>
                                                     
                                                 </td>
@@ -73,11 +72,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <!-- <div class="modal-footer">
                         <button type="submit" class="btn btn-success" v-on:click="guardarOrdenTrabajo">
                             <i class="fas fa-plus-square"></i> Guardar
                         </button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -85,16 +84,17 @@
 </template>
 
 <script>
+import { loadProgressBar } from 'axios-progress-bar'
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 export default {
     computed:{
-        ...mapState(['orden_trabajo','trabajos','newOrdenTrabajo', 'errorsLaravel']),
+        ...mapState(['trabajos','newOrdenTrabajo', 'errorsLaravel']),
         ...mapGetters(['completeOrdenTrabajo'])
     },
 
     methods:{
-        ...mapActions(['addTrabajo', 'removeFromTrabajo', 'guardarOrdenTrabajo']),
+        ...mapActions(['getTrabajos', 'removeTrabajo', 'guardarOrdenTrabajo']),
     },
 }
 </script>

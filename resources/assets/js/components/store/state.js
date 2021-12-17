@@ -179,10 +179,12 @@ export default { //data
     newOrdenTrabajo: {
         vehicle_id: 0,
         km: 0,
-        descripcion: ''
+        descripcion: '',
+        observacion: ''
     },
     ordenestrabajos:[],
     trabajos:[],
+    observaciones:[],
     /**********************************/
     vehiculotipos: [],
     vehiculotipo: {

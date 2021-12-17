@@ -32,20 +32,15 @@
                                 </div>
                             </div>
                             <div class="col-12">
-                                <table class="table table-hover table-striped mb-0 table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Descripcion Del Trabajo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="trabajo in trabajos" :key="trabajo.id">
-                                            <td>
-                                                <img :src="trabajo.url" class="img-fluid">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+
+
+                                <div class="row row-cols-1 row-cols-md-2 g-4">
+                                    <div class="col-6 pb-3" v-for="trabajo in trabajos" :key="trabajo.id">
+                                        <div class="card">
+                                            <img :src="trabajo.url" class="card-img-top" alt="...">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

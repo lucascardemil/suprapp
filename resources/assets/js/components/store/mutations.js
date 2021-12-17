@@ -25,8 +25,12 @@ var urlVehicle = 'vehicles'
 var urlVehicleUser = 'vehicles-user'
 var urlDetailVehicle = 'detailvehicles'
 var urlOrdenTrabajo = 'ordentrabajo'
+var urlTrabajo = 'trabajos'
+var urlObservacion = 'observaciones'
 var urlFotosOrdenTrabajo = 'fotosordentrabajo'
 var urlSubirFotosOrdenTrabajo = 'subirfotosordentrabajo'
+var urlSubirObservacion = 'subirobservacion'
+var urlEliminarObservacion = 'eliminarobservacion'
 var urlUpload = 'upload'
 
 var urlVehicleBrand = 'vehiclebrands'
@@ -247,16 +251,21 @@ export default { //used for changing the state
         $("#modalFotosOrdenTrabajo").modal('show')
     },
 
+    modalObservacion(state, id) {
+        state.newOrdenTrabajo.vehicle_id = id
+        $("#modalObservacion").modal('show')
+    },
+
     
     guardarOrdenTrabajo(state) {
         var url = urlOrdenTrabajo
-
-        let ordenes_trabajos = {
-            orden_trabajo: state.orden_trabajo,
-            trabajos: state.trabajos
-        }
-        axios.post(url, ordenes_trabajos).then(response => {
-            state.trabajos = []
+        axios.post(url, {
+            vehicle_id: state.newOrdenTrabajo.vehicle_id,
+            km: state.newOrdenTrabajo.km,
+            descripcion: state.newOrdenTrabajo.descripcion,
+        }).then(response => {
+            state.newOrdenTrabajo.descripcion = ''
+            state.errorsLaravel = []
             toastr.success('Se creo la orden de trabajo correctamente')
             $('#createOrdenTrabajo').modal('hide')
         })
@@ -267,30 +276,65 @@ export default { //used for changing the state
     },
 
 
-    addTrabajo(state) {
-        state.orden_trabajo.push({
-            vehicle_id: state.newOrdenTrabajo.vehicle_id,
-            km: state.newOrdenTrabajo.km,
-        })
+    // addOrdenTrabajo(state) {
+    //     state.orden_trabajo.push({
+    //         vehicle_id: state.newOrdenTrabajo.vehicle_id,
+    //         km: state.newOrdenTrabajo.km,
+    //     })
         
-        state.trabajos.push({
-            descripcion: state.newOrdenTrabajo.descripcion,
+    //     state.trabajos.push({
+    //         descripcion: state.newOrdenTrabajo.descripcion,
+    //     })
+    // },
+
+    // addObservacion(state) {
+    //     // state.orden_trabajo.push({
+    //     //     vehicle_id: state.newOrdenTrabajo.vehicle_id,
+    //     //     km: state.newOrdenTrabajo.km,
+    //     // })
+        
+    //     state.observaciones.push({
+    //         vehicle_id: state.newOrdenTrabajo.vehicle_id,
+    //         observacion: state.newOrdenTrabajo.observacion,
+    //     })
+    // },
+    removeTrabajo(state, id) {
+        var url = urlOrdenTrabajo + '/' + id
+        axios.delete(url).then(response => {
+            toastr.success('Orden de trabajo eliminada con éxito')
+            $('#createOrdenTrabajo').modal('hide')
         })
     },
 
-    removeFromTrabajo(state, index) {
-        const item = state.trabajos[index];
-            if(item) {
-                state.trabajos.splice(index, 1);
-            }
+    removeObservacion(state, id) {
+        var url = urlEliminarObservacion + '/' + id
+        axios.delete(url).then(response => {
+            toastr.success('Observacion eliminada con éxito')
+            $('#modalObservacion').modal('hide')
+        })
     },
 
+    getTrabajos(state, id) {
+        var url = urlTrabajo + '/' + id
+        axios.get(url).then(response => {
+            state.trabajos = response.data
+        })
+    },
+    
     getOrdenesTrabajos(state) {
         var url = urlOrdenTrabajo
         axios.get(url).then(response => {
             state.ordenestrabajos = response.data
         })
     },
+    
+    getObservaciones(state, id) {
+        var url = urlObservacion + '/' + id
+        axios.get(url).then(response => {
+            state.observaciones = response.data
+        })
+    },
+
 
     getFotosOrdenTrabajo(state, id) {
         var url = urlFotosOrdenTrabajo + '/' + id
@@ -331,6 +375,61 @@ export default { //used for changing the state
     },
 
     subirFotosOrdenTrabajo(state, evt) {
+        //console.log(e)
+        //let selectedFile = e.target.files[0]
+        state.form = new FormData()
+
+        state.images = []
+        state.attachment = []
+        let selectedFiles = evt.target.files
+
+        if (!selectedFiles.length) {
+            return false
+        }
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+            state.attachment.push(selectedFiles[i])
+        }
+    },
+
+
+    AgregarObservacion(state) {
+        
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+
+        //vehicle_id: state.newOrdenTrabajo.vehicle_id = id,
+
+        var url = urlSubirObservacion
+        if (state.attachment.length > 0 && state.newOrdenTrabajo.observacion != '') {
+
+            for (let i = 0; i < state.attachment.length; i++) {
+                state.form.append('pics_observacion[]', state.attachment[i])
+            }
+
+            state.form.append('id', state.newOrdenTrabajo.vehicle_id)
+            state.form.append('observacion', state.newOrdenTrabajo.observacion)
+            $("#filesObservacion").val(null)
+
+            axios.post(url, state.form, config).then(response => {
+                state.newOrdenTrabajo.vehicle_id = ''
+                state.newOrdenTrabajo.observacion = ''
+                state.attachment.length = []
+                state.errorsLaravel = []
+                $('#modalObservacion').modal('hide')
+                toastr.success('Se ingreso la observacion correctamente')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        }
+
+    },
+
+    subirFotosObservacion(state, evt) {
         //console.log(e)
         //let selectedFile = e.target.files[0]
         state.form = new FormData()

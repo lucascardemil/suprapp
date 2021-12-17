@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dec7d6665f79ee7ab0bcc7df1ad09bad",
+    "content-hash": "1a23c9ef7ae6974bb7765f9376f309d7",
     "packages": [
         {
             "name": "aprendible/storage-link-route",

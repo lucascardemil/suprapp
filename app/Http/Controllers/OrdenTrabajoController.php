@@ -7,6 +7,7 @@ use Intervention\Image\ImageManager;
 use App\OrdenTrabajo;
 use App\Trabajos;
 use App\ImageOrdenTrabajo;
+use App\Observacion;
 use App\Vehicle;
 use Auth;
 
@@ -31,25 +32,75 @@ class OrdenTrabajoController extends Controller
         return $fotosordentrabajo;
     }
 
+
+
+    public function observaciones($id)
+    {
+        $observacion = Observacion::where('trabajo_id', '=', $id)->get();     
+        return $observacion;
+    }
+
+    public function trabajos($id){
+
+        $ordenestrabajos = OrdenTrabajo::where('vehicle_id', '=', $id)->get();
+        foreach($ordenestrabajos as $ordentrabajo){
+
+            $trabajos = Trabajos::where('orden_trabajo_id', '=', $ordentrabajo->id)->get();
+            return $trabajos;
+        }
+
+    }
+
     
     public function store(Request $request)
     {
-        $orden_trabajo = $request->orden_trabajo;
+        // $orden_trabajo = $request->orden_trabajo;
 
-        $orden_trabajo_id = OrdenTrabajo::create([
-            'vehicle_id' => $orden_trabajo[0]['vehicle_id'],
-            'km' => $orden_trabajo[0]['km']
-        ])->id;
+        // $orden_trabajo_id = OrdenTrabajo::create([
+        //     'vehicle_id' => $orden_trabajo[0]['vehicle_id'],
+        //     'km' => $orden_trabajo[0]['km']
+        // ])->id;
 
-        $trabajo = $request->trabajos;
+        // $trabajo = $request->trabajos;
 
-        for ($i=0; $i<count($trabajo); $i++){
+        // for ($i=0; $i<count($trabajo); $i++){
+        //     Trabajos::create([
+        //         'orden_trabajo_id' => $orden_trabajo_id,
+        //         'descripcion' => $trabajo[$i]['descripcion'],
+        //         'realizado' => 0
+        //     ]);
+        // }
+
+        $data = $request->all();
+
+        if(OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->count() > 0){
+
+            $ordenestrabajos = OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->get();
+            foreach($ordenestrabajos as $ordentrabajo){
+
+                Trabajos::create([
+                    'orden_trabajo_id' => $ordentrabajo->id,
+                    'descripcion' => $data['descripcion'],
+                    'realizado' => 0
+                ]);
+            }
+
+        }else{
+
+            $orden_trabajo_id = OrdenTrabajo::create([
+                'vehicle_id' => $data['vehicle_id'],
+                'km' => $data['km']
+            ])->id;
+
             Trabajos::create([
                 'orden_trabajo_id' => $orden_trabajo_id,
-                'descripcion' => $trabajo[$i]['descripcion'],
+                'descripcion' => $data['descripcion'],
                 'realizado' => 0
             ]);
         }
+
+
+
     }
 
     
@@ -70,10 +121,24 @@ class OrdenTrabajoController extends Controller
     
     public function destroy($id)
     {
-        // $detail = Detail::findOrFail($id);
-        // $detail->delete();
+        $observaciones = Observacion::where('trabajo_id', '=', $id)->get();
 
-        // return;
+        foreach($observaciones as $observacion){
+            Observacion::findOrFail($observacion->id)->delete();
+            unlink( public_path().$observacion->url);
+        }
+
+        $ordenes_trabajos = ImageOrdenTrabajo::where('trabajo_id', '=', $id)->get();
+        foreach($ordenes_trabajos as $orden_trabajo){
+            ImageOrdenTrabajo::findOrFail($orden_trabajo->id)->delete();
+            unlink( public_path().$orden_trabajo->url);
+        }
+        
+        
+        $trabajo = Trabajos::findOrFail($id);
+        $trabajo->delete();
+
+        return;
     }
 
 
@@ -105,23 +170,74 @@ class OrdenTrabajoController extends Controller
         $manager = new ImageManager(array('local' => 'imagick'));
 
         foreach ($uploadedFile as $file){
+
             $filename = time().'.'.$file->getClientOriginalExtension();
-            $path = storage_path('app/public/ordenes_trabajos/'.$filename);
+            $path = public_path().'/images/orden_trabajos/'.$filename;
+
+
             $img = $manager->make($file->getRealPath());
             $img->resize(1000,1000, function($constraint){
                 $constraint->aspectRatio();
             })->save($path);
-            //url de comercialsupra.cl/registro
-            //$url = url('storage/img/vehicles/'.$filename);
-            //url original sin subcarpeta
-            $url = url('storage/ordenes_trabajos/'.$filename);
+
+            $url = '/images/orden_trabajos/'.$filename;
+
             ImageOrdenTrabajo::create(['trabajo_id' => $id, 'url' => $url]);
 
             array_push($arreglo, $path);
+
+
         }
 
 
 
         return response($arreglo);
+    }
+
+
+    public function AgregarObservacion(Request $request)
+    {
+        $arreglo = array();
+        $uploadedFile = $request->pics_observacion;
+        $id =  $request->id;
+        $observacion =  $request->observacion;
+
+        $manager = new ImageManager(array('local' => 'imagick'));
+
+        foreach ($uploadedFile as $file){
+
+            $filename = time().'.'.$file->getClientOriginalExtension();
+            $path = public_path().'/images/observaciones/'.$filename;
+
+
+            $img = $manager->make($file->getRealPath());
+            $img->resize(1000,1000, function($constraint){
+                $constraint->aspectRatio();
+            })->save($path);
+
+            $url = '/images/observaciones/'.$filename;
+
+            Observacion::create([
+                'trabajo_id' => $id,
+                'observacion' => $observacion,
+                'url' => $url,
+            ]);
+
+            array_push($arreglo, $path);
+
+
+        }
+        return response($arreglo);
+        
+    }
+
+
+    public function EliminarObservacion($id){
+
+        $observacion = Observacion::findOrFail($id);
+        unlink( public_path().$observacion->url);
+        $observacion->delete();
+
+        return;
     }
 }

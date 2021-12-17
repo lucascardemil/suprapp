@@ -60,32 +60,45 @@ export default { //methods
     },
     modalDetailVehicle(context, data) {
         context.commit('modalDetailVehicle', data.vehicleLocal)
+        context.commit('getTrabajos', data)
     },
     modalOrdenTrabajo(context, data) {
       context.commit('modalOrdenTrabajo', data.vehicleLocal)
+      context.commit('getTrabajos', data.vehicleLocal.id)
     },
     modalFotosOrdenTrabajo(context, data) {
         context.commit('modalFotosOrdenTrabajo', data.id)
         context.commit('getFotosOrdenTrabajo', data.id)
     },
-    addTrabajo(context, data) {
-        context.commit('addTrabajo', data)
+    modalObservacion(context, data) {
+        context.commit('modalObservacion', data.id)
+        context.commit('getObservaciones', data.id)
     },
-    removeFromTrabajo(context, data) {
-        context.commit('removeFromTrabajo', data)
+    removeTrabajo(context, data) {
+        context.commit('removeTrabajo', data.id)
+        context.commit('getOrdenesTrabajos')
     },
-    guardarOrdenTrabajo(context, data) {
-        context.commit('guardarOrdenTrabajo', data)
-        // setTimeout(function () {
-        //     context.commit('allSalesCalendar')
-        // }, 1000)
+    removeObservacion(context, data) {
+        context.commit('removeObservacion', data.id)
     },
+    guardarOrdenTrabajo(context) {
+        context.commit('guardarOrdenTrabajo')
+    },
+    
     getOrdenesTrabajos(context, data) {
         context.commit('getOrdenesTrabajos', data)
     },
 
+    getObservaciones(context, data) {
+        context.commit('getObservaciones', data)
+    },
+
     AgregarFotosOrdenTrabajo(context) {
         context.commit('AgregarFotosOrdenTrabajo')
+    },
+
+    AgregarObservacion(context) {
+        context.commit('AgregarObservacion')
     },
     createDetailVehicle(context) {
         context.commit('createDetailVehicle')
@@ -228,6 +241,9 @@ export default { //methods
         context.commit('getVehiculoMotors', data.page)
     },
     /********************************** */
+    subirFotosObservacion(context, data) {
+        context.commit('subirFotosObservacion', data.evt)
+    },
     subirFotosOrdenTrabajo(context, data) {
         context.commit('subirFotosOrdenTrabajo', data.evt)
     },

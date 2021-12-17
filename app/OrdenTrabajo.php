@@ -8,7 +8,7 @@ class OrdenTrabajo extends Model
 {
     protected $fillable = [
         'vehicle_id', 'km'
-     ];
+    ];
 
     public function vehicle()
     {

@@ -102,6 +102,13 @@ Route::post('checkRealizado', 'OrdenTrabajoController@checkRealizado');
 Route::post('deleteRealizado/{id}', 'OrdenTrabajoController@NocheckRealizado');
 Route::post('subirfotosordentrabajo', 'OrdenTrabajoController@SubirFotosOrdenTrabajo');
 Route::get('fotosordentrabajo/{id}', 'OrdenTrabajoController@obtenerFotosOrdenTrabajo');
+Route::post('subirobservacion', 'OrdenTrabajoController@AgregarObservacion');
+Route::get('observaciones/{id}', 'OrdenTrabajoController@observaciones');
+Route::delete('eliminarobservacion/{id}', 'OrdenTrabajoController@EliminarObservacion');
+Route::get('trabajos/{id}', 'OrdenTrabajoController@trabajos');
+
+
+
 
 Route::ApiResource('notes', 'NoteController');
 
