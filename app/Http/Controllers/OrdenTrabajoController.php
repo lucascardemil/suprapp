@@ -9,6 +9,7 @@ use App\Trabajos;
 use App\ImageOrdenTrabajo;
 use App\Observacion;
 use App\Vehicle;
+use App\User;
 use Auth;
 
 
@@ -17,12 +18,25 @@ class OrdenTrabajoController extends Controller
     
     public function index()
     {
-        $vehicles = Vehicle::where('user_id', '=', Auth::id())->get();
+        $user_id = \Auth::user()->id;
 
-        foreach($vehicles as $vehicle){
+        $users = User::where('id', '=', $user_id)->with('roles')->get();
 
-            $ordenestrabajos = OrdenTrabajo::with('vehicle', 'trabajo')->where('vehicle_id', '=', $vehicle->id)->get();
-            return $ordenestrabajos;
+        foreach ($users as $user) {
+            foreach ($user->roles as $roles) {
+                if($roles->name == 'admin'){
+                    $ordenestrabajos = OrdenTrabajo::with('vehicle', 'trabajo')->get();
+                    return $ordenestrabajos;
+                }else{
+                    $vehicles = Vehicle::where('user_id', '=', $user_id)->get();
+
+                    foreach($vehicles as $vehicle){
+
+                        $ordenestrabajos = OrdenTrabajo::with('vehicle', 'trabajo')->where('vehicle_id', '=', $vehicle->id)->get();
+                        return $ordenestrabajos;
+                    }
+                }
+            }
         }
     }
 
@@ -54,22 +68,6 @@ class OrdenTrabajoController extends Controller
     
     public function store(Request $request)
     {
-        // $orden_trabajo = $request->orden_trabajo;
-
-        // $orden_trabajo_id = OrdenTrabajo::create([
-        //     'vehicle_id' => $orden_trabajo[0]['vehicle_id'],
-        //     'km' => $orden_trabajo[0]['km']
-        // ])->id;
-
-        // $trabajo = $request->trabajos;
-
-        // for ($i=0; $i<count($trabajo); $i++){
-        //     Trabajos::create([
-        //         'orden_trabajo_id' => $orden_trabajo_id,
-        //         'descripcion' => $trabajo[$i]['descripcion'],
-        //         'realizado' => 0
-        //     ]);
-        // }
 
         $data = $request->all();
 

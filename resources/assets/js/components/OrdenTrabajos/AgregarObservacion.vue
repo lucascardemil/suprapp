@@ -85,11 +85,7 @@ export default {
         ...mapActions(['getObservaciones','removeObservacion', 'AgregarObservacion', 'subirFotosObservacion']),
     },
 
-    created(){
-        loadProgressBar();
-        // this.$store.dispatch('getOrdenesTrabajos', { page: 1 })
-        this.$store.dispatch('getObservaciones')
-    }
+    
 }
 </script>
 <style>

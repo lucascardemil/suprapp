@@ -47,7 +47,7 @@
                     <td width="10px">{{ quotationshippingLocal.id }}</td>
                     <td class="text-center" v-if="quotationshippingLocal.enviado > 0">
                         
-                        <button class="button" @click.prevent="deleteEnviado({ id: quotationshippingLocal.id })"><span>Enviado </span></button>
+                        <button class="button" @click.prevent="deleteEnviado({ id: quotationshippingLocal.id })"><span>Enviado</span></button>
                         
                     </td>
                     <td class="text-center" v-else>
@@ -193,7 +193,7 @@ export default {
   text-align: center;
   font-size: 0.875rem;
   padding: 0.25rem 0.5rem;
-  width: 80px;
+  width: 100%;
   transition: all 0.5s;
   cursor: pointer;
 }

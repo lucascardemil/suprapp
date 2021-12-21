@@ -60,7 +60,6 @@ export default { //methods
     },
     modalDetailVehicle(context, data) {
         context.commit('modalDetailVehicle', data.vehicleLocal)
-        context.commit('getTrabajos', data)
     },
     modalOrdenTrabajo(context, data) {
       context.commit('modalOrdenTrabajo', data.vehicleLocal)
