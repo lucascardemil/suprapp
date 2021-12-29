@@ -80,8 +80,10 @@ export default { //methods
     removeObservacion(context, data) {
         context.commit('removeObservacion', data.id)
     },
-    guardarOrdenTrabajo(context) {
-        context.commit('guardarOrdenTrabajo')
+    guardarOrdenTrabajo(context, data) {
+        context.commit('guardarOrdenTrabajo', data.km_old)
+        context.commit('getTrabajos', data.id)
+        context.commit('getVehicles', 1)
     },
     
     getOrdenesTrabajos(context, data) {

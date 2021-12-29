@@ -81,6 +81,10 @@ class OrdenTrabajoController extends Controller
                     'descripcion' => $data['descripcion'],
                     'realizado' => 0
                 ]);
+
+                Vehicle::find($data['vehicle_id'])->update([
+                    'km' => $data['km'],
+                ]);
             }
 
         }else{
@@ -94,6 +98,10 @@ class OrdenTrabajoController extends Controller
                 'orden_trabajo_id' => $orden_trabajo_id,
                 'descripcion' => $data['descripcion'],
                 'realizado' => 0
+            ]);
+
+            Vehicle::find($data['vehicle_id'])->update([
+                'km' => $data['km'],
             ]);
         }
 

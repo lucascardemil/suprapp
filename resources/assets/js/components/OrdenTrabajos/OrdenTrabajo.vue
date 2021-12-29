@@ -13,7 +13,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-12">
-                                <form action="POST" v-on:submit.prevent="guardarOrdenTrabajo">
+                                <form action="POST" v-on:submit.prevent="guardarOrdenTrabajo({ id: newOrdenTrabajo.vehicle_id, km_old:  newOrdenTrabajo.km_old})">
                                     <div class="form-group">
                                         <label for="kilometraje">Kilometraje</label>
                                         <input v-validate="'required|min:2|max:190'"
@@ -45,6 +45,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Trabajo</th>
+                                                <th>Fecha</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -53,6 +54,7 @@
                                             <tr  v-for="trabajo in trabajos" :key="trabajo.id">
                                                 <td>{{ trabajo.id }}</td>
                                                 <td>{{ trabajo.descripcion }}</td>
+                                                <td>{{ trabajo.created_at |  moment('DD/MM/YYYY') }}</td>
                                                 <td class="text-right">
                                                     <a 
                                                         href="#" 

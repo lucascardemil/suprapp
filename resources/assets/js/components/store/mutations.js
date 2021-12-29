@@ -241,7 +241,7 @@ export default { //used for changing the state
     },
     modalOrdenTrabajo(state, vehicle) {
         state.newOrdenTrabajo.vehicle_id = vehicle.id
-        state.newOrdenTrabajo.km = vehicle.km
+        state.newOrdenTrabajo.km_old = vehicle.km
         $("#createOrdenTrabajo").modal('show')
     },
 
@@ -259,19 +259,25 @@ export default { //used for changing the state
     
     guardarOrdenTrabajo(state) {
         var url = urlOrdenTrabajo
-        axios.post(url, {
-            vehicle_id: state.newOrdenTrabajo.vehicle_id,
-            km: state.newOrdenTrabajo.km,
-            descripcion: state.newOrdenTrabajo.descripcion,
-        }).then(response => {
-            state.newOrdenTrabajo.descripcion = ''
-            state.errorsLaravel = []
-            toastr.success('Se creo la orden de trabajo correctamente')
-            $('#createOrdenTrabajo').modal('hide')
-        })
-        .catch(error => {
-            toastr.error(error.response.data)
-        })
+
+        if(state.newOrdenTrabajo.km <= state.newOrdenTrabajo.km_old){
+            toastr.error('El kilometraje no puede ser menor o igual al actual')
+        }else{
+            axios.post(url, {
+                vehicle_id: state.newOrdenTrabajo.vehicle_id,
+                km: state.newOrdenTrabajo.km,
+                descripcion: state.newOrdenTrabajo.descripcion,
+            }).then(response => {
+                state.newOrdenTrabajo.descripcion = ''
+                state.newOrdenTrabajo.km = 0
+                state.errorsLaravel = []
+                toastr.success('Se creo la orden de trabajo correctamente')
+                // $('#createOrdenTrabajo').modal('hide')
+            })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
+        }
     
     },
 

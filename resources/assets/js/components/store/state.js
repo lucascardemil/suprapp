@@ -179,6 +179,7 @@ export default { //data
     newOrdenTrabajo: {
         vehicle_id: 0,
         km: 0,
+        km_old: 0,
         descripcion: '',
         observacion: ''
     },

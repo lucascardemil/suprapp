@@ -51,6 +51,11 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
 
                     <tr v-for="vehicleLocal in vehicles" :key="vehicleLocal.id">
