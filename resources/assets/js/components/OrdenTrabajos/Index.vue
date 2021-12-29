@@ -21,7 +21,7 @@
                         <td>{{ ordentrabajoLocal.id }}</td>
                         <td>{{ ordentrabajoLocal.vehicle.patent }}</td>
                         <td>{{ ordentrabajoLocal.km }}</td>
-                        <td>{{ ordentrabajoLocal.created_at |  moment('DD/MM/YYYY') }}</td>
+                        <td>{{ ordentrabajoLocal.updated_at |  moment('DD/MM/YYYY') }}</td>
 
                         <td width="10px">
                             <a class="btn btn-block btn-info btn-sm"
@@ -49,7 +49,7 @@
                                         <tr v-for="trabajo in ordentrabajoLocal.trabajo" :key="trabajo.id">
                                             <td>{{ trabajo.id }}</td>
                                             <td>{{ trabajo.descripcion }}</td>
-                                            <td>{{ ordentrabajoLocal.vehicle.km }}</td>
+                                            <td>{{ trabajo.km }}</td>
                                             <td v-if="trabajo.realizado > 0">
                             
                                                 <button class="button" @click.prevent="deleteRealizado({ id: trabajo.id })" ><i class="fas fa-check"></i></button>

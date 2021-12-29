@@ -76,6 +76,7 @@ export default { //methods
     removeTrabajo(context, data) {
         context.commit('removeTrabajo', data.id)
         context.commit('getOrdenesTrabajos')
+        context.commit('getTrabajos', data.id)
     },
     removeObservacion(context, data) {
         context.commit('removeObservacion', data.id)
