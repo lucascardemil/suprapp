@@ -28,6 +28,7 @@
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,6 +48,7 @@
                             <input type="text" class="form-control form-control-sm"
                                     v-model="searchVehicle.year" @keyup="getVehicles">
                         </td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -107,6 +109,15 @@
                                 <i class="fas fa-wrench"></i>
                             </a>
                         </td>
+                        <td width="10px">
+                            <a href="#" class="btn btn-success btn-sm"
+                                @click.prevent="modalCheckList( { vehicleLocal } )"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Check List">
+                                <i class="fas fa-clipboard-check"></i>
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -153,6 +164,7 @@
         <Imagenes></Imagenes>
         <AgregarDetalle></AgregarDetalle>
         <OrdenTrabajo></OrdenTrabajo>
+        <CheckListVehicle></CheckListVehicle>
     </div>
 
 </template>
@@ -167,17 +179,18 @@ import Detalle from './Detalle'
 import Imagenes from './Imagenes'
 import AgregarDetalle from './AgregarDetalle'
 import OrdenTrabajo from '../OrdenTrabajos/OrdenTrabajo'
+import CheckListVehicle from '../Check-List/CheckListVehicle'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle, OrdenTrabajo },
+    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle, OrdenTrabajo, CheckListVehicle },
     computed:{
         ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle']),
         ...mapGetters(['isActived', 'pagesNumber'])
     },
     methods:{
         ...mapActions(['getVehicles','getVehiclesUser', 'editVehicle',
-                'detailVehicle', 'modalDetailVehicle','modalOrdenTrabajo','changePageVehicle'])
+                'detailVehicle', 'modalDetailVehicle','modalOrdenTrabajo','changePageVehicle', 'modalCheckList'])
     },
     created(){
         loadProgressBar();

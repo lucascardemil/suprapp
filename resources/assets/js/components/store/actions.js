@@ -76,14 +76,14 @@ export default { //methods
     removeTrabajo(context, data) {
         context.commit('removeTrabajo', data.id)
         context.commit('getOrdenesTrabajos')
-        context.commit('getTrabajos', data.id)
+        // context.commit('getTrabajos', data.vehicle_id)
     },
     removeObservacion(context, data) {
         context.commit('removeObservacion', data.id)
     },
     guardarOrdenTrabajo(context, data) {
         context.commit('guardarOrdenTrabajo', data.km_old)
-        context.commit('getTrabajos', data.id)
+        // context.commit('getTrabajos', data.id)
         context.commit('getVehicles', 1)
     },
     
@@ -106,11 +106,124 @@ export default { //methods
         context.commit('createDetailVehicle')
     },
 
+
+    modalCrearFormatoCheckList(context){
+        context.commit('modalCrearFormatoCheckList')
+    },
+
+    modalCrearIntervencionCheckList(context){
+        context.commit('modalCrearIntervencionCheckList')
+    },
+
+    modalIntervencion(context, data){
+        context.commit('modalIntervencion', data.id)
+    },
+    modalCerrarIntervencion(context){
+        context.commit('modalCerrarIntervencion')
+    },
+
+    agregarCategoria(context, data) {
+        context.commit('agregarCategoria', data)
+    },
+
+    agregarIntervencion(context) {
+        context.commit('agregarIntervencion')
+    },
+
+    guardarIntervenciones(context, data){
+        context.commit('guardarIntervenciones', data)
+    },
+
+    eliminarIntervencion(context, data){
+        context.commit('eliminarIntervencion', data)
+    },
+    eliminarCategoria(context, data){
+        context.commit('eliminarCategoria', data)
+    },
+
+    crearCheckList(context, data) {
+        context.commit('crearCheckList', data)
+    },
+
+    finalizarFormatoCheckList(context) {
+        context.commit('finalizarFormatoCheckList')
+    },
+
+    modalMostrarFormatoCheckList(context, data) {
+        context.commit('modalMostrarFormatoCheckList', data)
+    },
+
+    modalEditarCategoria(context, data){
+        context.commit('modalEditarCategoria', data.formatchecklist)
+    },
+
+    editarCategoriaCheckList(context, data){
+        context.commit('editarCategoriaCheckList', data)
+    },
+
+    modalEditarIntervencion(context, data){
+        context.commit('modalEditarIntervencion', data.intervenciones)
+    },
+
+    editarIntervencionCheckList(context, data){
+        context.commit('editarIntervencionCheckList', data)
+    },
+
+    modalAgregarCategoria(context){
+        context.commit('modalAgregarCategoria')
+    },
+    modalAgregarIntervencion(context, data){
+        context.commit('modalAgregarIntervencion', data.id)
+    },
+
+    crearCategoria(context, data) {
+        context.commit('crearCategoria', data)
+    },
+
+    crearIntervencion(context, data) {
+        context.commit('crearIntervencion', data.id)
+    },
+
+    modalCheckList(context, data){
+        context.commit('modalCheckList', data.vehicleLocal)
+    },
+
+    guardarCheckList(context, data){
+        context.commit('guardarCheckList', data)
+    },
+
+    modalObservacionVehicleCheckList(context, data){
+        context.commit('modalObservacionVehicleCheckList', data)
+    },
+
+    agregarObservacionCheckList(context, data){
+        context.commit('agregarObservacionCheckList', data)
+    },
+
+    subirFotosObservacionCheckList(context, data) {
+        context.commit('subirFotosObservacionCheckList', data.evt)
+    },
+
+    getCheckListVehicles(context, data) {
+        context.commit('getCheckListVehicles', data)
+    },
+
+    modalMostrarCheckListVehicle(context, data){
+        context.commit('modalMostrarCheckListVehicle', data.id)
+    },
+
     createProductsPagos(context) {
         context.commit('createProductsPagos')
         setTimeout(function () {
             context.commit('getProducts', 1)
         }, 1000)
+    },
+
+    cerrarCategoria(context){
+        context.commit('cerrarCategoria')
+    },
+    cerrarIntervencion(context){
+        context.commit('cerrarIntervencion')
     },
     
     modalRequestParts(context, data) {

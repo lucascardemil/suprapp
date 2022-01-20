@@ -73,25 +73,42 @@ class OrdenTrabajoController extends Controller
 
         if(OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->count() > 0){
 
-            $ordenestrabajos = OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->get();
-            foreach($ordenestrabajos as $ordentrabajo){
+            // $ordenestrabajos = OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->get();
+            // foreach($ordenestrabajos as $ordentrabajo){
 
+            //     Trabajos::create([
+            //         'orden_trabajo_id' => $ordentrabajo->id,
+            //         'descripcion' => $data['descripcion'],
+            //         'realizado' => 0, 
+            //         'km' => $data['km']
+            //     ]);
+
+            //     $trabajos = Trabajos::where('orden_trabajo_id', '=', $ordentrabajo->id)->get();
+            //     return $trabajos;
+            // }
+
+            $ordenestrabajos = OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->get();
+
+            if($ordenestrabajos[0]['id'] > 0){
                 Trabajos::create([
-                    'orden_trabajo_id' => $ordentrabajo->id,
+                    'orden_trabajo_id' => $ordenestrabajos[0]['id'],
                     'descripcion' => $data['descripcion'],
                     'realizado' => 0, 
                     'km' => $data['km']
                 ]);
+
+                Vehicle::find($data['vehicle_id'])->update([
+                    'km' => $data['km'],
+                ]);
+
+                OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->update([
+                    'km' => $data['km']
+                ]);
+
+                $trabajos = Trabajos::where('orden_trabajo_id', '=', $ordenestrabajos[0]['id'])->get();
+                return $trabajos;
             }
-
-            Vehicle::find($data['vehicle_id'])->update([
-                'km' => $data['km'],
-            ]);
-
-            OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->update([
-                'km' => $data['km']
-            ]);
-
+            
         }else{
 
             $orden_trabajo_id = OrdenTrabajo::create([
@@ -113,6 +130,9 @@ class OrdenTrabajoController extends Controller
             OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->update([
                 'km' => $data['km']
             ]);
+
+            $trabajos = Trabajos::where('orden_trabajo_id', '=', $orden_trabajo_id)->get();
+            return $trabajos;
         }
 
 
@@ -154,7 +174,8 @@ class OrdenTrabajoController extends Controller
         $trabajo = Trabajos::findOrFail($id);
         $trabajo->delete();
 
-        return;
+        $trabajos = Trabajos::where('orden_trabajo_id', '=', $trabajo->orden_trabajo_id)->get();
+        return $trabajos;
     }
 
 

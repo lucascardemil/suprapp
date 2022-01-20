@@ -183,7 +183,44 @@ export default { //data
         descripcion: '',
         observacion: ''
     },
+    checkListForm:{
+        categoria: '',
+    },
+    intervencionForm:{
+        id_categoria: 0,
+        intervencion: '',
+    },
+    editarCategoriaForm:{
+        id_categoria: 0,
+        categoria: ''
+    },
+    editarIntervencionForm:{
+        id_intervencion: 0,
+        intervencion: ''
+    },
+    formcheckList:{
+        id_vehicle: 0,
+        existe: [],
+        estado: [],
+    },
+
+    columnaExiste:[],
+    columnaEstado:[],
+    columnaObservacion:{
+        id_intervencion: 0,
+        id_vehicle: 0,
+        observacion: '',
+        imagenes: []
+    },
+    mostrarchecklistvehicles:[],
+    checklistvehicles:[],
+    checklists:[],
+    formatchecklists:[],
+    editarIntervenciones:[],
+    categorias:[],
     ordenestrabajos:[],
+    intervenciones:[],
+    id_checklist: 0,
     trabajos:[],
     observaciones:[],
     /**********************************/

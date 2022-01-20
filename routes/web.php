@@ -109,6 +109,25 @@ Route::get('trabajos/{id}', 'OrdenTrabajoController@trabajos');
 
 
 
+Route::post('crearCheckList', 'CheckListController@crearCheckList');
+Route::get('checkListCategorias/{id}', 'CheckListController@checkListCategorias');
+Route::post('crearIntervenciones', 'CheckListController@crearIntervenciones');
+Route::get('checkListIntervencion/{id}', 'CheckListController@checkListIntervencion');
+Route::delete('eliminarIntervencion/{id}', 'CheckListController@eliminarIntervencion');
+Route::get('finalizarFormatoCheckList', 'CheckListController@finalizarFormatoCheckList');
+Route::get('mostrarFormatoCheckList', 'CheckListController@mostrarFormatoCheckList');
+Route::post('editarCategoria', 'CheckListController@editarCategoriaCheckList');
+Route::post('editarIntervencion', 'CheckListController@editarIntervencionCheckList');
+Route::post('crearCategoria', 'CheckListController@crearCategoria');
+Route::post('crearIntervencion/{id}', 'CheckListController@crearIntervencion');
+Route::post('guardarCheckListVehicle', 'CheckListController@guardarCheckListVehicle');
+Route::post('agregarObservacionCheckList', 'CheckListController@agregarObservacionCheckList');
+Route::get('checklistvehicles', 'CheckListController@checklistvehicles');
+Route::get('mostrarCheckListVehicles/{id}', 'CheckListController@mostrarCheckListVehicles');
+
+
+
+
 
 Route::ApiResource('notes', 'NoteController');
 
@@ -271,6 +290,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin-orden-trabajos', function () {
       return view('admin.orden-trabajos');
     })->name('admin-orden-trabajos'); //->middleware('permission:vehiculos');
+
+    Route::get('admin-check-list', function () {
+        return view('admin.check-list');
+      })->name('admin-check-list'); //->middleware('permission:vehiculos');
 
     Route::get('admin-vehiculosM', function () {
         return view('admin.vehiculo-mecanico');

@@ -59,7 +59,7 @@
                                                     <a 
                                                         href="#" 
                                                         class="btn btn-danger btn-sm"
-                                                        @click.prevent="removeTrabajo({ id: trabajo.id })"
+                                                        @click.prevent="removeTrabajo({ id: trabajo.id, vehicle_id: newOrdenTrabajo.vehicle_id })"
                                                         data-toggle="tooltip"
                                                         data-placement="top"
                                                         title="Eliminar">

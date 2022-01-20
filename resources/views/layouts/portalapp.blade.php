@@ -156,6 +156,14 @@
             </li>
             @endcan
 
+            @can('check-list')
+            <li id="orden-trabajos" class="nav-item">
+                <a class="nav-link" href="{{ route('admin-check-list') }}">
+                <i class="fas fa-clipboard-check"></i>
+                    <span>Check List</span></a>
+            </li>
+            @endcan
+
             @can('mechanic-vehicles')
             <li id="vehiculos-m" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-vehiculosM') }}">

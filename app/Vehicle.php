@@ -46,4 +46,9 @@ class Vehicle extends Model
         }
         return $query;
     }
+
+    public function checklist()
+    {
+        return $this->hasMany('App\CheckListVehicle');
+    }
 }

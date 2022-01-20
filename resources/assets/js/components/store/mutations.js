@@ -128,6 +128,20 @@ var urlUpdateUtilidadDefect = 'update-utilidad-defect'
 var urlUtilidadDefect = 'utilidad-defect'
 var urlDescuentoDefect = 'descuento-defect'
 
+var urlCrearCheckList = 'crearCheckList'
+var urlCheckListCategorias = 'checkListCategorias'
+var urlCrearIntervenciones = 'crearIntervenciones'
+var urlFinalizarFormatoCheckList = 'finalizarFormatoCheckList'
+var urlMostrarFormatoCheckList = 'mostrarFormatoCheckList'
+var urlEditarCategoria = 'editarCategoria'
+var urlEditarIntervecion = 'editarIntervencion'
+var urlCrearCategoria = 'crearCategoria'
+var urlCrearIntervencion = 'crearIntervencion'
+var urlAgregarObservacionCheckList = 'agregarObservacionCheckList'
+var urlGuardarCheckListVehicle = 'guardarCheckListVehicle'
+var urlCheckListVehicles = 'checklistvehicles'
+var urlMostrarCheckListVehicles = 'mostrarCheckListVehicles'
+
 export default { //used for changing the state
     /******************************* */
     /****** sección vehiculos **** */
@@ -273,6 +287,9 @@ export default { //used for changing the state
                 state.errorsLaravel = []
                 toastr.success('Se creo la orden de trabajo correctamente')
                 // $('#createOrdenTrabajo').modal('hide')
+                
+                state.trabajos = response.data
+            
             })
             .catch(error => {
                 toastr.error(error.response.data)
@@ -281,34 +298,11 @@ export default { //used for changing the state
     
     },
 
-
-    // addOrdenTrabajo(state) {
-    //     state.orden_trabajo.push({
-    //         vehicle_id: state.newOrdenTrabajo.vehicle_id,
-    //         km: state.newOrdenTrabajo.km,
-    //     })
-        
-    //     state.trabajos.push({
-    //         descripcion: state.newOrdenTrabajo.descripcion,
-    //     })
-    // },
-
-    // addObservacion(state) {
-    //     // state.orden_trabajo.push({
-    //     //     vehicle_id: state.newOrdenTrabajo.vehicle_id,
-    //     //     km: state.newOrdenTrabajo.km,
-    //     // })
-        
-    //     state.observaciones.push({
-    //         vehicle_id: state.newOrdenTrabajo.vehicle_id,
-    //         observacion: state.newOrdenTrabajo.observacion,
-    //     })
-    // },
     removeTrabajo(state, id) {
         var url = urlOrdenTrabajo + '/' + id
         axios.delete(url).then(response => {
             toastr.success('Orden de trabajo eliminada con éxito')
-            $('#createOrdenTrabajo').modal('hide')
+            state.trabajos = response.data
         })
     },
 
@@ -452,16 +446,385 @@ export default { //used for changing the state
             state.attachment.push(selectedFiles[i])
         }
     },
-    
+
+
+    modalCrearFormatoCheckList(state, id) {
+        // state.newOrdenTrabajo.vehicle_id = id
+        $("#CrearFormatoCheckList").modal('show')
+    },
+
+    agregarCategoria(state) {
+        state.checklists.push({
+            categoria: state.checkListForm.categoria
+        })
+        state.checkListForm.categoria = ''
+    },
+
+    crearCheckList(state) {
+        if(state.checklists.length == 0){
+            toastr.error('¡Error, Agregue una categoria!')
+        }else{
+            var url = urlCrearCheckList
+            axios.post(url, {
+                checklists: state.checklists,
+            }).then(response => {
+
+                var url = urlCheckListCategorias + '/' + response.data
+                axios.get(url).then(response => {
+                    state.categorias = response.data
+                })
+                
+                $('#CrearFormatoCheckList').modal('hide')
+                $('#CrearIntervencionCheckList').modal({backdrop: 'static', keyboard: false})  
+            })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
+        }
+    },
+
+    modalIntervencion(state, id) {
+        state.intervencionForm.id_categoria = id
+        $("#IntervencionCheckList").modal('show') 
+    },
+
+    agregarIntervencion(state) {
+        state.intervenciones.push({
+            id_categoria: state.intervencionForm.id_categoria,
+            intervencion: state.intervencionForm.intervencion
+        })
+        state.intervencionForm.intervencion = ''
+    },
+
+    modalCerrarIntervencion(state) {
+        $('#CrearIntervencionCheckList').modal({backdrop: 'static', keyboard: false})  
+        $("#IntervencionCheckList").modal('hide')
+    },
+
+    guardarIntervenciones(state){
+        if(state.intervenciones.length == 0){
+            toastr.error('¡Error, Agregue una intervención!')
+        }else{
+            var url = urlCrearIntervenciones
+            axios.post(url, {
+                intervenciones: state.intervenciones,
+            }).then(response => {
+                // var url = urlCheckListIntervenciones + '/' + response.data
+                // axios.get(url).then(response => {
+                //     state.intervenciones = response.data
+                // })
+
+                var url = urlCheckListCategorias + '/' + response.data[0].check_list_id
+                axios.get(url).then(response => {
+                    state.categorias = response.data
+                })
 
 
 
+                state.intervenciones = []
+                $('#CrearIntervencionCheckList').modal({backdrop: 'static', keyboard: false}) 
+                $("#IntervencionCheckList").modal('hide')
+                toastr.success('Se agrego la intervención correctamente')
+            })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
+        }
+    },
 
+    eliminarIntervencion(state, data){
+        state.intervenciones.splice(state.intervenciones.indexOf(data.id))
+    },
+    eliminarCategoria(state, data){
+        state.checklists.splice(state.checklists.indexOf(data.id))
+    },
+
+    finalizarFormatoCheckList(state){
+        var url = urlFinalizarFormatoCheckList
+        axios.get(url).then(response => {
+            if(response.data.intervenciones.length == 0){
+                toastr.error('¡Error, Agregue una intervención!')
+            }else{
+                state.checklists = []
+                state.categorias = []
+                state.intervenciones = []
+                $("#CrearIntervencionCheckList").modal('hide')
+            }
+        })
+    },
+
+    modalMostrarFormatoCheckList(state){
+        var url = urlMostrarFormatoCheckList
+        axios.get(url).then(response => {
+            state.formatchecklists = response.data
+        })
+        $("#MostrarFormatoCheckList").modal('show')
+    },
+
+    modalEditarCategoria(state, formatchecklist){
+        state.editarCategoriaForm.categoria = formatchecklist.categoria
+        state.editarCategoriaForm.id_categoria = formatchecklist.id
+        $('#EditarCategoriaCheckList').modal('show')
+    },
+
+    editarCategoriaCheckList(state) {
+        var url = urlEditarCategoria
+        axios.post(url, {
+            id_categoria: state.editarCategoriaForm.id_categoria,
+            categoria: state.editarCategoriaForm.categoria,
+        }).then(response => {
+            var url = urlMostrarFormatoCheckList
+            axios.get(url).then(response => {
+                state.formatchecklists = response.data
+            })
+            $('#EditarCategoriaCheckList').modal('hide') 
+        })
+        .catch(error => {
+            toastr.error(error.response.data)
+        })
+
+    },
+
+    modalEditarIntervencion(state, intervenciones){
+        state.editarIntervencionForm.intervencion = intervenciones.intervencion
+        state.editarIntervencionForm.id_intervencion = intervenciones.id
+        $('#EditarIntervencionCheckList').modal('show')
+    },
+
+    editarIntervencionCheckList(state) {
+        var url = urlEditarIntervecion
+        axios.post(url, {
+            id_intervencion: state.editarIntervencionForm.id_intervencion,
+            intervencion: state.editarIntervencionForm.intervencion,
+        }).then(response => {
+            var url = urlMostrarFormatoCheckList
+            axios.get(url).then(response => {
+                state.formatchecklists = response.data
+            })
+            $('#EditarIntervencionCheckList').modal('hide') 
+        })
+        .catch(error => {
+            toastr.error(error.response.data)
+        })
+
+    },
+
+    modalAgregarCategoria(state){
+        $('#AgregarCategoria').modal({backdrop: 'static', keyboard: false}) 
+    },
+
+    modalAgregarIntervencion(state, id){
+        state.intervencionForm.id_categoria = id
+        $('#AgregarIntervencion').modal({backdrop: 'static', keyboard: false}) 
+    },
+
+    crearCategoria(state) {
+        if(state.checklists.length == 0){
+            toastr.error('¡Error, Agregue una categoria!')
+        }else{
+            var url = urlCrearCategoria
+            axios.post(url, {
+                checklists: state.checklists,
+            }).then(response => {
+
+                var url = urlMostrarFormatoCheckList
+                axios.get(url).then(response => {
+                    state.formatchecklists = response.data
+                })
+
+                state.checklists = []
+                $('#AgregarCategoria').modal('hide')
+                toastr.success('Se agrego la categoria correctamente')
+            })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
+        }
+    },
+
+    crearIntervencion(state, id) {
+        if(state.intervenciones.length == 0){
+            toastr.error('¡Error, Agregue una intervención!')
+        }else{
+            var url = urlCrearIntervencion + '/' + id
+            axios.post(url, {
+                intervenciones: state.intervenciones,
+            }).then(response => {
+
+                var url = urlMostrarFormatoCheckList
+                axios.get(url).then(response => {
+                    state.formatchecklists = response.data
+                })
+                state.intervenciones = []
+                $('#AgregarIntervencion').modal('hide')
+                toastr.success('Se agrego la intervención correctamente')
+            })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
+        }
+    },
+
+    cerrarCategoria(state){
+        $('#AgregarCategoria').modal('hide')
+        $('#MostrarFormatoCheckList').modal('show')  
+    },
+
+
+    cerrarIntervencion(state){
+        $('#AgregarIntervencion').modal('hide')
+        $('#MostrarFormatoCheckList').modal('show')  
+    },
+
+    modalCheckList(state, vehicle){
+        state.formcheckList.id_vehicle = vehicle.id
+        var url = urlMostrarFormatoCheckList
+        axios.get(url).then(response => {
+            state.formatchecklists = response.data
+        })
+        $('#CheckListVehicle').modal('show')
+    },
+
+
+    setCheckExisteSi(state, value) {
+        state.checkExisteSi = value
+
+        state.columnaExiste.push({
+            id_intervencion: state.checkExisteSi,
+            existe: 'si'
+        })
+    },
+
+    setcheckExisteNo(state, value) {
+        state.checkExisteNo = value
+
+        state.columnaExiste.push({
+            id_intervencion: state.checkExisteNo,
+            existe: 'no',
+        })
+    },
+
+    setCheckEstadoBueno(state, value) {
+        state.checkEstadoBueno = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoBueno,
+            estado: 'bueno',
+        })
+    },
+    setCheckEstadoRegular(state, value) {
+        state.checkEstadoRegular = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoRegular,
+            estado: 'regular',
+        })
+    },
+    setCheckEstadoMalo(state, value) {
+        state.checkEstadoMalo = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoMalo,
+            estado: 'malo',
+        })
+    },
+
+    modalObservacionVehicleCheckList(state, data){
+        state.columnaObservacion.id_intervencion = data.id_intervencion
+        state.columnaObservacion.id_vehicle = data.id_vehicle
+        $('#AgregarObservacionCheckList').modal('show')
+    },
+
+    subirFotosObservacionCheckList(state, evt) {
+        state.form = new FormData()
+
+        state.images = []
+        state.attachment = []
+        let selectedFiles = evt.target.files
+
+        if (!selectedFiles.length) {
+            return false
+        }
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+            state.attachment.push(selectedFiles[i])
+        }
+    },
+
+
+    agregarObservacionCheckList(state) {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+
+        var url = urlAgregarObservacionCheckList
+        if (state.attachment.length > 0 && state.columnaObservacion.observacion != '') {
+
+            for (let i = 0; i < state.attachment.length; i++) {
+                state.form.append('imagenes_checklist[]', state.attachment[i])
+            }
+
+            state.form.append('id_intervencion_checklist', state.columnaObservacion.id_intervencion)
+            state.form.append('id_vehicle_checklist', state.columnaObservacion.id_vehicle)
+            state.form.append('observacion_checklist', state.columnaObservacion.observacion)
+            $("#filesObservacion").val(null)
+
+            axios.post(url, state.form, config).then(response => {
+                state.columnaObservacion.id_intervencion = ''
+                state.columnaObservacion.observacion = ''
+                state.columnaObservacion.id_vehicle = ''
+                state.attachment.length = []
+                state.errorsLaravel = []
+                $('#AgregarObservacionCheckList').modal('hide')
+                toastr.success('La observacion se agrego correctamente')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        }
+
+    },
+
+    guardarCheckList(state) {
+        var url = urlGuardarCheckListVehicle
+        axios.post(url, {
+            id_vehicle : state.formcheckList.id_vehicle,
+            id_checklist : state.formatchecklists[0].check_list_id,
+            existe: state.columnaExiste,
+            estado: state.columnaEstado,
+        
+        }).then(response => {
+            state.columnaExiste = [];
+            state.columnaEstado = [];
+            $('input[type="radio"]').prop('checked', false);         
+        $('#CheckListVehicle').modal('hide')
+            toastr.success('El check list se ingreso correctamente')
+        }).catch(error => {
+            state.errorsLaravel = error.response.data
+        }) 
+    },
+
+    getCheckListVehicles(state){
+        var url = urlCheckListVehicles
+        axios.get(url).then(response => {
+            state.checklistvehicles = response.data
+        })
+    },
+
+    modalMostrarCheckListVehicle(state, id) {
+        var url = urlMostrarCheckListVehicles  + '/' + id
+        axios.get(url).then(response => {
+            state.mostrarchecklistvehicles = response.data
+        })
+        $("#MostrarCheckListVehicle").modal('show')
+    },
 
     modalDetailVehicle(state, vehicle) {
         state.newDetailVehicle.vehicle_id = vehicle.id
         $("#createDetail").modal('show')
     },
+
     createDetailVehicle(state) {
         for (let i = 0; i < state.attachment.length; i++) {
             state.form.append('pics[]', state.attachment[i])
@@ -2633,23 +2996,6 @@ export default { //used for changing the state
         state.checkedPermissions = permissions
         $("#edit").modal('show')
     },
-    updateRole(state, id) {
-        var url = urlRoles + '/' + id
-        state.fillRole.special = state.checkedSpecialRole
-        state.fillRole.permissions = state.checkedPermissions
-        axios.put(url, state.fillRole).then(response => {
-            state.fillRole = {
-                id: '',
-                name: '',
-                description: ''
-            }
-            state.errorsLaravel = [];
-            $('#edit').modal('hide')
-            toastr.success('Rol actualizado con éxito')
-        }).catch(error => {
-            state.errorsLaravel = error.response.data
-        })
-    },
     deleteRole(state, id) {
         var url = urlRoles + '/' + id
         axios.delete(url).then(response => {
@@ -2775,7 +3121,7 @@ export default { //used for changing the state
             state.checkedPermissions = []
             $('input[name="permission"]').prop('disabled', true)
         }else if(value === 'all-access'){
-            state.checkedPermissions = [1,2,3,4,5,6,7,9,8,10,11,12,13,14,15,16,17,18,19]
+            state.checkedPermissions = [1,2,3,4,5,6,7,9,8,10,11,12,13,14,15,16,17,18,19,20,21]
             $('input[name="permission"]').prop('disabled', true)
         }else{
             state.checkedPermissions = []

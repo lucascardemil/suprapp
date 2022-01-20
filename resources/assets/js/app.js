@@ -57,6 +57,7 @@ Vue.component('utilidad-component', require('./components/Utilidad/Index.vue').d
 Vue.component('envios-component', require('./components/Quotationclient/ListarQuotationShipping.vue').default)
 
 Vue.component('ordentrabajos-component', require('./components/OrdenTrabajos/Index.vue').default)
+Vue.component('checklist-component', require('./components/Check-List/Index.vue').default)
 
 /**
  * Boleta components
