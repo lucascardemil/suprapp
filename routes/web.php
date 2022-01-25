@@ -116,6 +116,7 @@ Route::get('checkListIntervencion/{id}', 'CheckListController@checkListIntervenc
 Route::delete('eliminarIntervencion/{id}', 'CheckListController@eliminarIntervencion');
 Route::get('finalizarFormatoCheckList', 'CheckListController@finalizarFormatoCheckList');
 Route::get('mostrarFormatoCheckList', 'CheckListController@mostrarFormatoCheckList');
+Route::get('mostrarCheckList/{id}', 'CheckListController@mostrarCheckList');
 Route::post('editarCategoria', 'CheckListController@editarCategoriaCheckList');
 Route::post('editarIntervencion', 'CheckListController@editarIntervencionCheckList');
 Route::post('crearCategoria', 'CheckListController@crearCategoria');
@@ -124,10 +125,8 @@ Route::post('guardarCheckListVehicle', 'CheckListController@guardarCheckListVehi
 Route::post('agregarObservacionCheckList', 'CheckListController@agregarObservacionCheckList');
 Route::get('checklistvehicles', 'CheckListController@checklistvehicles');
 Route::get('mostrarCheckListVehicles/{id}', 'CheckListController@mostrarCheckListVehicles');
-
-
-
-
+Route::get('mostrarCondiciones', 'CheckListController@mostrarCondiciones');
+Route::get('mostrarObservaciones', 'CheckListController@mostrarObservaciones');
 
 Route::ApiResource('notes', 'NoteController');
 

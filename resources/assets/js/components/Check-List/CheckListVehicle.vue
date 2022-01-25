@@ -4,6 +4,14 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label for="kilometraje">Kilometraje</label>
+                            <input required 
+                                    class="form-control"
+                                    type="number"
+                                    name="kilometraje"
+                                    v-model="kilometraje" />
+                        </div>
 
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -33,7 +41,7 @@
                                     <tr v-for="intervencion in formatchecklist.intervenciones" :key="intervencion.id">
                                         <td>{{ intervencion.intervencion }}</td>
                                         <td class="text-center">
-                                            <input type="radio" required :name="'existe' + intervencion.id" :value="intervencion.id" v-model="checkExisteSi">
+                                            <input type="radio"  required :name="'existe' + intervencion.id" :value="intervencion.id" v-model="checkExisteSi">
                                             <label></label>
                                         </td>
                                         <td class="text-center">
@@ -54,7 +62,7 @@
                                         </td>
                                         <td>
                                             <a class="btn btn-success btn-block btn-sm text-white"
-                                                @click.prevent="modalObservacionVehicleCheckList({ id_intervencion: intervencion.id, id_vehicle: formcheckList.id_vehicle})">
+                                                @click.prevent="modalObservacionVehicleCheckList({ id_intervencion: intervencion.id})">
                                                 <i class="fas fa-plus"></i> Observación
                                             </a>
                                         </td>
@@ -62,8 +70,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        
-
                     </div>
                     <div class="modal-footer">
                         
@@ -91,8 +97,10 @@ import AgregarObservacionCheckList from './AgregarObservacionCheckList'
 export default {
     components: {AgregarObservacionCheckList},
     computed:{
-        ...mapState(['formatchecklists', 'formcheckList', 'columnaObservacion', 'columnaExiste', 'columnaEstado']),
+        ...mapState(['formatchecklists', 'formcheckList', 'id_vehicle','columnaObservacion', 'columnaExiste', 'columnaEstado']),
         ...mapGetters([]),
+
+
         checkExisteSi: {
             get () {
                 return this.$store.state.checkExisteSi
@@ -132,7 +140,16 @@ export default {
             set (value) {
                 this.$store.commit('setCheckEstadoMalo', value)
             }
+        },
+        kilometraje: {
+            get () {
+                return this.$store.state.kilometraje
+            },
+            set (value) {
+                this.$store.commit('setKilometraje', value)
+            }
         }
+        
     },
     methods:{
         ...mapActions(['guardarCheckList', 'modalObservacionVehicleCheckList'])

@@ -142,6 +142,11 @@ var urlGuardarCheckListVehicle = 'guardarCheckListVehicle'
 var urlCheckListVehicles = 'checklistvehicles'
 var urlMostrarCheckListVehicles = 'mostrarCheckListVehicles'
 
+var urlMostrarCheckList = 'mostrarCheckList'
+
+var urlMostrarCondiciones = 'mostrarCondiciones'
+var urlMostrarObservaciones = 'mostrarObservaciones'
+
 export default { //used for changing the state
     /******************************* */
     /****** sección vehiculos **** */
@@ -666,7 +671,7 @@ export default { //used for changing the state
     },
 
     cerrarCategoria(state){
-        $('#AgregarCategoria').modal('hide')
+        $('#AgregarCategoria').modal('hide')-
         $('#MostrarFormatoCheckList').modal('show')  
     },
 
@@ -677,56 +682,12 @@ export default { //used for changing the state
     },
 
     modalCheckList(state, vehicle){
-        state.formcheckList.id_vehicle = vehicle.id
-        var url = urlMostrarFormatoCheckList
+        state.id_vehicle = vehicle.id
+        var url = urlMostrarCheckList + '/' + state.id_vehicle
         axios.get(url).then(response => {
             state.formatchecklists = response.data
         })
         $('#CheckListVehicle').modal('show')
-    },
-
-
-    setCheckExisteSi(state, value) {
-        state.checkExisteSi = value
-
-        state.columnaExiste.push({
-            id_intervencion: state.checkExisteSi,
-            existe: 'si'
-        })
-    },
-
-    setcheckExisteNo(state, value) {
-        state.checkExisteNo = value
-
-        state.columnaExiste.push({
-            id_intervencion: state.checkExisteNo,
-            existe: 'no',
-        })
-    },
-
-    setCheckEstadoBueno(state, value) {
-        state.checkEstadoBueno = value
-
-        state.columnaEstado.push({
-            id_intervencion: state.checkEstadoBueno,
-            estado: 'bueno',
-        })
-    },
-    setCheckEstadoRegular(state, value) {
-        state.checkEstadoRegular = value
-
-        state.columnaEstado.push({
-            id_intervencion: state.checkEstadoRegular,
-            estado: 'regular',
-        })
-    },
-    setCheckEstadoMalo(state, value) {
-        state.checkEstadoMalo = value
-
-        state.columnaEstado.push({
-            id_intervencion: state.checkEstadoMalo,
-            estado: 'malo',
-        })
     },
 
     modalObservacionVehicleCheckList(state, data){
@@ -786,13 +747,64 @@ export default { //used for changing the state
 
     },
 
+
+
+    setCheckExisteSi(state, value) {
+        state.checkExisteSi = value
+
+        state.columnaExiste.push({
+            id_intervencion: state.checkExisteSi,
+            existe: 'si'
+        })
+    },
+
+    setcheckExisteNo(state, value) {
+        state.checkExisteNo = value
+
+        state.columnaExiste.push({
+            id_intervencion: state.checkExisteNo,
+            existe: 'no',
+        })
+    },
+
+
+    setCheckEstadoBueno(state, value) {
+        state.checkEstadoBueno = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoBueno,
+            estado: 'bueno',
+        })
+    },
+    setCheckEstadoRegular(state, value) {
+        state.checkEstadoRegular = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoRegular,
+            estado: 'regular',
+        })
+    },
+    setCheckEstadoMalo(state, value) {
+        state.checkEstadoMalo = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoMalo,
+            estado: 'malo',
+        })
+    },
+
+    setKilometraje(state, value) {
+        state.kilometraje = value
+    },
+    
+
     guardarCheckList(state) {
         var url = urlGuardarCheckListVehicle
         axios.post(url, {
-            id_vehicle : state.formcheckList.id_vehicle,
-            id_checklist : state.formatchecklists[0].check_list_id,
+            id_vehicle : state.id_vehicle,
             existe: state.columnaExiste,
             estado: state.columnaEstado,
+            kilometraje: state.kilometraje
         
         }).then(response => {
             state.columnaExiste = [];
@@ -813,12 +825,47 @@ export default { //used for changing the state
     },
 
     modalMostrarCheckListVehicle(state, id) {
+        state.id_checklist = id
         var url = urlMostrarCheckListVehicles  + '/' + id
         axios.get(url).then(response => {
             state.mostrarchecklistvehicles = response.data
         })
-        $("#MostrarCheckListVehicle").modal('show')
+        $("#MostrarCheckListVehicle").modal({backdrop: 'static', keyboard: false})
     },
+
+    mostrarCondiciones(state, data) {
+        var url = urlMostrarCondiciones
+        axios.get(url, {
+            params: {
+                id_categoria: data.id_categoria
+            }
+        }).then(response => {
+            state.intervenciones = response.data
+        })
+    },
+
+    modalMostrarObservacion(state, data){
+        var url = urlMostrarObservaciones
+        axios.get(url, {
+            params: {
+                id_intervencion: data.id_intervencion,
+                id_vehicle: data.id_vehicle
+            }
+        }).then(response => {
+            state.observaciones = response.data
+        })
+        $('#MostrarObservacion').modal('show')
+    },
+
+    cerrarMostrarObservacion(state){
+        $('#MostrarObservacion').modal('hide')
+    },
+
+    cerrarMostrarCheckListVehicle(state){
+        $('.collapse').collapse("hide")
+    },
+
+
 
     modalDetailVehicle(state, vehicle) {
         state.newDetailVehicle.vehicle_id = vehicle.id

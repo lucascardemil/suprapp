@@ -12,15 +12,7 @@ class CheckListIntervencion extends Model
     ];
 
 
-    public function condiciones()
-    {
-        return $this->hasMany('App\CheckListVehicleCondiciones');
-    }
-
-    public function categorias()
-    {
-        return $this->belongsTo('App\CheckListCategoria');
-    }
+    
 
     
 

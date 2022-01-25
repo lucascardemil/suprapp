@@ -73,20 +73,6 @@ class OrdenTrabajoController extends Controller
 
         if(OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->count() > 0){
 
-            // $ordenestrabajos = OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->get();
-            // foreach($ordenestrabajos as $ordentrabajo){
-
-            //     Trabajos::create([
-            //         'orden_trabajo_id' => $ordentrabajo->id,
-            //         'descripcion' => $data['descripcion'],
-            //         'realizado' => 0, 
-            //         'km' => $data['km']
-            //     ]);
-
-            //     $trabajos = Trabajos::where('orden_trabajo_id', '=', $ordentrabajo->id)->get();
-            //     return $trabajos;
-            // }
-
             $ordenestrabajos = OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->get();
 
             if($ordenestrabajos[0]['id'] > 0){

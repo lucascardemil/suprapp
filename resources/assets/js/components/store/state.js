@@ -198,12 +198,6 @@ export default { //data
         id_intervencion: 0,
         intervencion: ''
     },
-    formcheckList:{
-        id_vehicle: 0,
-        existe: [],
-        estado: [],
-    },
-
     columnaExiste:[],
     columnaEstado:[],
     columnaObservacion:{
@@ -220,7 +214,9 @@ export default { //data
     categorias:[],
     ordenestrabajos:[],
     intervenciones:[],
+    condiciones: [],
     id_checklist: 0,
+    id_vehicle: 0,
     trabajos:[],
     observaciones:[],
     /**********************************/

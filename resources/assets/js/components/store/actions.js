@@ -212,6 +212,22 @@ export default { //methods
         context.commit('modalMostrarCheckListVehicle', data.id)
     },
 
+    mostrarCondiciones(context, data){
+        context.commit('mostrarCondiciones', data)
+    },
+
+    modalMostrarObservacion(context, data){
+        context.commit('modalMostrarObservacion', data)
+    },
+
+    cerrarMostrarObservacion(context){
+        context.commit('cerrarMostrarObservacion')
+    },
+
+    cerrarMostrarCheckListVehicle(context){
+        context.commit('cerrarMostrarCheckListVehicle')
+    },
+
     createProductsPagos(context) {
         context.commit('createProductsPagos')
         setTimeout(function () {

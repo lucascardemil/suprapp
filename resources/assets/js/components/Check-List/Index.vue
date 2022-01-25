@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody v-for="(checklistvehicle, index) in checklistvehicles" :key="index">
-                    <tr>
+                    <tr v-if="checklistvehicle.checklist.length">
                         <td>{{ index + 1 }}</td>
                         <td>Check List {{ index + 1 }}</td>
                         <td>{{ checklistvehicle.km }}</td>
@@ -33,10 +33,10 @@
                             <button class="btn btn-success"><i class="fas fa-check"></i></button>
                         </td>
                         <td>{{ checklistvehicle.checklist[0]['created_at'] |  moment('DD/MM/YYYY') }}</td>
-                        <td width="10px">
+                        <td style="width: 20px">
                             <a class="btn btn-block btn-info"
                                 title="Editar"
-                                @click.prevent="modalMostrarCheckListVehicle({ id: checklistvehicle.checklist[0]['check_list_id'] })">
+                                @click.prevent="modalMostrarCheckListVehicle({ id: checklistvehicle.checklist[0].id })">
                                 <i class="fas fa-clipboard-check"></i> Ver
                             </a>
                         </td>
@@ -67,17 +67,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     components: { CrearFormatoCheckList, CrearIntervencionCheckList, MostrarFormatoCheckList, MostrarCheckListVehicle },
     computed:{
-        ...mapState(['ordenestrabajos', 'checklists','trabajos', 'checklistvehicles','checkRealizado']),
-        // ...mapGetters(['isActived', 'pagesNumber']),
-        // checkRealizado: {
-        //     get () {
-        //         return this.$store.state.checkRealizado
-        //     },
-        //     set (value) {
-        //         this.$store.commit('setcheckRealizado', value)
-        //         this.$store.commit('getOrdenesTrabajos')
-        //     }
-        // }
+        ...mapState(['ordenestrabajos', 'checklists','trabajos', 'checklistvehicles']),
     },
     methods:{
         

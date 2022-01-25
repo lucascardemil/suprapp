@@ -9,8 +9,10 @@ use App\CheckList;
 use App\CheckListCategoria;
 use App\CheckListIntervencion;
 use App\CheckListVehicle;
-use App\CheckListVehicleObservaciones;
-use App\CheckListVehicleCondiciones;
+use App\CheckListVehicleObservacion;
+use App\CheckListVehicleCondicion;
+use App\CheckListVehicleIntervencion;
+use App\CheckListVehicleCategoria;
 use Auth;
 
 class CheckListController extends Controller
@@ -73,9 +75,60 @@ class CheckListController extends Controller
 
     public function mostrarFormatoCheckList(){
 
-        $checklists = CheckList::orderby('created_at', 'desc')->first();
+        $user_id = Auth::user()->id;
+        $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
         $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
         return $formatchecklist;
+        
+    }
+
+
+    public function mostrarCheckList($id){
+
+        $count = CheckListVehicle::where('vehicle_id', '=', $id)->count();
+        if($count > 0){
+
+            $checklistvehicles = CheckListVehicle::where('vehicle_id', '=', $id)->get();
+            foreach ($checklistvehicles as $checklistvehicle){
+                $formatchecklist = CheckListVehicleCategoria::with('intervenciones')->where('check_list_vehicle_id', '=', $checklistvehicle->id)->get();
+                return $formatchecklist;
+            }
+
+        }else{
+
+            $user_id = Auth::user()->id;
+            $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+            $categorias = CheckListCategoria::where('check_list_id', '=', $checklists->id)->get();
+
+            $check_list_vehicle_id = CheckListVehicle::create([
+                'check_list_id' => $checklists->id,
+                'vehicle_id' => $id,
+                'realizado' => 0
+            ])->id;
+
+            foreach ($categorias as $categoria){
+                $check_list_vehicle_categoria_id = CheckListVehicleCategoria::create([
+                    'check_list_vehicle_id' => $check_list_vehicle_id,
+                    'categoria' => $categoria->categoria
+                ])->id;
+
+                $intervenciones = CheckListIntervencion::where('check_list_categoria_id', '=', $categoria->id)->get();
+
+                foreach ($intervenciones as $intervencion){
+                    CheckListVehicleIntervencion::create([
+                        'check_list_categoria_id' => $check_list_vehicle_categoria_id,
+                        'intervencion' => $intervencion->intervencion
+                    ]);
+                }
+            }
+
+
+            $checklistvehicles = CheckListVehicle::where('vehicle_id', '=', $id)->get();
+            foreach ($checklistvehicles as $checklistvehicle){
+                $formatchecklist = CheckListVehicleCategoria::with('intervenciones')->where('check_list_vehicle_id', '=', $checklistvehicle->id)->get();
+                return $formatchecklist;
+            }
+        }
         
     }
 
@@ -134,31 +187,75 @@ class CheckListController extends Controller
     }
 
 
+    function unique_multidim_array($array, $key) {
+        $uniq = [];
+        foreach($array as $val) {
+            $curVal = $val[$key]; // shortcut of the value
+            $uniq[$curVal] = $val; // override previous value if exists
+        }
+        return array_values($uniq); // array_values to re-index array
+    }
+
+
     public function guardarCheckListVehicle(Request $request)
     {
-        $estados = $request->estado;
-        $existe = $request->existe;
         $id_vehicle = $request->id_vehicle;
-        $id_checklist = $request->id_checklist;
+        $kilometraje = $request->kilometraje;
+        $user_id = Auth::user()->id;
 
-        CheckListVehicle::create([
-            'check_list_id' => $id_checklist,
-            'vehicle_id' => $id_vehicle,
-            'realizado' => 1
-        ]);
+        
+        $existe =  $this->unique_multidim_array($request->existe, 'id_intervencion');
+        $estado =  $this->unique_multidim_array($request->estado, 'id_intervencion');
 
-        for ($i=0; $i<count($estados); $i++){
-            for ($y=0; $y<count($existe); $y++){
 
-                if($existe[$y]['id_intervencion'] == $estados[$i]['id_intervencion']){
-                    CheckListVehicleCondiciones::create([
-                        'check_list_intervencion_id' => $existe[$y]['id_intervencion'],
-                        'estado' => $estados[$i]['estado'],
-                        'existe' => $existe[$y]['existe']
-                    ]);
+        $checklistvehicles = CheckListVehicle::where('vehicle_id', '=', $id_vehicle)->get();
+        foreach ($checklistvehicles as $checklistvehicle){
+
+            $categorias = CheckListVehicleCategoria::where('check_list_vehicle_id', '=', $checklistvehicle->id)->get();
+            foreach ($categorias as $categoria){
+
+                $intervenciones = CheckListVehicleIntervencion::where('check_list_categoria_id', '=', $categoria->id)->get();
+                foreach ($intervenciones as $intervencion){
+
+                    $count_condicion = CheckListVehicleCondicion::where('check_list_intervencion_id', '=', $intervencion->id)->count();
+                    if($count_condicion > 0){
+                        for ($i=0; $i<count($estado); $i++){
+                            for ($y=0; $y<count($existe); $y++){
+                
+                                if($existe[$y]['id_intervencion'] == $estado[$i]['id_intervencion']){
+                                    CheckListVehicleCondicion::where('check_list_intervencion_id', '=', $existe[$y]['id_intervencion'])
+                                    ->update([
+                                        'estado' => $estado[$i]['estado'],
+                                        'existe' => $existe[$y]['existe']
+                                    ]);
+                                }
+                            }
+                        }
+
+                        Vehicle::find($id_vehicle)->update([
+                            'km' => $kilometraje,
+                        ]);
+                        
+                    }else{
+                        for ($i=0; $i<count($estado); $i++){
+                            for ($y=0; $y<count($existe); $y++){
+                
+                                if($existe[$y]['id_intervencion'] == $estado[$i]['id_intervencion']){
+                                    CheckListVehicleCondicion::create([
+                                        'check_list_intervencion_id' => $existe[$y]['id_intervencion'],
+                                        'estado' => $estado[$i]['estado'],
+                                        'existe' => $existe[$y]['existe']
+                                    ]);
+                                }
+                            }
+                        }
+
+                        Vehicle::find($id_vehicle)->update([
+                            'km' => $kilometraje,
+                        ]);
+                    }
                 }
             }
-
         }
     }
 
@@ -170,7 +267,7 @@ class CheckListController extends Controller
         $id_intervencion =  $request->id_intervencion_checklist;
         $id_vehicle =  $request->id_vehicle_checklist;
         $imagenes = $request->imagenes_checklist;
-        $observacion =  $request->observacion_checklist;
+        $user_id = Auth::user()->id;
 
         $manager = new ImageManager(array('local' => 'imagick'));
 
@@ -187,16 +284,39 @@ class CheckListController extends Controller
 
             $url = '/images/checklist/'.$filename;
 
-            
-            CheckListVehicleObservaciones::create([
-                'check_list_intervencion_id' => $id_intervencion,
-                'vehicle_id' => $id_vehicle,
-                'observacion' => $observacion,
-                'imagen' => $url,
-            ]);
 
-            
+    
+            $intervenciones = CheckListVehicleIntervencion::where('id', '=', $id_intervencion)->get();
+            foreach ($intervenciones as $intervencion){
 
+                $count_observacion = CheckListVehicleObservacion::where('check_list_intervencion_id', '=', $intervencion->id)->count();
+                if($count_observacion > 0){
+
+                    $observaciones = CheckListVehicleObservacion::where('check_list_intervencion_id', '=', $intervencion->id)->get();
+
+                    foreach ($observaciones as $observacion){
+                        unlink(public_path().$observacion->imagen);
+
+                        $image = CheckListVehicleObservacion::findOrFail($observacion->id);
+                        $image->delete();
+                    }
+        
+                    CheckListVehicleObservacion::create([
+                        'check_list_intervencion_id' => $intervencion->id,
+                        'observacion' => $request->observacion_checklist,
+                        'imagen' => $url,
+                    ]);
+
+                }else{
+                    CheckListVehicleObservacion::create([
+                        'check_list_intervencion_id' => $intervencion->id,
+                        'observacion' => $request->observacion_checklist,
+                        'imagen' => $url,
+                    ]);
+
+                }
+            }
+                
             array_push($arreglo, $path);
 
 
@@ -208,59 +328,53 @@ class CheckListController extends Controller
     public function checklistvehicles(){
 
         $user_id = Auth::user()->id;
-        $vehicles = Vehicle::where('user_id', '=', $user_id)->get();
 
+        $roles = DB::table('roles')
+            ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
+            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+            ->where('users.id', '=', $user_id)
+            ->select('roles.name')
+            ->get();
 
-        for ($i=0; $i<count($vehicles); $i++){
-            $checklistvehicles = Vehicle::with('checklist')->where('id', '=', $vehicles[$i]['id'])->get();
+        if($roles[0]->name == 'admin'){
+            $checklistvehicles = Vehicle::with('checklist')->get();
+            return $checklistvehicles;
+        }else{
+            $checklistvehicles = Vehicle::with('checklist')->where('user_id', '=', $user_id)->get();
+            return $checklistvehicles;
         }
 
-        return $checklistvehicles;
-        
     }
 
 
     public function mostrarCheckListVehicles($id){
-        
 
-        // $categorias = CheckListCategoria::where('check_list_id', '=', $id)->get();
-        // for ($i=0; $i<count($categorias); $i++){
-        //     $intervenciones = CheckListIntervencion::with('condiciones')->where('check_list_categoria_id', '=', $categorias[$i]['id'])->get();
-
-        //     for ($y=0; $y<count($intervenciones); $y++){
-        //         if($categorias[$i]['id'] == $intervenciones[$y]['check_list_categoria_id']){
-        //             $array = [
-        //                 'categorias' => $categorias,
-        //                 'intervenciones' => $intervenciones
-        //             ];
-
-        //             return $array;
-
-        //         }
-        //     }
+        $checklistvehicles= CheckListVehicle::where('id', '=', $id)->get();
+        foreach ($checklistvehicles as $checklistvehicle){
             
-        // }
+            $formatchecklist = CheckListVehicleCategoria::with('intervenciones')->where('check_list_vehicle_id', '=', $checklistvehicle->id)->get();
+            $array = [
+                $formatchecklist,
+                'id_checklist_vehicle' => $id
+            ];
 
-        
-              $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $id)->get();
-
-              return $formatchecklist;
-        
-        
-        
-       
+            return $array;
+        }  
+    }
 
 
-        // $checklistvehicles = DB::table('check_list_categorias')
-        //     ->join('check_list_intervenciones', 'check_list_categorias.id', '=', 'check_list_intervenciones.check_list_categoria_id')
-        //     ->join('check_list_vehicle_condiciones', 'check_list_intervenciones.id', '=', 'check_list_vehicle_condiciones.check_list_intervencion_id')
-            
-        //     ->groupBy('check_list_intervenciones.id')
-        //     ->where('check_list_categorias.check_list_id', '=', $id)
-        //     ->get();
 
-        // return $checklistvehicles;
+    public function mostrarCondiciones(Request $request){
+
+        $intervenciones = CheckListVehicleIntervencion::with('condiciones' , 'observaciones')->where('check_list_categoria_id', '=', $request->id_categoria)->get();
+        return $intervenciones;
         
     }
 
+    public function mostrarObservaciones(Request $request){
+
+        $observaciones = CheckListVehicleObservacion::where('check_list_intervencion_id', '=', $request->id_intervencion)->get();
+        return $observaciones;
+        
+    }
 }
