@@ -127,6 +127,10 @@ Route::get('checklistvehicles', 'CheckListController@checklistvehicles');
 Route::get('mostrarCheckListVehicles/{id}', 'CheckListController@mostrarCheckListVehicles');
 Route::get('mostrarCondiciones', 'CheckListController@mostrarCondiciones');
 Route::get('mostrarObservaciones', 'CheckListController@mostrarObservaciones');
+Route::get('roleschecklists', 'CheckListController@roleschecklists');
+Route::post('crearFormatoCheckList', 'CheckListController@crearFormatoCheckList');
+
+
 
 Route::ApiResource('notes', 'NoteController');
 

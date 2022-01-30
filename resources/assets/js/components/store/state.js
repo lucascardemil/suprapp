@@ -219,6 +219,8 @@ export default { //data
     id_vehicle: 0,
     trabajos:[],
     observaciones:[],
+    roleschecklists:[],
+    km_old: 0,
     /**********************************/
     vehiculotipos: [],
     vehiculotipo: {

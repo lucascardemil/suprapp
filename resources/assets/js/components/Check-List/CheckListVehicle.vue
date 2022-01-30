@@ -49,15 +49,15 @@
                                             <label></label>
                                         </td>
                                         <td class="text-center">
-                                            <input type="radio" required :name="'estado' + intervencion.id" :value="intervencion.id" v-model="checkEstadoBueno">
+                                            <input type="radio" :name="'estado' + intervencion.id" :value="intervencion.id" v-model="checkEstadoBueno">
                                             <label></label>
                                         </td>
                                         <td class="text-center">
-                                            <input type="radio" required :name="'estado' + intervencion.id" :value="intervencion.id" v-model="checkEstadoRegular">
+                                            <input type="radio" :name="'estado' + intervencion.id" :value="intervencion.id" v-model="checkEstadoRegular">
                                             <label></label>
                                         </td>
                                         <td class="text-center">
-                                            <input type="radio" required :name="'estado' + intervencion.id" :value="intervencion.id" v-model="checkEstadoMalo">
+                                            <input type="radio" :name="'estado' + intervencion.id" :value="intervencion.id" v-model="checkEstadoMalo">
                                             <label></label>
                                         </td>
                                         <td>
@@ -97,7 +97,7 @@ import AgregarObservacionCheckList from './AgregarObservacionCheckList'
 export default {
     components: {AgregarObservacionCheckList},
     computed:{
-        ...mapState(['formatchecklists', 'formcheckList', 'id_vehicle','columnaObservacion', 'columnaExiste', 'columnaEstado']),
+        ...mapState(['formatchecklists', 'formcheckList', 'km_old','id_vehicle','columnaObservacion', 'columnaExiste', 'columnaEstado']),
         ...mapGetters([]),
 
 

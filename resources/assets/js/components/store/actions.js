@@ -190,6 +190,7 @@ export default { //methods
 
     guardarCheckList(context, data){
         context.commit('guardarCheckList', data)
+        context.commit('getVehicles', 1)
     },
 
     modalObservacionVehicleCheckList(context, data){
@@ -240,6 +241,10 @@ export default { //methods
     },
     cerrarIntervencion(context){
         context.commit('cerrarIntervencion')
+    },
+
+    getCheckListRoles(context){
+        context.commit('getCheckListRoles')
     },
     
     modalRequestParts(context, data) {

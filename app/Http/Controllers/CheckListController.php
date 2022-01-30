@@ -75,10 +75,27 @@ class CheckListController extends Controller
 
     public function mostrarFormatoCheckList(){
 
+
         $user_id = Auth::user()->id;
-        $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
-        $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
-        return $formatchecklist;
+
+        $count = CheckList::where('user_id', '=', $user_id)->count();
+        if($count > 0){
+            $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+            $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+            return $formatchecklist;
+        }else{
+            $user_id = DB::table('roles')
+            ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
+            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+            ->where('roles.name', '=', 'admin')
+            ->select('users.id')
+            ->get();
+        
+            $checklists = CheckList::where('user_id', '=', $user_id[0]->id)->orderby('created_at', 'desc')->first();
+            $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+            return $formatchecklist;
+
+        } 
         
     }
 
@@ -219,39 +236,70 @@ class CheckListController extends Controller
 
                     $count_condicion = CheckListVehicleCondicion::where('check_list_intervencion_id', '=', $intervencion->id)->count();
                     if($count_condicion > 0){
-                        for ($i=0; $i<count($estado); $i++){
-                            for ($y=0; $y<count($existe); $y++){
+                    
+                        for ($i=0; $i<count($existe); $i++){
+
+                            if($existe[$i]['existe'] == 'no'){
+                                CheckListVehicleCondicion::where('check_list_intervencion_id', '=', $existe[$i]['id_intervencion'])
+                                ->update([
+                                    'estado' => '',
+                                    'existe' => $existe[$i]['existe']
+                                ]);
+                            }else{
+
+                                for ($y=0; $y<count($estado); $y++){
                 
-                                if($existe[$y]['id_intervencion'] == $estado[$i]['id_intervencion']){
-                                    CheckListVehicleCondicion::where('check_list_intervencion_id', '=', $existe[$y]['id_intervencion'])
-                                    ->update([
-                                        'estado' => $estado[$i]['estado'],
-                                        'existe' => $existe[$y]['existe']
-                                    ]);
+                                    if($existe[$i]['id_intervencion'] == $estado[$y]['id_intervencion']){
+                                        CheckListVehicleCondicion::where('check_list_intervencion_id', '=', $existe[$i]['id_intervencion'])
+                                        ->update([
+                                            'estado' => $estado[$y]['estado'],
+                                            'existe' => $existe[$i]['existe']
+                                        ]);
+                                    }
                                 }
+
                             }
                         }
 
                         Vehicle::find($id_vehicle)->update([
                             'km' => $kilometraje,
                         ]);
+
+                        CheckListVehicle::find($checklistvehicle->id)->update([
+                            'realizado' => 1
+                        ]);
                         
                     }else{
-                        for ($i=0; $i<count($estado); $i++){
-                            for ($y=0; $y<count($existe); $y++){
+                        for ($i=0; $i<count($existe); $i++){
+
+                            if($existe[$i]['existe'] == 'no'){
+                                CheckListVehicleCondicion::create([
+                                    'check_list_intervencion_id' => $existe[$i]['id_intervencion'],
+                                    'estado' => '',
+                                    'existe' => $existe[$i]['existe']
+                                ]);
+                            }else{
+
+                                for ($y=0; $y<count($estado); $y++){
                 
-                                if($existe[$y]['id_intervencion'] == $estado[$i]['id_intervencion']){
-                                    CheckListVehicleCondicion::create([
-                                        'check_list_intervencion_id' => $existe[$y]['id_intervencion'],
-                                        'estado' => $estado[$i]['estado'],
-                                        'existe' => $existe[$y]['existe']
-                                    ]);
+                                    if($existe[$i]['id_intervencion'] == $estado[$y]['id_intervencion']){
+                                        CheckListVehicleCondicion::create([
+                                            'check_list_intervencion_id' => $existe[$i]['id_intervencion'],
+                                            'estado' => $estado[$y]['estado'],
+                                            'existe' => $existe[$i]['existe']
+                                        ]);
+                                    }
                                 }
+
                             }
                         }
 
                         Vehicle::find($id_vehicle)->update([
                             'km' => $kilometraje,
+                        ]);
+
+                        CheckListVehicle::find($checklistvehicle->id)->update([
+                            'realizado' => 1
                         ]);
                     }
                 }
@@ -376,5 +424,55 @@ class CheckListController extends Controller
         $observaciones = CheckListVehicleObservacion::where('check_list_intervencion_id', '=', $request->id_intervencion)->get();
         return $observaciones;
         
+    }
+
+
+    public function roleschecklists(){
+
+        $user_id = Auth::user()->id;
+
+        $roles = DB::table('roles')
+            ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
+            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+            ->where('users.id', '=', $user_id)
+            ->select('roles.name')
+            ->get();
+
+        return $roles[0]->name;
+
+    }
+
+    public function crearFormatoCheckList(Request $request){
+
+        $user_id = Auth::user()->id;
+
+        $count = CheckList::where('user_id', '=', $user_id)->count();
+        if($count > 0){
+            $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+            $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+            return $formatchecklist;
+        }else{
+            $checklist = CheckList::create([
+                'user_id' => $user_id
+            ])->id;
+
+            foreach ($request->formatchecklist as $format){
+                $categoria_id = CheckListCategoria::create([
+                    'check_list_id' => $checklist,
+                    'categoria' => $format['categoria'],
+                ])->id;
+
+                foreach ($format['intervenciones'] as $intervencion){
+                    CheckListIntervencion::create([
+                        'check_list_categoria_id' => $categoria_id,
+                        'intervencion' => $intervencion['intervencion'],
+                    ]);
+                }
+            }
+
+            $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+            $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+            return $formatchecklist;
+        }
     }
 }

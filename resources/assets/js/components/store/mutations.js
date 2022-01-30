@@ -146,6 +146,11 @@ var urlMostrarCheckList = 'mostrarCheckList'
 
 var urlMostrarCondiciones = 'mostrarCondiciones'
 var urlMostrarObservaciones = 'mostrarObservaciones'
+var urlCheckListRoles = 'roleschecklists'
+
+var urlCrearFormatoCheckList = 'crearFormatoCheckList'
+
+
 
 export default { //used for changing the state
     /******************************* */
@@ -559,10 +564,19 @@ export default { //used for changing the state
     },
 
     modalMostrarFormatoCheckList(state){
-        var url = urlMostrarFormatoCheckList
-        axios.get(url).then(response => {
-            state.formatchecklists = response.data
+        axios.get(urlMostrarFormatoCheckList).then(response => {
+            axios.post(urlCrearFormatoCheckList, {
+                formatchecklist: response.data
+            }).then(response => {
+                state.formatchecklists = response.data
+            })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
         })
+
+        
+
         $("#MostrarFormatoCheckList").modal('show')
     },
 
@@ -683,6 +697,7 @@ export default { //used for changing the state
 
     modalCheckList(state, vehicle){
         state.id_vehicle = vehicle.id
+        state.km_old = vehicle.km
         var url = urlMostrarCheckList + '/' + state.id_vehicle
         axios.get(url).then(response => {
             state.formatchecklists = response.data
@@ -765,6 +780,14 @@ export default { //used for changing the state
             id_intervencion: state.checkExisteNo,
             existe: 'no',
         })
+
+        // if(value > 0){
+        //     $('#estado' + value).prop('disabled', true); 
+        // }else{
+        //     $('#estado' + value).prop('disabled', false); 
+        // }
+            
+        
     },
 
 
@@ -800,21 +823,25 @@ export default { //used for changing the state
 
     guardarCheckList(state) {
         var url = urlGuardarCheckListVehicle
-        axios.post(url, {
-            id_vehicle : state.id_vehicle,
-            existe: state.columnaExiste,
-            estado: state.columnaEstado,
-            kilometraje: state.kilometraje
-        
-        }).then(response => {
-            state.columnaExiste = [];
-            state.columnaEstado = [];
-            $('input[type="radio"]').prop('checked', false);         
-        $('#CheckListVehicle').modal('hide')
-            toastr.success('El check list se ingreso correctamente')
-        }).catch(error => {
-            state.errorsLaravel = error.response.data
-        }) 
+
+        if(state.kilometraje <= state.km_old){
+            toastr.error('El kilometraje no puede ser menor o igual al actual')
+        }else{
+            axios.post(url, {
+                id_vehicle : state.id_vehicle,
+                existe: state.columnaExiste,
+                estado: state.columnaEstado,
+                kilometraje: state.kilometraje
+            }).then(response => {
+                state.columnaExiste = [];
+                state.columnaEstado = [];
+                $('input[type="radio"]').prop('checked', false);         
+            $('#CheckListVehicle').modal('hide')
+                toastr.success('El check list se ingreso correctamente')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        }
     },
 
     getCheckListVehicles(state){
@@ -863,6 +890,13 @@ export default { //used for changing the state
 
     cerrarMostrarCheckListVehicle(state){
         $('.collapse').collapse("hide")
+    },
+
+    getCheckListRoles(state){
+        var url = urlCheckListRoles
+        axios.get(url).then(response => {
+            state.roleschecklists = response.data
+        })
     },
 
 
