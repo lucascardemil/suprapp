@@ -623,44 +623,114 @@ class BillController extends Controller
                     }
                 }                        
             }else{
-                
+
+                $count = Product::where('name', $producto->NmbItem)->count();
                 $detail = preg_replace(array('/\s{2,}/', '/[\t\n]/'), ' ', $producto->NmbItem);
-
-                $product = Product::firstOrCreate(
-                    [
-                        'name' => $detail,
-                        'detail' => 'Sin codigo'
-                    ]);
                 
-                
+                if(empty($count)){
 
-                $code = Code::firstOrCreate(
-                    [
-                        'client_id' => $client_id,
-                        'product_id' => $product->id,
-                        'codebar' => 'Sin codigo',
-                        'folio' => $xml->DTE->Documento->Encabezado->IdDoc[0]->Folio
-                    ]);
             
-        
-                Inventory::firstOrCreate(
-                    [
-                        'code_id' => $code->id,
-                        'price' => round($producto->MontoItem / $producto->QtyItem),
-                        'quantity' => $producto->QtyItem,
-                        'fecha_fact' => $xml->DTE->Documento->Encabezado->IdDoc[0]->FchEmis
-                    ]);
+                    $product = Product::firstOrCreate(
+                        [
+                            'name' => $detail,
+                            'detail' => 'Sin codigo'
+                        ]);
+                    
+                    
+
+                    $code = Code::firstOrCreate(
+                        [
+                            'client_id' => $client_id,
+                            'product_id' => $product->id,
+                            'codebar' => $producto->NmbItem,
+                            'folio' => $xml->DTE->Documento->Encabezado->IdDoc[0]->Folio
+                        ]);
                 
-                $tipospagos =  TipoPago::select('utilidad')->where('pago', 'DEFECTO')->get();
+            
+                    Inventory::firstOrCreate(
+                        [
+                            'code_id' => $code->id,
+                            'price' => round($producto->MontoItem / $producto->QtyItem),
+                            'quantity' => $producto->QtyItem,
+                            'fecha_fact' => $xml->DTE->Documento->Encabezado->IdDoc[0]->FchEmis
+                        ]);
+                    
+                    $tipospagos =  TipoPago::select('utilidad')->where('pago', 'DEFECTO')->get();
 
-                ProductPago::create([
-                    'product_id' => $product->id,
-                    'forma_pago' => 'DEFECTO',
-                    'utilidad' => $tipospagos[0]->utilidad
-                ]);
+                    ProductPago::create([
+                        'product_id' => $product->id,
+                        'forma_pago' => 'DEFECTO',
+                        'utilidad' => $tipospagos[0]->utilidad
+                    ]);
 
+                }else{
+                    
+                    $products = Product::where('name', $producto->NmbItem)->get();
 
+                    foreach ($products as $product) {
 
+                        $count = Code::where('codebar', $producto->NmbItem)->count();
+
+                        if(empty($count)){
+                            $code = Code::firstOrCreate(
+                                [
+                                    'client_id' => $client_id,
+                                    'product_id' => $product->id,
+                                    'codebar' => $producto->NmbItem,
+                                    'folio' => $xml->DTE->Documento->Encabezado->IdDoc[0]->Folio
+                                ]);
+                            
+                            Inventory::firstOrCreate(
+                                [
+                                    'code_id' => $code->id,
+                                    'price' => round($producto->MontoItem / $producto->QtyItem),
+                                    'quantity' => $producto->QtyItem,
+                                    'fecha_fact' => $xml->DTE->Documento->Encabezado->IdDoc[0]->FchEmis
+                                ]);
+                            
+                        }else{
+                            $inventorys = Code::where('codebar', $producto->NmbItem)->get();
+                            foreach($inventorys as $inventory){
+
+                                if($inventory->codebar != $producto->NmbItem){
+
+                                    $code = Code::firstOrCreate(
+                                        [
+                                            'client_id' => $client_id,
+                                            'product_id' => $product->id,
+                                            'codebar' => $producto->NmbItem,
+                                            'folio' => $xml->DTE->Documento->Encabezado->IdDoc[0]->Folio
+                                        ]);
+                                }
+                            
+                            
+                                if($inventory->atributo > 0){
+
+                                    $cantidad = $producto->QtyItem * $inventory->atributo;
+                                    $total = $producto->PrcItem * $producto->QtyItem;
+                                    
+                                    Inventory::create(
+                                        [
+                                            'code_id' => $inventory->id,
+                                            'price' => $total / $cantidad,
+                                            'quantity' => $cantidad,
+                                            'fecha_fact' => $xml->DTE->Documento->Encabezado->IdDoc[0]->FchEmis
+                                        ]);
+                                    
+                                }else{
+                            
+                                    Inventory::firstOrCreate(
+                                        [
+                                            'code_id' => $inventory->id,
+                                            'price' => round($producto->MontoItem / $producto->QtyItem),
+                                            'quantity' => $producto->QtyItem,
+                                            'fecha_fact' => $xml->DTE->Documento->Encabezado->IdDoc[0]->FchEmis
+                                        ]);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
