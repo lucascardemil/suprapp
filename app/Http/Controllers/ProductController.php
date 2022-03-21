@@ -149,7 +149,7 @@ class ProductController extends Controller
             ->join('products', 'codes.product_id', '=', 'products.id')
             ->join('inventories', 'codes.id', '=', 'inventories.code_id')
             ->join('product_pagos', 'products.id', '=', 'product_pagos.product_id')
-            ->select(DB::raw('max(inventories.fecha_fact)'), 'products.name', 'inventories.price', 'codes.id as code_id', 'inventories.id as inventory_id', 'inventories.quantity', 'product_pagos.utilidad')
+            ->select(DB::raw('max(inventories.fecha_fact)'), 'products.name', 'inventories.price', 'codes.id as code_id', 'inventories.id as inventory_id', 'inventories.quantity', 'product_pagos.utilidad', 'products.detail')
             ->where('clients.user_id', '=', $idUser)
             ->where('inventories.quantity', '>', 0)
             ->groupBy('inventories.code_id')

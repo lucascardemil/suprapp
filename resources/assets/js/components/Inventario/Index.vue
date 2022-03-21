@@ -121,9 +121,9 @@ export default {
                 if(this.totalInventario(a.inventories[0]) > this.totalInventario(b.inventories[0])) return 1 * modifier;
                 return 0;
             })
-            // .filter(code => {
-            //     return code.product.name.toLowerCase().includes(this.search.toLowerCase())
-            // })
+            .filter(code => {
+                return code.product.name.toLowerCase().includes(this.search.toLowerCase())
+            })
         },
         ...mapState(['codes', 'search','pagination', 'offset', 'errorsLaravel', 'allInventory']),
         ...mapGetters(['isActived', 'pagesNumber'])

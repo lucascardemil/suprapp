@@ -755,6 +755,7 @@ export default { //used for changing the state
                 state.errorsLaravel = []
                 $('#AgregarObservacionCheckList').modal('hide')
                 toastr.success('La observacion se agrego correctamente')
+                toastr.success('La imagen se agrego correctamente')
             }).catch(error => {
                 state.errorsLaravel = error.response.data
             })
@@ -3730,7 +3731,8 @@ export default { //used for changing the state
                     label: product.name,
                     value: product.id,
                     price: product.price,
-                    utilidad: product.utilidad
+                    utilidad: product.utilidad,
+                    codigo: product.detail
                 })
             });
         });
@@ -3741,6 +3743,7 @@ export default { //used for changing the state
             state.newDetailclient.product = state.selectedProduct.label
             state.productForm.product = state.selectedProduct.label
             state.newDetailclient.price = state.selectedProduct.price
+            state.newDetailclient.detail = state.selectedProduct.codigo
 
             state.newDetailclient.percentage = state.selectedProduct.utilidad
 
