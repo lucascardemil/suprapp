@@ -62,8 +62,8 @@ export default { //methods
         context.commit('modalDetailVehicle', data.vehicleLocal)
     },
     modalOrdenTrabajo(context, data) {
-      context.commit('modalOrdenTrabajo', data.vehicleLocal)
-      context.commit('getTrabajos', data.vehicleLocal.id)
+        context.commit('modalOrdenTrabajo', data.vehicleLocal)
+        context.commit('getTrabajos', data.vehicleLocal.id)
     },
     modalFotosOrdenTrabajo(context, data) {
         context.commit('modalFotosOrdenTrabajo', data.id)
@@ -86,7 +86,7 @@ export default { //methods
         // context.commit('getTrabajos', data.id)
         context.commit('getVehicles', 1)
     },
-    
+
     getOrdenesTrabajos(context, data) {
         context.commit('getOrdenesTrabajos', data)
     },
@@ -107,18 +107,18 @@ export default { //methods
     },
 
 
-    modalCrearFormatoCheckList(context){
+    modalCrearFormatoCheckList(context) {
         context.commit('modalCrearFormatoCheckList')
     },
 
-    modalCrearIntervencionCheckList(context){
+    modalCrearIntervencionCheckList(context) {
         context.commit('modalCrearIntervencionCheckList')
     },
 
-    modalIntervencion(context, data){
+    modalIntervencion(context, data) {
         context.commit('modalIntervencion', data.id)
     },
-    modalCerrarIntervencion(context){
+    modalCerrarIntervencion(context) {
         context.commit('modalCerrarIntervencion')
     },
 
@@ -130,14 +130,14 @@ export default { //methods
         context.commit('agregarIntervencion')
     },
 
-    guardarIntervenciones(context, data){
+    guardarIntervenciones(context, data) {
         context.commit('guardarIntervenciones', data)
     },
 
-    eliminarIntervencion(context, data){
+    eliminarIntervencion(context, data) {
         context.commit('eliminarIntervencion', data)
     },
-    eliminarCategoria(context, data){
+    eliminarCategoria(context, data) {
         context.commit('eliminarCategoria', data)
     },
 
@@ -153,26 +153,26 @@ export default { //methods
         context.commit('modalMostrarFormatoCheckList', data)
     },
 
-    modalEditarCategoria(context, data){
+    modalEditarCategoria(context, data) {
         context.commit('modalEditarCategoria', data.formatchecklist)
     },
 
-    editarCategoriaCheckList(context, data){
+    editarCategoriaCheckList(context, data) {
         context.commit('editarCategoriaCheckList', data)
     },
 
-    modalEditarIntervencion(context, data){
+    modalEditarIntervencion(context, data) {
         context.commit('modalEditarIntervencion', data.intervenciones)
     },
 
-    editarIntervencionCheckList(context, data){
+    editarIntervencionCheckList(context, data) {
         context.commit('editarIntervencionCheckList', data)
     },
 
-    modalAgregarCategoria(context){
+    modalAgregarCategoria(context) {
         context.commit('modalAgregarCategoria')
     },
-    modalAgregarIntervencion(context, data){
+    modalAgregarIntervencion(context, data) {
         context.commit('modalAgregarIntervencion', data.id)
     },
 
@@ -184,20 +184,20 @@ export default { //methods
         context.commit('crearIntervencion', data.id)
     },
 
-    modalCheckList(context, data){
+    modalCheckList(context, data) {
         context.commit('modalCheckList', data.vehicleLocal)
     },
 
-    guardarCheckList(context, data){
+    guardarCheckList(context, data) {
         context.commit('guardarCheckList', data)
         context.commit('getVehicles', 1)
     },
 
-    modalObservacionVehicleCheckList(context, data){
+    modalObservacionVehicleCheckList(context, data) {
         context.commit('modalObservacionVehicleCheckList', data)
     },
 
-    agregarObservacionCheckList(context, data){
+    agregarObservacionCheckList(context, data) {
         context.commit('agregarObservacionCheckList', data)
     },
 
@@ -209,23 +209,23 @@ export default { //methods
         context.commit('getCheckListVehicles', data)
     },
 
-    modalMostrarCheckListVehicle(context, data){
+    modalMostrarCheckListVehicle(context, data) {
         context.commit('modalMostrarCheckListVehicle', data.id)
     },
 
-    mostrarCondiciones(context, data){
+    mostrarCondiciones(context, data) {
         context.commit('mostrarCondiciones', data)
     },
 
-    modalMostrarObservacion(context, data){
+    modalMostrarObservacion(context, data) {
         context.commit('modalMostrarObservacion', data)
     },
 
-    cerrarMostrarObservacion(context){
+    cerrarMostrarObservacion(context) {
         context.commit('cerrarMostrarObservacion')
     },
 
-    cerrarMostrarCheckListVehicle(context){
+    cerrarMostrarCheckListVehicle(context) {
         context.commit('cerrarMostrarCheckListVehicle')
     },
 
@@ -236,17 +236,17 @@ export default { //methods
         }, 1000)
     },
 
-    cerrarCategoria(context){
+    cerrarCategoria(context) {
         context.commit('cerrarCategoria')
     },
-    cerrarIntervencion(context){
+    cerrarIntervencion(context) {
         context.commit('cerrarIntervencion')
     },
 
-    getCheckListRoles(context){
+    getCheckListRoles(context) {
         context.commit('getCheckListRoles')
     },
-    
+
     modalRequestParts(context, data) {
         context.commit('modalRequestParts', data.vehicleLocal)
     },
@@ -489,18 +489,18 @@ export default { //methods
     },
 
     deleteEnviado(context, data) {
-        context.commit('deleteEnviado' , data.id)
+        context.commit('deleteEnviado', data.id)
         context.commit('getQuotationShipping', 1)
     },
 
     deleteRealizado(context, data) {
-        context.commit('deleteRealizado' , data.id)
+        context.commit('deleteRealizado', data.id)
         context.commit('getOrdenesTrabajos')
     },
     // getQuotationShipping(context, data) {
     //     context.commit('getQuotationShipping', data)
     // },
-    
+
     createQuotationclient(context) {
         context.commit('createQuotationclient')
         setTimeout(function () {
@@ -542,10 +542,10 @@ export default { //methods
         }, 1000)
     },
     generarRecibo(context, data) {
-        context.commit('generarRecibo' , data.id)
+        context.commit('generarRecibo', data.id)
     },
     eliminarVenta(context, data) {
-        context.commit('eliminarVenta' , data.id)
+        context.commit('eliminarVenta', data.id)
         setTimeout(function () {
             context.commit('allSalesCalendar')
         }, 1000)
@@ -554,7 +554,7 @@ export default { //methods
         context.commit('pdfQuotationclient')
     },
     pdfQuotationShipping(context, data) {
-        context.commit('pdfQuotationShipping' , data.id)
+        context.commit('pdfQuotationShipping', data.id)
     },
     pdfIvaQuotationclient(context) {
         context.commit('pdfIvaQuotationclient')
@@ -637,7 +637,7 @@ export default { //methods
         context.commit('getQuotationforms')
     },
     showModalDetailUserMechanic(context, data) {
-        context.commit('showModalDetailUserMechanic' , data.id)
+        context.commit('showModalDetailUserMechanic', data.id)
     },
     createDetail(context) {
         context.commit('createDetail')
@@ -825,7 +825,7 @@ export default { //methods
         context.commit('createDescuento')
         context.commit('descuentoDefect')
     },
-    
+
 
     createTipoPago(context) {
         context.commit('createTipoPago')
@@ -1304,7 +1304,7 @@ export default { //methods
     },
     setProduct(context, data) {
         context.commit('setProduct', data)
-        
+
         // context.commit('setCode', { label:'', value:'' })
         // context.commit('allCodes')
     },
@@ -1417,24 +1417,24 @@ export default { //methods
     agregarFormaPago(context, data) {
         context.commit('agregarFormaPago', data)
     },
-    
+
 
     allSalesCalendar(context, data) {
         context.commit('allSalesCalendar', data.page)
-        
+
     },
 
     cierreCajaZ(context) {
         context.commit('cierreCajaZ')
     },
-    
+
     allSales(context, data) {
         context.commit('allSales', data.page)
     },
 
     calendar(context) {
         context.commit('calendar')
-    },    
+    },
 
     searchCode(context) {
         context.commit('searchCode')
