@@ -91,48 +91,6 @@
                 </tbody>
             </table>
         </div>
-
-        <!-- <nav>
-            <ul class="pagination">
-                <li class="page-item" v-if="pagination.current_page > 1">
-                    <a class="page-link" href="#" @click.prevent="changePageVehicle({page: 1})">
-                        <span>Primera</span>
-                    </a>
-                </li>
-
-                <li class="page-item" v-if="pagination.current_page > 1">
-                    <a class="page-link" href="#" @click.prevent="changePageVehicle({page: pagination.current_page - 1})">
-                        <span>Atrás</span>
-                    </a>
-                </li>
-
-                <li class="page-item" v-for="page in pagesNumber"
-                    v-bind:class="[ page == isActived ? 'active' : '' ]" :key="page">
-                    <a class="page-link" href="#" @click.prevent="changePageVehicle({page})">
-                        {{ page }}
-                    </a>
-                </li>
-
-                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                    <a class="page-link" href="#" @click.prevent="changePageVehicle({page: pagination.current_page + 1})">
-                        <span>Siguiente</span>
-                    </a>
-                </li>
-
-                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                    <a class="page-link" href="#"  @click.prevent="changePageVehicle({page:pagination.last_page})">
-                        <span>Última</span>
-                    </a>
-                </li>
-            </ul>
-        </nav> -->
-
-        <!-- <Agregar></Agregar>
-        <Editar></Editar>
-        <Detalle></Detalle>
-        <Imagenes></Imagenes>
-        <AgregarDetalle></AgregarDetalle>
-        <OrdenTrabajo></OrdenTrabajo> -->
         <AgregarFotosOrdenTrabajo></AgregarFotosOrdenTrabajo>
         <AgregarObservacion></AgregarObservacion>
     </div>
@@ -143,11 +101,6 @@
 <script>
 
 import { loadProgressBar } from 'axios-progress-bar'
-// import Agregar from './Agregar'
-// import Editar from './Editar'
-// import Detalle from './Detalle'
-// import Imagenes from './Imagenes'
-// import AgregarDetalle from './AgregarDetalle'
 import AgregarFotosOrdenTrabajo from './AgregarFotosOrdenTrabajo'
 import AgregarObservacion from './AgregarObservacion'
 import { mapState, mapActions, mapGetters } from 'vuex'
@@ -155,7 +108,6 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     components: { AgregarFotosOrdenTrabajo, AgregarObservacion },
     computed:{
-        // ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle']),
         ...mapState(['ordenestrabajos', 'trabajos', 'checkRealizado']),
         ...mapGetters(['isActived', 'pagesNumber']),
         checkRealizado: {
@@ -169,13 +121,10 @@ export default {
         }
     },
     methods:{
-        // ...mapActions(['getVehicles','getVehiclesUser', 'editVehicle',
-        //         'detailVehicle', 'modalDetailVehicle','modalOrdenTrabajo','changePageVehicle'])
         ...mapActions(['getOrdenesTrabajos','deleteRealizado', 'modalFotosOrdenTrabajo', 'modalObservacion', 'removeTrabajo'])
     },
     created(){
         loadProgressBar();
-        // this.$store.dispatch('getOrdenesTrabajos', { page: 1 })
         this.$store.dispatch('getOrdenesTrabajos')
     }
 }

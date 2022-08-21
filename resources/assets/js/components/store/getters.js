@@ -12,7 +12,7 @@ export default { //computed propeties
 
     completeOrdenTrabajo(state, getters){
       return state.newOrdenTrabajo.km.length >= 1 &&
-              state.newOrdenTrabajo.descripcion.length >= 0
+              state.newOrdenTrabajo.descripcion.length >= 4
     },
     // completeVehicleEdit(state, getters){
     //     return state.fillVehicle.name.length >= 4

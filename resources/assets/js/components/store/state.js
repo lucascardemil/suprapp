@@ -134,6 +134,7 @@ export default { //data
     },
     /*** sección componentes de vehiculos */
     vehicles: [],
+    rol: '',
     vehicle: {
         id: '',
         user_id: '',
@@ -174,7 +175,8 @@ export default { //data
     newDetailVehicle: {
         vehicle_id: '',
         km: '',
-        note: ''
+        note: '',
+        rol: ''
     },
     newOrdenTrabajo: {
         vehicle_id: 0,

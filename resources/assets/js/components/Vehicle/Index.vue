@@ -27,8 +27,8 @@
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
+                        <th v-if="rol === 'mechanic'">&nbsp;</th>
+                        <th v-if="rol === 'mechanic'">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,8 +56,8 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+                        <td v-if="rol === 'mechanic'"></td>
+                        <td v-if="rol === 'mechanic'"></td>
                     </tr>
 
                     <tr v-for="vehicleLocal in vehicles" :key="vehicleLocal.id">
@@ -87,7 +87,7 @@
                                 @click.prevent="detailVehicle( { vehicleLocal } )"
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title="Detalle">
+                                title="Informacion">
                                 <i class="fas fa-info"></i>
                             </a>
                         </td>
@@ -100,7 +100,8 @@
                                 <i class="fas fa-plus-circle"></i>
                             </a>
                         </td>
-                        <td width="10px">
+
+                        <td width="10px" v-if="rol === 'mechanic'">
                             <a href="#" class="btn btn-success btn-sm"
                                 @click.prevent="modalOrdenTrabajo( { vehicleLocal } )"
                                 data-toggle="tooltip"
@@ -109,7 +110,7 @@
                                 <i class="fas fa-wrench"></i>
                             </a>
                         </td>
-                        <td width="10px">
+                        <td width="10px" v-if="rol === 'mechanic'">
                             <a href="#" class="btn btn-success btn-sm"
                                 @click.prevent="modalCheckList( { vehicleLocal } )"
                                 data-toggle="tooltip"
@@ -185,7 +186,7 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle, OrdenTrabajo, CheckListVehicle },
     computed:{
-        ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle']),
+        ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle', 'rol']),
         ...mapGetters(['isActived', 'pagesNumber'])
     },
     methods:{

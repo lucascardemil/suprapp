@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class OrdenTrabajo extends Model
 {
     protected $fillable = [
-        'vehicle_id', 'km'
+        'vehicle_id', 'km', 'user_id'
     ];
 
     public function vehicle()

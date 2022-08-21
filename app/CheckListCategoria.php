@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CheckListCategoria extends Model
 {
     protected $fillable = [
-        'check_list_id' , 'categoria'
+        'check_list_id' , 'categoria', 'count'
     ];
 
     public function intervenciones()

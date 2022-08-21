@@ -128,7 +128,6 @@ Route::get('mostrarCheckListVehicles/{id}', 'CheckListController@mostrarCheckLis
 Route::get('mostrarCondiciones', 'CheckListController@mostrarCondiciones');
 Route::get('mostrarObservaciones', 'CheckListController@mostrarObservaciones');
 Route::get('roleschecklists', 'CheckListController@roleschecklists');
-Route::post('crearFormatoCheckList', 'CheckListController@crearFormatoCheckList');
 
 
 

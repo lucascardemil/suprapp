@@ -59,7 +59,7 @@ export default { //methods
         }, 200)
     },
     modalDetailVehicle(context, data) {
-        context.commit('modalDetailVehicle', data.vehicleLocal)
+        context.commit('modalDetailVehicle', [data.vehicleLocal, data.rol])
     },
     modalOrdenTrabajo(context, data) {
         context.commit('modalOrdenTrabajo', data.vehicleLocal)
@@ -84,7 +84,7 @@ export default { //methods
     guardarOrdenTrabajo(context, data) {
         context.commit('guardarOrdenTrabajo', data.km_old)
         // context.commit('getTrabajos', data.id)
-        context.commit('getVehicles', 1)
+        // context.commit('getClientVehicles')
     },
 
     getOrdenesTrabajos(context, data) {
@@ -102,8 +102,13 @@ export default { //methods
     AgregarObservacion(context) {
         context.commit('AgregarObservacion')
     },
-    createDetailVehicle(context) {
+    createDetailVehicle(context, data) {
         context.commit('createDetailVehicle')
+        if(data == 'mechanic'){
+            context.commit('getClientVehicles')
+        }else{
+            context.commit('getVehicles')
+        }
     },
 
 
@@ -178,6 +183,7 @@ export default { //methods
 
     crearCategoria(context, data) {
         context.commit('crearCategoria', data)
+        context.commit('getCheckListVehicles')
     },
 
     crearIntervencion(context, data) {
@@ -190,7 +196,7 @@ export default { //methods
 
     guardarCheckList(context, data) {
         context.commit('guardarCheckList', data)
-        context.commit('getVehicles', 1)
+        context.commit('getClientVehicles', 1)
     },
 
     modalObservacionVehicleCheckList(context, data) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DetailVehicle;
+use App\Vehicle;
 use Illuminate\Http\Request;
 
 class DetailVehicleController extends Controller
@@ -20,16 +21,6 @@ class DetailVehicleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -38,11 +29,19 @@ class DetailVehicleController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        //$data['user_id'] = 1;
 
-        $detail = DetailVehicle::create($data);
+        $vehicle = Vehicle::find($data['vehicle_id']);
+        if($data['km'] > $vehicle->km){
+        
+            Vehicle::where('id', $data['vehicle_id'])
+            ->update(['km' => $data['km']]);
+            $detail = DetailVehicle::create($data);
 
-        return $detail->id;
+            return $detail->id;
+        }else{
+            return response()->json('¡Error, El kilometraje no puede ser menor al actual!', 400);
+        }
+
     }
 
     /**
@@ -58,37 +57,5 @@ class DetailVehicleController extends Controller
         return $detalle;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\DetailVehicle  $detailVehicle
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(DetailVehicle $detailVehicle)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\DetailVehicle  $detailVehicle
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, DetailVehicle $detailVehicle)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\DetailVehicle  $detailVehicle
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(DetailVehicle $detailVehicle)
-    {
-        //
-    }
+    
 }

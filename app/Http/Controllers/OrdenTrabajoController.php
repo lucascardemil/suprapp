@@ -20,24 +20,9 @@ class OrdenTrabajoController extends Controller
     {
         $user_id = \Auth::user()->id;
 
-        $users = User::where('id', '=', $user_id)->with('roles')->get();
-
-        foreach ($users as $user) {
-            foreach ($user->roles as $roles) {
-                if($roles->name == 'admin'){
-                    $ordenestrabajos = OrdenTrabajo::with('vehicle', 'trabajo')->get();
-                    return $ordenestrabajos;
-                }else{
-                    $vehicles = Vehicle::where('user_id', '=', $user_id)->get();
-
-                    foreach($vehicles as $vehicle){
-
-                        $ordenestrabajos = OrdenTrabajo::with('vehicle', 'trabajo')->where('vehicle_id', '=', $vehicle->id)->get();
-                        return $ordenestrabajos;
-                    }
-                }
-            }
-        }
+        $ordenestrabajos = OrdenTrabajo::with('vehicle', 'trabajo')->where('user_id', '=', $user_id)->get();
+        return $ordenestrabajos;
+           
     }
 
     public function obtenerFotosOrdenTrabajo($id)
@@ -70,6 +55,7 @@ class OrdenTrabajoController extends Controller
     {
 
         $data = $request->all();
+        $user_id = \Auth::user()->id;
 
         if(OrdenTrabajo::where('vehicle_id', '=', $data['vehicle_id'])->count() > 0){
 
@@ -98,6 +84,7 @@ class OrdenTrabajoController extends Controller
         }else{
 
             $orden_trabajo_id = OrdenTrabajo::create([
+                'user_id' => $user_id,
                 'vehicle_id' => $data['vehicle_id'],
                 'km' => $data['km']
             ])->id;
@@ -126,34 +113,22 @@ class OrdenTrabajoController extends Controller
     }
 
     
-    public function show($id)
-    {
-        //
-    }
-
-
-    
-    public function update(Request $request, $id)
-    {
-        // Detail::find($id)->update($request->all());
-
-        // return;
-    }
-
-    
     public function destroy($id)
     {
         $observaciones = Observacion::where('trabajo_id', '=', $id)->get();
 
         foreach($observaciones as $observacion){
             Observacion::findOrFail($observacion->id)->delete();
-            unlink( public_path().$observacion->url);
+            // unlink( public_path().$observacion->url);
+            unlink( getcwd().$observacion->url);
         }
 
         $ordenes_trabajos = ImageOrdenTrabajo::where('trabajo_id', '=', $id)->get();
         foreach($ordenes_trabajos as $orden_trabajo){
             ImageOrdenTrabajo::findOrFail($orden_trabajo->id)->delete();
-            unlink( public_path().$orden_trabajo->url);
+            // unlink( public_path().$orden_trabajo->url);
+            unlink( getcwd().$orden_trabajo->url);
+
         }
         
         
@@ -170,7 +145,8 @@ class OrdenTrabajoController extends Controller
         $data = $request->all();
 
         Trabajos::where('id', $data['check'])->update([
-            'realizado' => 1
+            'realizado' => 1,
+            'created_at' => date('Y-m-d H:i:s')
         ]);
     }
 
@@ -195,7 +171,8 @@ class OrdenTrabajoController extends Controller
         foreach ($uploadedFile as $file){
 
             $filename = time().'.'.$file->getClientOriginalExtension();
-            $path = public_path().'/images/orden_trabajos/'.$filename;
+            // $path = public_path().'/images/orden_trabajos/'.$filename;
+            $path = getcwd().'/images/orden_trabajos/'.$filename;
 
 
             $img = $manager->make($file->getRealPath());
@@ -230,8 +207,8 @@ class OrdenTrabajoController extends Controller
         foreach ($uploadedFile as $file){
 
             $filename = time().'.'.$file->getClientOriginalExtension();
-            $path = public_path().'/images/observaciones/'.$filename;
-
+            // $path = public_path().'/images/observaciones/'.$filename;
+            $path = getcwd().'/images/observaciones/'.$filename;
 
             $img = $manager->make($file->getRealPath());
             $img->resize(1000,1000, function($constraint){
@@ -258,7 +235,8 @@ class OrdenTrabajoController extends Controller
     public function EliminarObservacion($id){
 
         $observacion = Observacion::findOrFail($id);
-        unlink( public_path().$observacion->url);
+        // unlink( public_path().$observacion->url);
+        unlink( getcwd().$observacion->url);
         $observacion->delete();
 
         return;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Intervention\Image\ImageManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\User;
 use App\Vehicle;
 use App\CheckList;
 use App\CheckListCategoria;
@@ -78,25 +79,109 @@ class CheckListController extends Controller
 
         $user_id = Auth::user()->id;
 
-        $count = CheckList::where('user_id', '=', $user_id)->count();
-        if($count > 0){
-            $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+        $user_id_admin = DB::table('roles')
+        ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
+        ->join('users', 'model_has_roles.model_id', '=', 'users.id')
+        ->where('roles.name', '=', 'admin')
+        ->select('users.id')
+        ->get();
+
+        if($user_id_admin[0]->id == $user_id){
+            $checklists = CheckList::where('user_id', '=', $user_id_admin[0]->id)->orderby('created_at', 'desc')->first();
             $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
             return $formatchecklist;
         }else{
-            $user_id = DB::table('roles')
-            ->join('model_has_roles', 'roles.id', '=', 'model_has_roles.role_id')
-            ->join('users', 'model_has_roles.model_id', '=', 'users.id')
-            ->where('roles.name', '=', 'admin')
-            ->select('users.id')
-            ->get();
-        
-            $checklists = CheckList::where('user_id', '=', $user_id[0]->id)->orderby('created_at', 'desc')->first();
-            $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
-            return $formatchecklist;
 
-        } 
-        
+            $checklists_user = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+
+            if($checklists_user === null){
+
+                $checklists_admin = CheckList::where('user_id', '=', $user_id_admin[0]->id)->orderby('created_at', 'desc')->first();
+                $formatchecklistadmin = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists_admin->id)->get();
+                
+                $checklist_id = CheckList::create([
+                    'user_id' => $user_id,
+                    'count' => count($formatchecklistadmin)
+                ])->id;
+
+                foreach ($formatchecklistadmin as $format){
+                    $categoria_id = CheckListCategoria::create([
+                        'check_list_id' => $checklist_id,
+                        'categoria' => $format['categoria'],
+                        'count' => count($format['intervenciones'])
+                    ])->id;
+
+                    foreach ($format['intervenciones'] as $intervencion){
+                        CheckListIntervencion::create([
+                            'check_list_categoria_id' => $categoria_id,
+                            'intervencion' => $intervencion['intervencion'],
+                        ]);
+                    }
+                }
+
+                $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+                $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+                return $formatchecklist;
+
+            }else{
+                $checklists_user = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+
+                
+                $checklists_admin = CheckList::where('user_id', '=', $user_id_admin[0]->id)->orderby('created_at', 'desc')->first();
+                $formatchecklistadmin = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists_admin->id)->get();
+
+                if(count($formatchecklistadmin) > $checklists_user->count){
+                    $diferencia = count($formatchecklistadmin) - $checklists_user->count;
+
+
+                    $ultimos_registros = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists_admin->id)->orderby('created_at', 'desc')->limit($diferencia)->get();
+
+                    foreach ($ultimos_registros as $ultimo){
+                        $categoria_id = CheckListCategoria::create([
+                            'check_list_id' => $checklists_user->id,
+                            'categoria' => $ultimo['categoria'],
+                        ])->id;
+                        foreach ($ultimo['intervenciones'] as $intervencion){
+                            CheckListIntervencion::create([
+                                'check_list_categoria_id' => $categoria_id,
+                                'intervencion' => $intervencion['intervencion'],
+                            ]);
+                        }
+                    }
+
+                    CheckList::where('id', '=', $checklists_user->id)->update(['count' => count($formatchecklistadmin)]);
+
+                    
+
+                    $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+                    $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+                    return $formatchecklist;
+
+                }else{
+                    
+                    $formatchecklistuser = CheckListCategoria::where('check_list_id', '=', $checklists_user->id)->get();
+
+                    for($a = 0; count($formatchecklistadmin) > $a; $a++){
+                        if(count($formatchecklistadmin[$a]['intervenciones']) > $formatchecklistuser[$a]->count){
+                            $diferencia = count($formatchecklistadmin[$a]['intervenciones']) - $formatchecklistuser[$a]->count;
+                            $ultimos_registros = CheckListIntervencion::where('check_list_categoria_id', '=', $formatchecklistadmin[$a]->id)->orderby('created_at', 'desc')->limit($diferencia)->get();
+                            foreach ($ultimos_registros as $ultimo){
+                                CheckListIntervencion::create([
+                                    'check_list_categoria_id' => $formatchecklistuser[$a]->id,
+                                    'intervencion' => $ultimo['intervencion'],
+                                ]);
+                            }
+                            CheckListCategoria::where('id', '=', $formatchecklistuser[$a]->id)->update(['count' => count($formatchecklistadmin[$a]['intervenciones'])]);
+                        }
+                    }
+
+                   
+                    $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
+                    $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+                    return $formatchecklist;
+                }
+            }
+        }
     }
 
 
@@ -171,20 +256,21 @@ class CheckListController extends Controller
 
     public function crearCategoria(Request $request)
     {
-        $checklists = CheckList::orderby('created_at', 'desc')->first();
-
+        $user_id = Auth::user()->id;
+        $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
 
         $categorias = $request->checklists;
 
         for ($i=0; $i<count($categorias); $i++){
-            CheckListCategoria::create([
+            $checklist_id = CheckListCategoria::create([
                 'check_list_id' => $checklists->id,
-                'categoria' => $categorias[$i]['categoria'],
-            ]);
+                'categoria' => $categorias[$i]['categoria']
+            ])->id;
+
         }
 
-
-        return $checklists->id;
+        $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
+        return $formatchecklist;
     }
 
     public function crearIntervencion(Request $request, $id)
@@ -322,8 +408,8 @@ class CheckListController extends Controller
         foreach ($imagenes as $imagen){
 
             $filename = time().'.'.$imagen->getClientOriginalExtension();
-            $path = public_path().'/images/checklist/'.$filename;
-
+            // $path = public_path().'/images/checklist/'.$filename;
+            $path = getcwd().'/images/checklist/'.$filename;
 
             $img = $manager->make($imagen->getRealPath());
             $img->resize(1000,1000, function($constraint){
@@ -343,7 +429,8 @@ class CheckListController extends Controller
                     $observaciones = CheckListVehicleObservacion::where('check_list_intervencion_id', '=', $intervencion->id)->get();
 
                     foreach ($observaciones as $observacion){
-                        unlink(public_path().$observacion->imagen);
+                        // unlink(public_path().$observacion->imagen);
+                        unlink(getcwd().$observacion->imagen);
 
                         $image = CheckListVehicleObservacion::findOrFail($observacion->id);
                         $image->delete();
@@ -388,8 +475,16 @@ class CheckListController extends Controller
             $checklistvehicles = Vehicle::with('checklist')->get();
             return $checklistvehicles;
         }else{
-            $checklistvehicles = Vehicle::with('checklist')->where('user_id', '=', $user_id)->get();
-            return $checklistvehicles;
+
+            $clients = DB::table('users')
+            ->join('mechanic_client', 'users.id', '=', 'mechanic_client.user_id')
+            ->where('mechanic_client.mechanic_id', '=', $user_id)
+            ->select('users.id')->get();
+
+            foreach ($clients as $client){
+                $checklistvehicles = Vehicle::with('checklist')->where('user_id', '=', $client->id)->get();
+                return $checklistvehicles;
+            }
         }
 
     }
@@ -440,39 +535,5 @@ class CheckListController extends Controller
 
         return $roles[0]->name;
 
-    }
-
-    public function crearFormatoCheckList(Request $request){
-
-        $user_id = Auth::user()->id;
-
-        $count = CheckList::where('user_id', '=', $user_id)->count();
-        if($count > 0){
-            $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
-            $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
-            return $formatchecklist;
-        }else{
-            $checklist = CheckList::create([
-                'user_id' => $user_id
-            ])->id;
-
-            foreach ($request->formatchecklist as $format){
-                $categoria_id = CheckListCategoria::create([
-                    'check_list_id' => $checklist,
-                    'categoria' => $format['categoria'],
-                ])->id;
-
-                foreach ($format['intervenciones'] as $intervencion){
-                    CheckListIntervencion::create([
-                        'check_list_categoria_id' => $categoria_id,
-                        'intervencion' => $intervencion['intervencion'],
-                    ]);
-                }
-            }
-
-            $checklists = CheckList::where('user_id', '=', $user_id)->orderby('created_at', 'desc')->first();
-            $formatchecklist = CheckListCategoria::with('intervenciones')->where('check_list_id', '=', $checklists->id)->get();
-            return $formatchecklist;
-        }
     }
 }

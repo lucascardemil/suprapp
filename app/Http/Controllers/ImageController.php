@@ -87,7 +87,8 @@ class ImageController extends Controller
 
         foreach ($uploadedFile as $file){
             $filename = time().'.'.$file->getClientOriginalExtension();
-            $path = public_path().'/images/vehicles/'.$filename;
+            // $path = public_path().'/images/vehicles/'.$filename;
+            $path = getcwd().'/images/vehicles/'.$filename;
 
 
             $img = $manager->make($file->getRealPath());

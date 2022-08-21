@@ -33,7 +33,7 @@
                                         <p v-show="errors.has('descripcion')" class="text-danger">{{ errors.first('descripcion') }}</p>
                                     </div>
 
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-success" :disabled="!completeOrdenTrabajo">
                                         <i class="fas fa-plus-square"></i> Agregar
                                     </button>
                                 </form>
@@ -45,6 +45,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Trabajo</th>
+                                                <th>Kilometraje</th>
                                                 <th>Fecha</th>
                                                 <th></th>
                                             </tr>
@@ -54,7 +55,8 @@
                                             <tr  v-for="trabajo in trabajos" :key="trabajo.id">
                                                 <td>{{ trabajo.id }}</td>
                                                 <td>{{ trabajo.descripcion }}</td>
-                                                <td>{{ trabajo.created_at |  moment('DD/MM/YYYY') }}</td>
+                                                <td>{{ trabajo.km }}</td>
+                                                <td>{{ trabajo.created_at |  moment('DD/MM/YYYY h:mm a') }}</td>
                                                 <td class="text-right">
                                                     <a 
                                                         href="#" 
@@ -74,11 +76,11 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" v-on:click="guardarOrdenTrabajo">
-                            <i class="fas fa-plus-square"></i> Guardar
-                        </button>
-                    </div> -->
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger">
+                        Cerrar
+                    </button>
+                    </div>
                 </div>
             </div>
         </div>
