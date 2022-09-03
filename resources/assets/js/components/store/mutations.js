@@ -285,9 +285,9 @@ export default { //used for changing the state
     guardarOrdenTrabajo(state) {
         var url = urlOrdenTrabajo
 
-        // if (state.newOrdenTrabajo.km <= state.newOrdenTrabajo.km_old) {
-        //     toastr.error('El kilometraje no puede ser menor o igual al actual')
-        // } else {
+        if (state.newOrdenTrabajo.km < state.newOrdenTrabajo.km_old) {
+            toastr.error('El kilometraje no puede ser menor actual')
+        } else {
             axios.post(url, {
                 vehicle_id: state.newOrdenTrabajo.vehicle_id,
                 km: state.newOrdenTrabajo.km,
@@ -310,7 +310,7 @@ export default { //used for changing the state
                 .catch(error => {
                     toastr.error(error.response.data)
                 })
-        // }
+        }
 
     },
 

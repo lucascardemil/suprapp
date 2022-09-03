@@ -4,7 +4,6 @@
         placeholder="Seleccionar Marca"
         @input="setVBR"
         :options="optionsVBR"
-        :searchable="false"
         :value="selectedVBR">
     </v-select>
 </template>

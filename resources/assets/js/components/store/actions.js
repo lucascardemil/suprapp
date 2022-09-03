@@ -105,7 +105,10 @@ export default { //methods
     createDetailVehicle(context, data) {
         context.commit('createDetailVehicle')
         if(data == 'mechanic'){
-            context.commit('getClientVehicles')
+            setTimeout(function () {
+                context.commit('getClientVehicles')
+            }, 1000)
+            
         }else{
             context.commit('getVehicles')
         }

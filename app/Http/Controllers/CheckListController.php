@@ -473,17 +473,19 @@ class CheckListController extends Controller
 
         if($roles[0]->name == 'admin'){
             $checklistvehicles = Vehicle::with('checklist')->get();
-            return $checklistvehicles;
+            foreach ($checklistvehicles as $checklistvehicle){
+                if($checklistvehicle->checklist->count() > 0){
+                    $checklistvehicles = Vehicle::with('checklist')->where('id', '=', $checklistvehicle->id)->get();
+                    return $checklistvehicles;
+                }
+            }
         }else{
-
-            $clients = DB::table('users')
-            ->join('mechanic_client', 'users.id', '=', 'mechanic_client.user_id')
-            ->where('mechanic_client.mechanic_id', '=', $user_id)
-            ->select('users.id')->get();
-
-            foreach ($clients as $client){
-                $checklistvehicles = Vehicle::with('checklist')->where('user_id', '=', $client->id)->get();
-                return $checklistvehicles;
+            $checklistvehicles = Vehicle::with('checklist')->where('user_id', '=', $user_id)->get();
+            foreach ($checklistvehicles as $checklistvehicle){
+                if($checklistvehicle->checklist->count() > 0){
+                    $checklistvehicles = Vehicle::with('checklist')->where('id', '=', $checklistvehicle->id)->get();
+                    return $checklistvehicles;
+                }
             }
         }
 

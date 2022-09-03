@@ -5,7 +5,6 @@
         @input="setYM"
         :disabled="selectedMM.label==''"
         :options="optionsYM"
-        :searchable="false"
         :value="selectedYM">
     </v-select>
 </template>

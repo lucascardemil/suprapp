@@ -70,7 +70,7 @@
                                 @click.prevent="modalDetailVehicle( { vehicleLocal, rol: 'mechanic'} )"
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title="Detalle">
+                                title="Detalle de vehiculo">
                                 <i class="fas fa-plus-circle"></i>
                             </a>
                         </td>

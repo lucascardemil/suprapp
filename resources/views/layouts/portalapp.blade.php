@@ -79,7 +79,7 @@
 
     </nav>
 
-    <div id="wrapper" style="background-image: url('img/background.jpg')">
+    <div id="wrapper" style="background-image: url('img/sonda.jpg')">
 
         <ul class="sidebar navbar-nav toggled">
 
