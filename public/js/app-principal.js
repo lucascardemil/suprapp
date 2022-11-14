@@ -133,26 +133,14 @@
 
 /***/ }),
 
-/***/ "./resources/assets/sass/app.scss":
-/*!****************************************!*\
-  !*** ./resources/assets/sass/app.scss ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ 0:
-/*!****************************************************************************************!*\
-  !*** multi ./resources/assets/js/sbAdmin/sb-admin.js ./resources/assets/sass/app.scss ***!
-  \****************************************************************************************/
+/*!*******************************************************!*\
+  !*** multi ./resources/assets/js/sbAdmin/sb-admin.js ***!
+  \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\wamp64\www\suprapp\resources\assets\js\sbAdmin\sb-admin.js */"./resources/assets/js/sbAdmin/sb-admin.js");
-module.exports = __webpack_require__(/*! C:\wamp64\www\suprapp\resources\assets\sass\app.scss */"./resources/assets/sass/app.scss");
+module.exports = __webpack_require__(/*! C:\wamp64\www\suprapp\resources\assets\js\sbAdmin\sb-admin.js */"./resources/assets/js/sbAdmin/sb-admin.js");
 
 
 /***/ })

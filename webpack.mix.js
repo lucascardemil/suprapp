@@ -24,5 +24,4 @@ mix.js(['resources/assets/js/app.js'], 'public/js')
     'resources/assets/css/toastr.css',
     'node_modules/bootstrap4-fullscreen-modal/dist/bootstrap4-modal-fullscreen.css',
     'node_modules/axios-progress-bar/dist/nprogress.css',
-], 'public/css/app-principal.css')
-    .sass('resources/assets/sass/app.scss', 'public/css');
+], 'public/css/app-principal.css');

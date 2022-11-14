@@ -105,7 +105,7 @@ import Agregar from './Agregar'
 export default {
     data() {
         return {
-            //search: '',
+            search_value: '',
             sortMethod: 'asc'
         }
     },
@@ -122,7 +122,7 @@ export default {
                 return 0;
             })
             .filter(code => {
-                return code.product.name.toLowerCase().includes(this.search.toLowerCase())
+                return code.product.name.toLowerCase().includes(this.search_value.toLowerCase())
             })
         },
         ...mapState(['codes', 'search','pagination', 'offset', 'errorsLaravel', 'allInventory']),
