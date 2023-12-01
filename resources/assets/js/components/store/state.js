@@ -135,6 +135,7 @@ export default { //data
     /*** sección componentes de vehiculos */
     vehicles: [],
     rol: '',
+    rol: '',
     vehicle: {
         id: '',
         user_id: '',
