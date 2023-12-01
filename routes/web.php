@@ -97,6 +97,39 @@ Route::get('/cotizar', 'QuotationUserController@cotizar');
 Route::get('cotizar-express', 'QuotationUserController@cotizar_express');
 
 Route::ApiResource('detailvehicles', 'DetailVehicleController');
+Route::ApiResource('ordentrabajo', 'OrdenTrabajoController');
+Route::post('checkRealizado', 'OrdenTrabajoController@checkRealizado');
+Route::post('deleteRealizado/{id}', 'OrdenTrabajoController@NocheckRealizado');
+Route::post('subirfotosordentrabajo', 'OrdenTrabajoController@SubirFotosOrdenTrabajo');
+Route::get('fotosordentrabajo/{id}', 'OrdenTrabajoController@obtenerFotosOrdenTrabajo');
+Route::post('subirobservacion', 'OrdenTrabajoController@AgregarObservacion');
+Route::get('observaciones/{id}', 'OrdenTrabajoController@observaciones');
+Route::delete('eliminarobservacion/{id}', 'OrdenTrabajoController@EliminarObservacion');
+Route::get('trabajos/{id}', 'OrdenTrabajoController@trabajos');
+
+
+
+Route::post('crearCheckList', 'CheckListController@crearCheckList');
+Route::get('checkListCategorias/{id}', 'CheckListController@checkListCategorias');
+Route::post('crearIntervenciones', 'CheckListController@crearIntervenciones');
+Route::get('checkListIntervencion/{id}', 'CheckListController@checkListIntervencion');
+Route::delete('eliminarIntervencion/{id}', 'CheckListController@eliminarIntervencion');
+Route::get('finalizarFormatoCheckList', 'CheckListController@finalizarFormatoCheckList');
+Route::get('mostrarFormatoCheckList', 'CheckListController@mostrarFormatoCheckList');
+Route::get('mostrarCheckList/{id}', 'CheckListController@mostrarCheckList');
+Route::post('editarCategoria', 'CheckListController@editarCategoriaCheckList');
+Route::post('editarIntervencion', 'CheckListController@editarIntervencionCheckList');
+Route::post('crearCategoria', 'CheckListController@crearCategoria');
+Route::post('crearIntervencion/{id}', 'CheckListController@crearIntervencion');
+Route::post('guardarCheckListVehicle', 'CheckListController@guardarCheckListVehicle');
+Route::post('agregarObservacionCheckList', 'CheckListController@agregarObservacionCheckList');
+Route::get('checklistvehicles', 'CheckListController@checklistvehicles');
+Route::get('mostrarCheckListVehicles/{id}', 'CheckListController@mostrarCheckListVehicles');
+Route::get('mostrarCondiciones', 'CheckListController@mostrarCondiciones');
+Route::get('mostrarObservaciones', 'CheckListController@mostrarObservaciones');
+Route::get('roleschecklists', 'CheckListController@roleschecklists');
+
+
 
 Route::ApiResource('notes', 'NoteController');
 
@@ -157,6 +190,8 @@ Route::put('update-utilidad-defect', 'CodeController@updateUtilidadDefect');
 Route::get('utilidad-defect', 'CodeController@utilidadDefect');
 Route::get('code-search/{code}', 'CodeController@search');
 Route::get('product-search/{code}', 'CodeController@product');
+Route::put('update-flete-defect', 'CodeController@updateFleteDefect');
+Route::get('flete-defect', 'CodeController@fleteDefect');
 
 
 Route::ApiResource('inventories', 'InventoryController');
@@ -189,6 +224,9 @@ Route::get('quotationlinkenvio', 'QuotationShippingController@user');
 Route::ApiResource('quotationshipping', 'QuotationShippingController');
 Route::get('/cotizar-envio/{id}', 'QuotationShippingController@cotizar_envio');
 Route::get('quotationshipping-pdf/{id}', 'QuotationShippingController@pdf');
+Route::put('facebookshipping/{id}', 'QuotationShippingController@updateFacebook');
+Route::post('checkEnviado', 'QuotationShippingController@checkEnviado');
+Route::post('deleteEnviado/{id}', 'QuotationShippingController@NocheckEnviado');
 
 Route::get('/cotizar-envio/enviado/{id}', 'QuotationShippingController@cotizacion_envio_enviada');
 
@@ -237,6 +275,10 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.inventario');
     })->name('admin-inventario');
 
+    Route::get('admin-lista-precios', function () {
+        return view('admin.lista-precios');
+    })->name('admin-lista-precios');
+
     Route::get('admin-usuarios', function () {
         return view('role.users');
     })->name('admin-usuarios'); //->middleware('permission:usuarios');
@@ -252,6 +294,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin-vehiculos', function () {
         return view('admin.vehiculo');
     })->name('admin-vehiculos'); //->middleware('permission:vehiculos');
+    
+    Route::get('admin-orden-trabajos', function () {
+      return view('admin.orden-trabajos');
+    })->name('admin-orden-trabajos'); //->middleware('permission:vehiculos');
+
+    Route::get('admin-check-list', function () {
+        return view('admin.check-list');
+      })->name('admin-check-list'); //->middleware('permission:vehiculos');
 
     Route::get('admin-vehiculosM', function () {
         return view('admin.vehiculo-mecanico');

@@ -1,6 +1,6 @@
 <template>
 
-    <form action="POST" v-on:submit.prevent="createDetailVehicle">
+    <form action="POST" v-on:submit.prevent="createDetailVehicle(newDetailVehicle.rol)">
         <div id="createDetail" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">

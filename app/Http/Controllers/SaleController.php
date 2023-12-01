@@ -144,6 +144,7 @@ class SaleController extends Controller
         }
     }
 
+
     public function products($sale){
         return \DB::select(
         'select
@@ -203,7 +204,7 @@ class SaleController extends Controller
             ->join('products', 'codes.product_id', '=', 'products.id')
             ->join('inventories', 'codes.id', '=', 'inventories.code_id')
             ->join('product_pagos', 'products.id', '=', 'product_pagos.product_id')
-            ->select(DB::raw('max(inventories.fecha_fact)'), 'products.name', 'inventories.price', 'codes.id as code_id', 'inventories.id as inventory_id', 'inventories.quantity', 'product_pagos.utilidad')
+            ->select(DB::raw('max(inventories.fecha_fact)'), 'products.name', 'inventories.price', 'codes.id as code_id', 'inventories.id as inventory_id', 'inventories.quantity', 'product_pagos.utilidad', 'codes.codebar as codebar')
             ->where('clients.user_id', '=', $idUser)
             ->where('inventories.quantity', '>', 0)
             ->groupBy('inventories.code_id')
@@ -235,7 +236,6 @@ class SaleController extends Controller
             ->where('sales.id', '=', $id)
             ->get();
 
-       
         // $pdf = PDF::loadView('pdf.sales-recibo', compact(['products','clients']) )->setPaper([ 0 , 0 , 226.772 , 141.732 ], 'landscape');
         $pdf = PDF::loadView('pdf.sales-recibo', compact(['products','clients']) )->setPaper('B8', 'portrait');
         return $pdf->stream('Recibo N° '.$id.'.pdf');
@@ -267,8 +267,13 @@ class SaleController extends Controller
             ->whereDate('sales.created_at', $fecha)
             ->get();
 
-        $pdf = PDF::loadView('pdf.cierre-cajaz', compact(['products','clients','fecha']));
-        return $pdf->stream('CajaZ-'.$fecha.'.pdf');
+        if(count($products) > 0 && count($clients) > 0){
+            $pdf = PDF::loadView('pdf.cierre-cajaz', compact(['products','clients','fecha']));
+            return $pdf->stream('CajaZ-'.$fecha.'.pdf');
+        }else{
+            return response()->json(['error' => 0], 200);
+
+        }
 
     }
 }

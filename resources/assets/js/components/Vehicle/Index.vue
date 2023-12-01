@@ -27,6 +27,8 @@
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
+                        <th v-if="rol === 'mechanic'">&nbsp;</th>
+                        <th v-if="rol === 'mechanic'">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +51,13 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td v-if="rol === 'mechanic'"></td>
+                        <td v-if="rol === 'mechanic'"></td>
                     </tr>
 
                     <tr v-for="vehicleLocal in vehicles" :key="vehicleLocal.id">
@@ -78,7 +87,7 @@
                                 @click.prevent="detailVehicle( { vehicleLocal } )"
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title="Detalle">
+                                title="Informacion">
                                 <i class="fas fa-info"></i>
                             </a>
                         </td>
@@ -89,6 +98,25 @@
                                 data-placement="top"
                                 title="Detalle">
                                 <i class="fas fa-plus-circle"></i>
+                            </a>
+                        </td>
+
+                        <td width="10px" v-if="rol === 'mechanic'">
+                            <a href="#" class="btn btn-success btn-sm"
+                                @click.prevent="modalOrdenTrabajo( { vehicleLocal } )"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Orden de trabajo">
+                                <i class="fas fa-wrench"></i>
+                            </a>
+                        </td>
+                        <td width="10px" v-if="rol === 'mechanic'">
+                            <a href="#" class="btn btn-success btn-sm"
+                                @click.prevent="modalCheckList( { vehicleLocal } )"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Check List">
+                                <i class="fas fa-clipboard-check"></i>
                             </a>
                         </td>
                     </tr>
@@ -136,6 +164,8 @@
         <Detalle></Detalle>
         <Imagenes></Imagenes>
         <AgregarDetalle></AgregarDetalle>
+        <OrdenTrabajo></OrdenTrabajo>
+        <CheckListVehicle></CheckListVehicle>
     </div>
 
 </template>
@@ -149,17 +179,19 @@ import Editar from './Editar'
 import Detalle from './Detalle'
 import Imagenes from './Imagenes'
 import AgregarDetalle from './AgregarDetalle'
+import OrdenTrabajo from '../OrdenTrabajos/OrdenTrabajo'
+import CheckListVehicle from '../Check-List/CheckListVehicle'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle },
+    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle, OrdenTrabajo, CheckListVehicle },
     computed:{
-        ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle']),
+        ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle', 'rol']),
         ...mapGetters(['isActived', 'pagesNumber'])
     },
     methods:{
         ...mapActions(['getVehicles','getVehiclesUser', 'editVehicle',
-                'detailVehicle', 'modalDetailVehicle', 'changePageVehicle'])
+                'detailVehicle', 'modalDetailVehicle','modalOrdenTrabajo','changePageVehicle', 'modalCheckList'])
     },
     created(){
         loadProgressBar();

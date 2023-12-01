@@ -1,5 +1,4 @@
 <template>
-
     <form action="POST" v-on:submit.prevent="">
         <div id="modalQuotationclient" class="modal fade modal-fullscreen">
             <div class="modal-dialog">
@@ -14,121 +13,104 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <!--<div id="accordion">-->
-                                    <div class="card">
+                                <div class="card">
 
-                                        
 
-                                        <div class="card-header">
-                                            <h5 class="mb-0">Nuevo Producto</h5>
-                                        </div>
 
-                                        
-                                            <div class="card-body">
-                                                <form action="POST" v-on:submit.prevent="createDetailclient">
-
-                                                    <div class="row mb-3">
-
-                                                        <div class="col-lg-4">
-                                                            <label for="cliente">Producto</label>
-                                                            <SelectProduct></SelectProduct>
-                                                        </div>
-
-                                                        <div class="col-lg-4">
-                                                            <label for="product">Nombre Producto</label>
-                                                            <input required
-                                                                type="text"
-                                                                name="product"
-                                                                class="form-control"
-                                                                v-model="newDetailclient.product"
-                                                            >
-                                                        </div>
-
-                                                         <div class="col-lg-4">
-                                                            <label for="product">Código</label>
-                                                            <input type="text" name="product" class="form-control"
-                                                            v-model="newDetailclient.detail">
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-
-                                                        <div class="col-lg-2">
-                                                            <label for="precio">Precio</label>
-                                                            <input type="number" name="precio" class="form-control"
-                                                                v-model="newDetailclient.price"
-                                                                @keyup="sumTotalProduct" required
-                                                                >
-                                                            
-                                                        </div>
-                                                        <!-- <div class="col-lg-2">
-                                                            <label for="precio">Precio</label>
-                                                            <div class="input-group mb-3">
-                                                                <input type="number" name="precio" class="form-control"
-                                                                v-model="newDetailclient.price">
-                                                                <div class="input-group-append">
-                                                                    <button class="btn btn-secondary" @click="sumTotalProduct" type="button"><i class="fas fa-calculator"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div> -->
-
-                                                        <div class="col-lg-1">
-                                                            <label for="cantidad">Cantidad</label>
-                                                            <input type="number" name="quantity" class="form-control" required
-                                                                v-model="newDetailclient.quantity" @keyup="sumTotalProduct" min="0"
-                                                                >
-                                                        </div>
-
-                                                        <div class="col-lg-1">
-                                                            <label for="percentage">%</label>
-                                                            <input type="number" name="percentage" class="form-control"
-                                                                v-model="newDetailclient.percentage" @keyup="sumTotalProduct" min="0"
-                                                                >
-                                                        </div>
-
-                                                        <div class="col-lg-1">
-                                                            <label for="aditional">Adicional</label>
-                                                            <input type="number" name="aditional" class="form-control"
-                                                                v-model="newDetailclient.aditional" @keyup="sumTotalProduct" min="0"
-                                                                >
-                                                        </div>
-
-                                                        <div class="col-lg-1">
-                                                            <label for="transport">Flete</label>
-                                                            <input type="number" name="transport" class="form-control"
-                                                                v-model="newDetailclient.transport" @keyup="sumTotalProduct" min="0"
-                                                                >
-                                                        </div>
-
-                                                        <div class="col-lg-1">
-                                                            <label for="utilidad">Utilidad</label>
-                                                            <input type="number" name="utilidad" class="form-control"
-                                                                v-model="newDetailclient.utility" min="0" disabled>
-                                                        </div>
-
-                                                        <div class="col-lg-2">
-                                                            <label for="plazo">Días de Plazo</label>
-                                                            <input type="text" name="plazo" class="form-control"
-                                                                v-model="newDetailclient.days">
-                                                        </div>
-
-                                                        <div class="col-lg-2">
-                                                            <label for="total">Total</label>
-                                                            <input type="number" name="total" class="form-control"
-                                                                v-model="newDetailclient.total" min="0" disabled>
-                                                        </div>
-
-                                                        <div class="col-lg-1 mt-2">
-                                                            <label></label>
-                                                            <button type="submit" class="btn btn-success form-control">
-                                                                <i class="fas fa-plus-square"></i> Guardar
-                                                            </button>
-                                                        </div>
-
-                                                    </div>
-
-                                                </form>
-                                            </div>
-                                        <!--</div>-->
+                                    <div class="card-header">
+                                        <h5 class="mb-0">Nuevo Producto</h5>
                                     </div>
+
+
+                                    <div class="card-body">
+                                        <form action="POST" v-on:submit.prevent="createDetailclient">
+
+                                            <div class="row mb-3">
+
+                                                <div class="col-lg-4">
+                                                    <label for="cliente">Producto</label>
+                                                    <SelectProduct></SelectProduct>
+                                                </div>
+
+                                                <div class="col-lg-4">
+                                                    <label for="product">Nombre Producto</label>
+                                                    <input required type="text" name="product" class="form-control"
+                                                        v-model="newDetailclient.product">
+                                                </div>
+
+                                                <div class="col-lg-4">
+                                                    <label for="product">Código</label>
+                                                    <input type="text" name="product" class="form-control"
+                                                        v-model="newDetailclient.detail">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-lg-2">
+                                                    <label for="precio">Precio</label>
+                                                    <input type="number" name="precio" class="form-control"
+                                                        v-model="newDetailclient.price" @keyup="sumTotalProduct" required>
+
+                                                </div>
+  
+                                                <div class="col-lg-1">
+                                                    <label for="cantidad">Cantidad</label>
+                                                    <input type="number" name="quantity" class="form-control" required
+                                                        v-model="newDetailclient.quantity" @keyup="sumTotalProduct" min="0">
+                                                </div>
+
+                                                <div class="col-lg-1">
+                                                    <label for="percentage">%</label>
+                                                    <input type="number" name="percentage" class="form-control"
+                                                        v-model="newDetailclient.percentage" @keyup="sumTotalProduct"
+                                                        min="0">
+                                                </div>
+
+                                                <div class="col-lg-1">
+                                                    <label for="aditional">Adicional</label>
+                                                    <input type="number" name="aditional" class="form-control"
+                                                        v-model="newDetailclient.aditional" @keyup="sumTotalProduct"
+                                                        min="0">
+                                                </div>
+
+                                                <div class="col-lg-1">
+                                                    <label for="transport">Flete</label>
+                                                    <input type="number" name="transport" class="form-control"
+                                                        v-model="newDetailclient.transport" @keyup="sumTotalProduct"
+                                                        min="0">
+                                                </div>
+
+                                                <div class="col-lg-1">
+                                                    <label for="utilidad">Utilidad</label>
+                                                    <input type="number" name="utilidad" class="form-control"
+                                                        v-model="newDetailclient.utility" min="0" disabled>
+                                                </div>
+
+                                                <div class="col-lg-2">
+                                                    <label for="plazo">Días de Plazo</label>
+                                                    <input type="text" name="plazo" class="form-control"
+                                                        v-model="newDetailclient.days">
+                                                </div>
+
+                                                <div class="col-lg-2">
+                                                    <label for="total">Total</label>
+                                                    <input type="number" name="total" class="form-control"
+                                                        v-model="newDetailclient.total" min="0" disabled>
+                                                </div>
+
+                                                <div class="col-lg-1 mt-2">
+                                                    <label></label>
+                                                    <button type="submit" class="btn btn-success form-control">
+                                                        <i class="fas fa-plus-square"></i> Guardar
+                                                    </button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                    <!--</div>-->
+                                </div>
                                 <!--</div>-->
                             </div>
 
@@ -154,27 +136,6 @@
                                     </thead>
                                     <tbody>
 
-                                        <!--<tr>
-                                            <td></td>
-                                            <td>
-                                                <input type="text" class="form-control form-control-sm"
-                                                        v-model="newDetail.product">
-                                            </td>
-                                            <td>
-                                                <input type="number" class="form-control form-control-sm"
-                                                        v-model="newDetail.price">
-                                            </td>
-                                            <td>
-                                                <a href="#" class="btn btn-success btn-sm"
-                                                    @click.prevent="createDetail"
-                                                    data-toggle="tooltip"
-                                                    data-placement="top"
-                                                    title="Crear">
-                                                    <i class="fas fa-plus-square"></i>
-                                                </a>
-                                            </td>
-                                        </tr>-->
-
                                         <tr v-for="(detailLocal, index) in detailclients" :key="detailLocal.id">
                                             <td width="10px">{{ index + 1 }}</td>
                                             <td>{{ detailLocal.product }}</td>
@@ -182,29 +143,30 @@
                                             <td>{{ detailLocal.days }}</td>
                                             <td>{{ detailLocal.price | currency('', 0, { thousandsSeparator: '.' }) }}</td>
                                             <td>{{ detailLocal.quantity }}</td>
-                                            <td>{{ detailLocal.percentage+'%' }}</td>
-                                            <td>{{ detailLocal.aditional | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            <td>{{ detailLocal.transport | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            <td>{{ detailLocal.utility | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            
-                                            
+                                            <td>{{ detailLocal.percentage + '%' }}</td>
+                                            <td>{{ detailLocal.aditional | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </td>
+                                            <td>{{ detailLocal.transport | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </td>
+                                            <td>{{ detailLocal.utility | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </td>
+
+
                                             <td>{{ detailLocal.total | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            <th>{{ Math.round(detailLocal.total * 1.19) | currency('', 0, { thousandsSeparator: '.' }) }}</th>
+                                            <th>{{ Math.round(detailLocal.total * 1.19) | currency('', 0, {
+                                                thousandsSeparator: '.'
+                                            }) }}</th>
 
                                             <td>
                                                 <a href="#" class="btn btn-warning btn-sm"
-                                                    @click.prevent="editDetailclient( { detailLocal } )"
-                                                    data-toggle="tooltip"
-                                                    data-placement="top"
-                                                    title="Editar">
+                                                    @click.prevent="editDetailclient({ detailLocal })"
+                                                    data-toggle="tooltip" data-placement="top" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
                                                 <a href="#" class="btn btn-danger btn-sm"
-                                                    @click.prevent="deleteDetailclient( { id: detailLocal.id } )"
-                                                    data-toggle="tooltip"
-                                                    data-placement="top"
-                                                    title="Eliminar">
+                                                    @click.prevent="deleteDetailclient({ id: detailLocal.id })"
+                                                    data-toggle="tooltip" data-placement="top" title="Eliminar">
                                                     <i class="fas fa-ban"></i>
                                                 </a>
                                             </td>
@@ -218,10 +180,15 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>Total: {{ totalAdicional | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            <td>Total: {{ totalTransporte | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            <td>Total: {{ totalUtilidad | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            <td>Total: {{ totalQuotationclient | currency('', 0, { thousandsSeparator: '.' }) }}</td>
+                                            <td>Total: {{ totalAdicional | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </td>
+                                            <td>Total: {{ totalTransporte | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </td>
+                                            <td>Total: {{ totalUtilidad | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </td>
+                                            <td>Total: {{ totalQuotationclient | currency('', 0, {
+                                                thousandsSeparator: '.'
+                                            }) }}</td>
                                             <td></td>
                                         </tr>
                                         <tr>
@@ -236,7 +203,9 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>Total + IVA: {{ totalQuotationclientIVA | currency('', 0, { thousandsSeparator: '.' }) }}</td>
+                                            <td>Total + IVA: {{ totalQuotationclientIVA | currency('', 0, {
+                                                thousandsSeparator: '.'
+                                            }) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -247,13 +216,11 @@
 
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-danger" href="#" role="button"
-                            @click.prevent="pdfQuotationclient">
+                        <a class="btn btn-danger" href="#" role="button" @click.prevent="pdfQuotationclient">
                             <i class="far fa-file-pdf"></i> PDF
                         </a>
 
-                        <a class="btn btn-danger" href="#" role="button"
-                            @click.prevent="pdfIvaQuotationclient">
+                        <a class="btn btn-danger" href="#" role="button" @click.prevent="pdfIvaQuotationclient">
                             <i class="far fa-file-pdf"></i> PDF IVA Incluido
                         </a>
 
@@ -262,7 +229,6 @@
             </div>
         </div>
     </form>
-
 </template>
 
 <script>
@@ -273,15 +239,18 @@ import SelectProduct from '../Product/Select'
 
 export default {
     components: { SelectProduct },
-    computed:{
+    computed: {
         ...mapState(['detailclients', 'totalQuotationclient', 'totalUtilidad', 'totalTransporte', 'totalAdicional',
-                    'totalQuotationclientIVA', 'newDetailclient', 'totalDetailclient', 'errorsLaravel']),
+            'totalQuotationclientIVA', 'newDetailclient', 'totalDetailclient', 'errorsLaravel']),
         ...mapGetters([])
     },
-    methods:{
+    methods: {
         ...mapActions(['createDetailclient', 'editDetailclient', 'deleteDetailclient',
-                    'pdfQuotationclient', 'pdfIvaQuotationclient', 'sumTotalProduct'])
+            'pdfQuotationclient', 'pdfIvaQuotationclient', 'sumTotalProduct'])
     },
+    created(){
+        this.$store.dispatch('fleteDefect')
+    }
 }
 </script>
 

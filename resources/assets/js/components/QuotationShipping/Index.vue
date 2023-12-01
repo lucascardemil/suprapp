@@ -19,33 +19,35 @@
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-light">Nombre*</label>
-                                <input v-validate="'required|min:3|max:60'" 
-                                        :class="{'input': true, 'is-invalid': errors.has('nombre')}"
+                                <input 
                                         class="form-control"
                                         type="text"
                                         name="nombre"
                                         v-model="formQuotationShipping.nombre" />
-                                <p v-show="errors.has('nombre')" class="text-danger">{{ errors.first('nombre') }}</p>
+                                <!-- <p v-show="errors.has('nombre')" class="text-danger">{{ errors.first('nombre') }}</p> -->
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-light">RUT*</label>
-                                <input v-validate="'required|min:3|max:60'" 
-                                        :class="{'input': true, 'is-invalid': errors.has('rut')}"
+                                <input 
                                         class="form-control"
                                         type="text"
                                         name="rut"
                                         v-model="formQuotationShipping.rut" />
-                                <p v-show="errors.has('rut')" class="text-danger">{{ errors.first('rut') }}</p>
+                                <!-- <p v-show="errors.has('rut')" class="text-danger">{{ errors.first('rut') }}</p> -->
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-light">Telefono*</label>
-                                <input v-validate="'required|min:3|max:60'" 
-                                        :class="{'input': true, 'is-invalid': errors.has('telefono')}"
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">+569</span>
+                                    </div>
+                                    <input maxlength="8"
                                         class="form-control"
                                         type="text"
                                         name="telefono"
                                         v-model="formQuotationShipping.telefono" />
-                                <p v-show="errors.has('telefono')" class="text-danger">{{ errors.first('telefono') }}</p>
+                                </div>
+                                <!-- <p v-show="errors.has('telefono')" class="text-danger">{{ errors.first('telefono') }}</p> -->
                             </div>
                             <div class="form-group">
                                 <label class="font-weight-light">Localidad*</label>

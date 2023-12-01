@@ -8,6 +8,8 @@ use App\Inventory;
 use App\TipoPago;
 use App\Atributo;
 use App\ProductPago;
+use App\Flete;
+use App\Product;
 use Illuminate\Http\Request;
 
 class CodeController extends Controller
@@ -20,25 +22,6 @@ class CodeController extends Controller
     public function index()
     {
         $idUser = Auth::id();
-        // $codes = Code::with('client', 'product', 'inventories')
-        // ->whereHas('client', function ($query) use($idUser) {
-        //     $query->where('clients.user_id', '=', $idUser);
-        // })->orderBy('id', 'DESC')->paginate(10);
-
-        // return [
-        //     'pagination' => [
-        //         'total'         => $codes->total(),
-        //         'current_page'  => $codes->currentPage(),
-        //         'per_page'      => $codes->perPage(),
-        //         'last_page'     => $codes->lastPage(),
-        //         'from'          => $codes->firstItem(),
-        //         'to'            => $codes->lastItem(),
-        //     ],
-        //     'codes' => $codes
-        // ];
-
-
-
         $search = request('name');
 
         $codes = Code::with('client', 'product', 'inventories', 'productpagos')
@@ -118,26 +101,23 @@ class CodeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Code::find($id)->update($request->all());
-        
-        // $inventory = Inventory::find($codes);
-        // $inventory->quantity = $request->atributo;
-        // $inventory->save();
-
         $code = Code::find($id);
         $code->codebar = $request->codebar;
         $code->atributo = $request->atributo;
         $code->save();
 
-        // Atributo::create([
-        //     'codigo' => $request->codebar,
-        //     'atributo' => $request->atributo
-        // ]);
+        if($request->product !== '' || $request->detail !== ''){
+            Product::where('id', $code->product_id)->update([
+                'name' => $request->product,
+                'detail' => $request->detail,
+            ]);
+        }
 
         if($request->utilidad > 0){
             ProductPago::where('product_id', $code->product_id)->update([
                 'forma_pago' => 'DEFECTO',
-                'utilidad' => $request->utilidad
+                'utilidad' => $request->utilidad,
+                'flete' => $request->flete
             ]);
         }
 
@@ -168,8 +148,8 @@ class CodeController extends Controller
      */
     public function destroy($id)
     {
-        $code = Code::findOrFail($id);
-        $code->delete();
+        $product = Product::findOrFail($id);
+        $product->delete();
 
         return;
     }
@@ -203,9 +183,6 @@ class CodeController extends Controller
             ]);
 
         }
-
-        
-
         return;
     }
 
@@ -215,6 +192,38 @@ class CodeController extends Controller
 
         return $utilidad;
     }
+
+
+    public function updateFleteDefect(Request $request)
+    {
+        $idUser = Auth::id();
+        
+        Flete::updateOrCreate([
+            'flete' => $request->flete
+        ]);
+
+        $codes = Code::with('client', 'product')
+        ->whereHas('client', function ($query) use($idUser) {
+            $query->where('clients.user_id', '=', $idUser);
+        })->get();
+
+        foreach($codes as $code){
+
+            ProductPago::where('product_id', $code->product_id)->update([
+                'flete' => $request->flete
+            ]);
+
+        }
+        return $request->flete;
+    }
+
+    public function fleteDefect()
+    {
+        $flete = Flete::orderBy('id', 'ASC')->get();
+
+        return $flete;
+    }
+
     
 
 }

@@ -15,6 +15,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Enviado</th>
                     <th>Nombre</th>
                     <th>RUT</th>
                     <th>Telefono</th>
@@ -39,23 +40,41 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                 </tr>
                 <tr v-for="quotationshippingLocal in quotationshipping" :key="quotationshippingLocal.id">
 
                     <td width="10px">{{ quotationshippingLocal.id }}</td>
+                    <td class="text-center" v-if="quotationshippingLocal.enviado > 0">
+                        
+                        <button class="button" @click.prevent="deleteEnviado({ id: quotationshippingLocal.id })"><span>Enviado</span></button>
+                        
+                    </td>
+                    <td class="text-center" v-else>
+                        
+                            <input type="checkbox" :id="quotationshippingLocal.id" :value="quotationshippingLocal.id" v-model="checkEnviado">
+                            <label :for="quotationshippingLocal.id"></label>
+                        
+                    </td>
+
+                    
                     <td>{{ quotationshippingLocal.nombre }}</td>
                     <td>{{ quotationshippingLocal.rut }}</td>
                     <td>{{ quotationshippingLocal.telefono }}</td>
                     <td>{{ quotationshippingLocal.ciudad }}</td>
                     <td width="15%">{{ quotationshippingLocal.direccion }}</td>
-                    <td>{{ quotationshippingLocal.sucursal }}</td>
+                    <td width="15%">{{ quotationshippingLocal.sucursal }}</td>
                     <td>{{ quotationshippingLocal.created_at }}</td>
                     <td class="text-right">
-                        <a class="btn btn-success btn-sm" href="#" role="button"
-                            @click.prevent="showQuotationShipping({ id: quotationshippingLocal.id })"><i class="fas fa-shipping-fast"></i> Domicilio
+                        <a class="btn btn-primary btn-sm" href="#" role="button"
+                            @click.prevent="editFacebook({ quotationshippingLocal })"><i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a class="btn btn-success btn-sm" :href="'https://wa.me/+569'+quotationshippingLocal.telefono" target="_blank" role="button"><i class="fab fa-whatsapp"></i></a>
+                        <a class="btn btn-secondary btn-sm" href="#" role="button"
+                            @click.prevent="showQuotationShipping({ id: quotationshippingLocal.id })"><i class="fas fa-shipping-fast"></i>
                         </a>
                         <a class="btn btn-info btn-sm" href="#" role="button"
-                            @click.prevent="pdfQuotationShipping({ id: quotationshippingLocal.id })"><i class="far fa-file-alt"></i> Generar
+                            @click.prevent="pdfQuotationShipping({ id: quotationshippingLocal.id })"><i class="far fa-file-alt"></i>
                         </a>
                         <a class="btn btn-danger btn-sm" href="#" role="button"
                             @click.prevent="showdeleteQuotationShipping({ id: quotationshippingLocal.id })"><i class="far fa-trash-alt"></i>
@@ -107,6 +126,7 @@
         </nav>
         <EliminarShipping></EliminarShipping>
         <EnvioShipping></EnvioShipping>
+        <EditFacebook></EditFacebook>
     </div>
 </div>
 </template>
@@ -115,18 +135,29 @@
 
 import EliminarShipping from '../QuotationShipping/EliminarShipping'
 import EnvioShipping from '../QuotationShipping/EnvioShipping'
+import EditFacebook from '../QuotationShipping/EditFacebook'
 import { loadProgressBar } from 'axios-progress-bar'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 
 export default {
-    components: { EliminarShipping, EnvioShipping },
+    components: { EliminarShipping, EnvioShipping, EditFacebook },
     computed:{
-        ...mapState(['quotationshipping','linkenvio','errorsLaravel', 'pagination_shipping', 'offset_shipping', 'searchShipping']),
-        ...mapGetters(['isActived_shipping', 'pagesNumber_shipping'])
+        ...mapState(['quotationshipping','linkenvio','errorsLaravel', 'pagination_shipping', 'offset_shipping', 'searchShipping', 'checkEnviado']),
+        ...mapGetters(['isActived_shipping', 'pagesNumber_shipping']),
+        checkEnviado: {
+            get () {
+                return this.$store.state.checkEnviado
+            },
+            set (value) {
+                this.$store.commit('setCheckEnviado', value)
+                this.$store.commit('getQuotationShipping', 1)
+            }
+        },
+        
     },
     methods:{
-        ...mapActions(['getQuotationShipping','pdfQuotationShipping','showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping']),
+        ...mapActions(['getQuotationShipping','pdfQuotationShipping','showdeleteQuotationShipping', 'showQuotationShipping', 'changePageQuotationShipping', 'editFacebook', 'deleteEnviado']),
         copyTestingCode () {
           let testingCodeToCopy = document.querySelector('#testing-code')
           testingCodeToCopy.setAttribute('type', 'text')    // 不是 hidden 才能複製
@@ -153,3 +184,33 @@ export default {
 
 }
 </script>
+<style>
+.button {
+  border-radius: 0.2rem;
+  background-color: #28a745;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  width: 100%;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+
+.button:hover {
+  background-color: #dc3545;
+}
+.button:hover span {display:none}
+.button:hover:before {content: '\26CC'}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+</style>

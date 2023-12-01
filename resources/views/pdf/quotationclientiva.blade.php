@@ -22,6 +22,14 @@
                     <br>
                     <span>Repuestos Automotrices, Repuestos Maquinarias, Importaciones</span>
                     <br>
+                    <span>Direccion: Avda. Ruben Jimenez 601, Coquimbo</span>
+                    <br>
+                    <span>Email: ventas@comercialsupra.cl</span>
+                    <br>
+                    <span>Vendedor: Alvaro Perez</span>
+                    <br>
+                    <span>Cel: +56989483379 - +56973887034</span>
+                    <br>
                     <br>
                 </td>
                 <td class="text-center" COLSPAN="2">
@@ -42,6 +50,14 @@
                     <br>
                     <span>Repuestos Automotrices, Repuestos Maquinarias, Importaciones</span>
                     <br>
+                    <span>Direccion: Avda. Ruben Jimenez 601, Coquimbo</span>
+                    <br>
+                    <span>Email: ventas@comercialsupra.cl</span>
+                    <br>
+                    <span>Vendedor: Alvaro Perez</span>
+                    <br>
+                    <span>Cel: +56989483379 - +56973887034</span>
+                    <br>
                     <br>
                 </td>
                 <td class="text-center" COLSPAN="2">
@@ -60,9 +76,31 @@
             <tr>
                 <td COLSPAN="12"
                     style="font-size:14px;padding:10px!important;border-radius:10px">
+                    @if($client->type == 'Cliente Particular')
                     <span>Sr: </span> <b><span>{{ $quotation->client_text }}</span></b>
+                    @else
+                    <span>Sr: </span> <b><span>{{ $client->name }}</span></b>
+                    <br>
+                    <span>Empresa: </span> <b><span>{{ $client->razonSocial }}</span></b>
+                    <br>
+                    <span>Rut: </span> <b><span>{{ $client->rut }}</span></b>
+                    <br>
+                    <span>Dirección: </span> <b><span>{{ $client->address }}</span></b>
+                    <br>
+                    <span>Ciudad: </span> <b><span>{{ $client->comuna }}</span></b>
+                    <br>
+                    <span>E-mail: </span> <b><span>{{ $client->email }}</span></b>
+                    <br>
+                    <span>Teléfono: </span> <b><span>{{ $client->phone }}</span></b>
+                    @endif
+                    @if($quotation->ppu != '')
+                    <br>
+                    <span>PPU/N°Interno: </span> <b><span>{{ $quotation->ppu }}</span></b>
+                    @endif
+                    @if($quotation->vehicle != '')
                     <br>
                     <span>Vehículo: </span> <b><span>{{ $quotation->vehicle }}</span></b>
+                    @endif
                 </td>
             </tr>
 

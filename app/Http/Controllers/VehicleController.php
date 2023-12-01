@@ -57,7 +57,8 @@ class VehicleController extends Controller
                             'from'          => $vehicles->firstItem(),
                             'to'            => $vehicles->lastItem(),
                         ],
-                        'vehicles' => $vehicles
+                        'vehicles' => $vehicles,
+                        'rol' => $roles->name
                     ];
                     
                 }

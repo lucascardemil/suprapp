@@ -5,7 +5,6 @@
         @input="setVMR"
         :disabled="selectedVBR.label==''"
         :options="optionsVMR"
-        :searchable="false"
         :value="selectedVMR">
     </v-select>
 </template>

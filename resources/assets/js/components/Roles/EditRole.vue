@@ -1,6 +1,6 @@
 <template>
 
-    <form action="POST" v-on:submit.prevent="updateRole({ id: fillRole.id })">
+    <form action="POST" v-on:submit.prevent="updateRole(fillRole)">
         <div id="edit" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -48,11 +48,12 @@
                             <label class="form-check-label" for="inlineRadio1"> Acceso Personalizado</label>
                         </div>
 
-                        <div v-for="permissionLocal in permissions" :key="permissionLocal.id">
+                        <div v-show="checkedSpecialRole !== 'all-access' && checkedSpecialRole !== 'no-access'" v-for="permissionLocal in permissions" :key="permissionLocal.id">
                             <input name="permission" type="checkbox" v-bind:id="permissionLocal.id" v-bind:value="permissionLocal.id"
                                     v-model="checkedPermissions">
                             <label v-bind:for="permissionLocal.id">{{ permissionLocal.name }} </label>
                         </div>
+                        
 
                     </div>
                     <div class="modal-footer">

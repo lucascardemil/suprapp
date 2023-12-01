@@ -67,11 +67,14 @@
                             <label for="cant_vehicle">Vehiculos</label>
                             <select class="form-control" name="cant_vehicle" v-model="fillCantCliVehi.cant_vehicle">
                                 <option disabled value="0">Seleccione Cantidad</option>
+                                <option value="1" selected>1 - 1</option>
                                 <option value="5">1 - 5</option>
                                 <option value="10">1 - 10</option>
                                 <option value="30">1 - 30</option>
                                 <option value="50">1 - 50</option>
                                 <option value="100">1 - 100</option>
+                                <option value="500">1 - 500</option>
+                                <option value="1000">1 - 1000</option>
                             </select>
                         </div>
                     </div>

@@ -12,12 +12,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="cliente">Proveedor</label>
-                            <SelectProvider></SelectProvider>
-                        </div>
-                        <div class="form-group">
                             <label for="producto">Producto</label>
-                            <SelectProduct></SelectProduct>
+                            <input required
+                                    
+                                    type="text"
+                                    name="producto"
+                                    class="form-control" v-model="fillCode.product">
                         </div>
                         <div class="form-group">
                             <label for="codigo">Código</label>
@@ -26,6 +26,14 @@
                                     type="text"
                                     name="codigo"
                                     class="form-control" v-model="fillCode.codebar">
+                        </div>
+                        <div class="form-group">
+                            <label for="detalle">Detalle</label>
+                            <input required
+                                    
+                                    type="text"
+                                    name="detalle"
+                                    class="form-control" v-model="fillCode.detail">
                         </div>
                         <div class="form-group">
                             <label for="atributo">Atributo</label>
@@ -40,6 +48,13 @@
                             type="number"
                             name="utilidad"
                             class="form-control" v-model="fillCode.utilidad">
+                        </div>
+                        <div class="form-group">
+                            <label for="flete">Flete</label>
+                            <input required
+                            type="number"
+                            name="flete"
+                            class="form-control" v-model="fillCode.flete">
                         </div>
 
                     </div>
@@ -57,12 +72,10 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import SelectProduct from './SelectProduct'
-import SelectProvider from './SelectProvider'
 import SelectTiposPagos from '../Utilidad/SelectTiposPagos'
 
 export default {
-    components: { SelectProduct, SelectProvider, SelectTiposPagos },
+    components: { SelectTiposPagos },
     computed:{
         ...mapState(['fillCode', 'errorsLaravel'])
     },

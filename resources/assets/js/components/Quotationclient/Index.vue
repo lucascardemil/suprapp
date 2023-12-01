@@ -102,6 +102,13 @@
                                             <EngineSelector/>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col mb-3">
+                                            <label for="url">P.P.U / N° Interno</label>
+                                            <input type="text" name="ppu" class="form-control"
+                                                v-model="newQuotationclient.ppu">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>

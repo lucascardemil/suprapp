@@ -5,7 +5,8 @@
 				<div class="modal-content">
 					<div class="modal-header bg-dark text-white">
 						<h4>Nueva Venta</h4>
-						<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span>&times;</span></button>
+						<button type="button" class="close text-white" data-dismiss="modal"
+							aria-label="Close"><span>&times;</span></button>
 					</div>
 					<div class="modal-body">
 						<div class="row">
@@ -28,7 +29,8 @@
 									<div class="row">
 										<div class="col-lg-2">
 											<label for="price">Valor Neto</label>
-											<input class="form-control" type="number" v-model="productForm.price" @keyup="sumTotalProductSale">
+											<input class="form-control" type="number" v-model="productForm.price"
+												@keyup="sumTotalProductSale">
 										</div>
 										<div class="col-lg-2">
 											<label for="utility">Utilidad (%)</label>
@@ -36,7 +38,8 @@
 										</div>
 										<div class="col-lg-2">
 											<label for="quantity">Cantidad</label>
-											<input class="form-control" type="number" min="1" @keyup="sumTotalProductSale" :max="productForm.max_quantity" v-model="productForm.quantity">
+											<input class="form-control" type="number" min="1" @keyup="sumTotalProductSale"
+												:max="productForm.max_quantity" v-model="productForm.quantity">
 										</div>
 										<div class="col-lg-2">
 											<label for="value">Total Neto</label>
@@ -48,7 +51,8 @@
 										</div>
 										<div class="col-lg-2 mt-2">
 											<label />
-											<button :disabled="!productForm.value" type="submit" class="btn btn-info form-control">Agregar</button>
+											<button :disabled="!productForm.value" type="submit"
+												class="btn btn-info form-control">Agregar</button>
 										</div>
 									</div>
 								</form>
@@ -69,22 +73,21 @@
 											</thead>
 											<tbody>
 												<tr v-for="product in cart" :key="product.product.label">
-													<td>{{product.product.label}}</td>
-													<td>{{product.product.price | currency('$', 0, { thousandsSeparator: '.' })}}</td>
-													<td>{{product.utility+'%'}}</td>
-													<td>{{product.quantity}}</td>
-													<td>{{product.value | currency('$', 0, { thousandsSeparator: '.' })}}</td>
-													<td>{{product.total | currency('$', 0, { thousandsSeparator: '.' })}}</td>
+													<td>{{ product.product.label }}</td>
+													<td>{{ product.product.price | currency('$', 0, {
+														thousandsSeparator: '.'
+													}) }}</td>
+													<td>{{ product.utility + '%' }}</td>
+													<td>{{ product.quantity }}</td>
+													<td>{{ product.value | currency('$', 0, { thousandsSeparator: '.' }) }}
+													</td>
+													<td>{{ product.total | currency('$', 0, { thousandsSeparator: '.' }) }}
+													</td>
 													<td>
 														<!-- <div class="col-lg-5 mt-1"> -->
-														<a 
-															href="#" 
-															class="btn btn-danger btn-sm"
+														<a href="#" class="btn btn-danger btn-sm"
 															@click.prevent="removeFromCart({ id: product.product.label })"
-															data-toggle="tooltip"
-															data-placement="top"
-															title="Eliminar"
-														>
+															data-toggle="tooltip" data-placement="top" title="Eliminar">
 															<i class="fas fa-ban"></i>
 														</a>
 														<!-- </div> -->
@@ -95,8 +98,8 @@
 													<td></td>
 													<td></td>
 													<td></td>
-													<td>{{cartValue | currency('$', 0, { thousandsSeparator: '.' })}}</td>
-													<td>{{cartTotal | currency('$', 0, { thousandsSeparator: '.' })}}</td>
+													<td>{{ cartValue | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
+													<td>{{ cartTotal | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
 													<td></td>
 												</tr>
 												<tr>
@@ -116,14 +119,9 @@
 													<th>Descuento:</th>
 													<td>{{ aplicardescuento }}%</td>
 													<td>
-														<a 
-															href="#" 
-															class="btn btn-danger btn-sm"
-															@click.prevent="removeDescuento()"
-															data-toggle="tooltip"
-															data-placement="top"
-															title="Eliminar"
-														>
+														<a href="#" class="btn btn-danger btn-sm"
+															@click.prevent="removeDescuento()" data-toggle="tooltip"
+															data-placement="top" title="Eliminar">
 															<i class="fas fa-ban"></i>
 														</a>
 													</td>
@@ -136,9 +134,14 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button href="#" :disabled="cartValue===0" class="col-lg-1 btn btn-success form-control" data-toggle="modal" data-target="#formaPago"><i class="fas fa-money-bill-wave"></i> Forma de Pago</button>
-						<button :disabled="cartValue===0" v-on:click="aplicarDescuento" class="col-lg-2 btn btn-success form-control"><i class="fas fa-tags"></i> Aplicar Descuento</button>
-						<button :disabled="cartValue===0" v-on:click="newSale" class="col-lg-1 btn btn-success form-control"><i class="fas fa-check"></i> Venta</button>
+						<button href="#" :disabled="cartValue === 0" class="col-lg-1 btn btn-success form-control"
+							data-toggle="modal" data-target="#formaPago"><i class="fas fa-money-bill-wave"></i> Forma de
+							Pago</button>
+						<button :disabled="cartValue === 0" v-on:click="aplicarDescuento"
+							class="col-lg-2 btn btn-success form-control"><i class="fas fa-tags"></i> Aplicar
+							Descuento</button>
+						<button :disabled="cartValue === 0" v-on:click="newSale"
+							class="col-lg-1 btn btn-success form-control"><i class="fas fa-check"></i> Venta</button>
 					</div>
 				</div>
 			</div>
@@ -154,12 +157,15 @@ import AgregarFormaPago from './AgregarFormaPago'
 
 export default {
 	components: { SelectProductSale, AgregarFormaPago },
-	computed: { 
-		...mapState(['productForm', 'cartValue', 'cartTotal', 'formapago', 'aplicardescuento','cart']),
+	computed: {
+		...mapState(['productForm', 'cartValue', 'cartTotal', 'formapago', 'aplicardescuento', 'cart']),
 	},
 	methods: {
-		...mapActions(['newSale', 'aplicarDescuento', 'sumTotalProductSale','addToCart', 'removeFromCart', 'removeDescuento']),
-	}
+		...mapActions(['newSale', 'aplicarDescuento', 'sumTotalProductSale', 'addToCart', 'removeFromCart', 'removeDescuento']),
+	},
+	created() {
+        this.$store.dispatch('descuentoDefect')
+    }
 }
 </script>
 

@@ -4,7 +4,6 @@
         placeholder="Seleccionar Modelo..."
         @input="setMM"
         :options="optionsMM"
-        :searchable="false"
         :value="selectedMM">
     </v-select>
 </template>

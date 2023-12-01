@@ -8,6 +8,6 @@ class TipoPago extends Model
 {
     protected $table = 'tipos_pagos';
     protected $fillable = [
-        'user_id', 'pago', 'utilidad'
+        'pago', 'utilidad'
     ];
 }

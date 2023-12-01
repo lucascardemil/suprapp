@@ -8,6 +8,7 @@ use App\TipoPago;
 use App\ProductPago;
 use App\Descuento;
 use App\Code;
+use App\Flete;
 use App\Imports\ProductImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -78,11 +79,13 @@ class ProductController extends Controller
             ]);
 
         $tipospagos =  TipoPago::select('utilidad')->where('pago', 'DEFECTO')->get();
+        $flete = Flete::orderBy('id', 'DESC')->get();
         
         ProductPago::create([
             'product_id' => $product,
             'forma_pago' => 'Venta',
-            'utilidad' => $tipospagos[0]->utilidad
+            'utilidad' => $tipospagos[0]->utilidad,
+            'flete' => $flete[0]->flete
         ]);
         
         return $tipospagos;
@@ -110,8 +113,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
-
         Product::find($id)->update($request->all());
 
         return;
@@ -134,22 +135,13 @@ class ProductController extends Controller
     public function all()
     {
         $idUser = Auth::id();
-        // $product = Product::whereHas('codes.client', function ($query) use($idUser) {
-        //     $query->where('clients.user_id', '=', $idUser);
-        // })->orderBy('id', 'DESC')->groupBy('name')->get();
-
-        // return $product;
-
-
-        
-
         $product = DB::table('clients')
             
             ->join('codes', 'clients.id', '=', 'codes.client_id')
             ->join('products', 'codes.product_id', '=', 'products.id')
             ->join('inventories', 'codes.id', '=', 'inventories.code_id')
             ->join('product_pagos', 'products.id', '=', 'product_pagos.product_id')
-            ->select(DB::raw('max(inventories.fecha_fact)'), 'products.name', 'inventories.price', 'codes.id as code_id', 'inventories.id as inventory_id', 'inventories.quantity', 'product_pagos.utilidad')
+            ->select(DB::raw('max(inventories.fecha_fact)'), 'products.name', 'inventories.price', 'codes.id as code_id', 'inventories.id as inventory_id', 'inventories.quantity', 'product_pagos.utilidad', 'product_pagos.flete', 'products.detail')
             ->where('clients.user_id', '=', $idUser)
             ->where('inventories.quantity', '>', 0)
             ->groupBy('inventories.code_id')
@@ -169,10 +161,8 @@ class ProductController extends Controller
     public function storeTipoPago(Request $request)
     {
         $data = $request->all();
-        $idUser = Auth::id();
 
         TipoPago::create([
-            'user_id' => $idUser,
             'pago' => $data['pago'],
             'utilidad' => 0
         ]);
@@ -281,22 +271,29 @@ class ProductController extends Controller
      */
     public function storeDescuento(Request $request)
     {
-        $data = $request->all();
-        $idUser = Auth::id();
+        try {
+            $data = $request->all();
+            $idUser = Auth::id();
 
-        $descuentos = Descuento::where('user_id', $idUser)->count();
+            $descuentos = Descuento::where('user_id', $idUser)->count();
 
-        if($descuentos > 0){
-            Descuento::where('user_id', $idUser)->update($request->all());
-        }else{
-            Descuento::create([
-                'user_id' => $idUser,
-                'descuento' => $data['descuento']
-            ]);
+            if ($descuentos > 0) {
+                Descuento::where('user_id', $idUser)->update($request->all());
+            } else {
+                Descuento::create([
+                    'user_id' => $idUser,
+                    'descuento' => $data['descuento']
+                ]);
+            }
+
+            // Additional code if needed after the try block
+
+        } catch (\Exception $e) {
+            // Handle the exception, you can log it or return an error response
+            return response()->json(['error' => $e], 500);
         }
-
-        
     }
+
 
     public function descuentoDefect()
     {

@@ -36,24 +36,8 @@
             <i class="fas fa-bars"></i>
         </button>
 
-        <!-- Navbar Search -->
-        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <!--<input type="text" class="form-control" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="button">
-                    <i class="fas fa-search"></i>
-                  </button>
-                </div>-->
-            </div>
-        </form>
-
         <!-- Navbar -->
-        <ul class="navbar-nav ml-auto ml-md-0">
-            <!-- Authentication Links -->
-            @guest
-            
-            @else
+        <ul class="navbar-nav ml-auto">
             <li class="nav-item dropdown">
                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                     {{ Auth::user()->name }}
@@ -74,33 +58,15 @@
                     </form>
                 </div>
             </li>
-            @endguest
         </ul>
 
     </nav>
 
-    <div id="wrapper" style="background-image: url('img/background.jpg')">
+    <div id="wrapper">
 
         <ul class="sidebar navbar-nav toggled">
 
-            <!--<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-fw fa-folder"></i>
-                        <span>Pages</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                        <h6 class="dropdown-header">Login Screens:</h6>
-                        <a class="dropdown-item" href="login.html">Login</a>
-                        <a class="dropdown-item" href="register.html">Register</a>
-                        <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="dropdown-divider"></div>
-                        <h6 class="dropdown-header">Other Pages:</h6>
-                        <a class="dropdown-item" href="404.html">404 Page</a>
-                        <a class="dropdown-item" href="blank.html">Blank Page</a>
-                    </div>
-                </li>-->
-
-            @can('clients')
+            @can('clientes')
             <li id="clientes" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-clientes') }}">
                     <i class="fas fa-users-cog"></i>
@@ -108,19 +74,11 @@
             </li>
             @endcan
 
-            @can('products')
+            @can('productos')
             <li id="productos" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-productos') }}">
                     <i class="fas fa-dolly-flatbed"></i>
                     <span>Productos</span></a>
-            </li>
-            @endcan
-
-            @can('codes')
-            <li id="codigos" class="nav-item">
-                <a class="nav-link" href="{{ route('admin-codigos') }}">
-                    <i class="fas fa-dolly-flatbed"></i>
-                    <span>Códigos</span></a>
             </li>
             @endcan
 
@@ -132,7 +90,15 @@
             </li>
             @endcan
 
-            @can('utility')
+            @can('lista-precios')
+            <li id="lista-precios" class="nav-item">
+                <a class="nav-link" href="{{ route('admin-lista-precios') }}">
+                    <i class="fas fa-dolly-flatbed"></i>
+                    <span>Lista de precios</span></a>
+            </li>
+            @endcan
+
+            @can('utilidades')
             <li id="utilidad" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-utilidad') }}">
                     <i class="fas fa-money-bill-wave"></i>
@@ -140,7 +106,7 @@
             </li>
             @endcan
 
-            @can('vehicles')
+            @can('vehiculos')
             <li id="vehiculos" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-vehiculos') }}">
                     <i class="fas fa-car"></i>
@@ -148,7 +114,23 @@
             </li>
             @endcan
 
-            @can('mechanic-vehicles')
+            @can('ordenes_trabajo')
+            <li id="orden-trabajos" class="nav-item">
+                <a class="nav-link" href="{{ route('admin-orden-trabajos') }}">
+                <i class="fas fa-wrench"></i>
+                    <span>Ordenes de Trabajos</span></a>
+            </li>
+            @endcan
+
+            @can('check-list')
+            <li id="orden-trabajos" class="nav-item">
+                <a class="nav-link" href="{{ route('admin-check-list') }}">
+                <i class="fas fa-clipboard-check"></i>
+                    <span>Check List</span></a>
+            </li>
+            @endcan
+
+            @can('vehiculos_mecanicos')
             <li id="vehiculos-m" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-vehiculosM') }}">
                     <i class="fas fa-car"></i>
@@ -156,7 +138,7 @@
             </li>
             @endcan
 
-            @can('brands')
+            @can('marcas')
             <li id="marcas" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-marca-vehiculos') }}">
                     <i class="fas fa-car"></i>
@@ -164,7 +146,7 @@
             </li>
             @endcan
 
-            <!-- @can('models')
+            <!-- @can('modelos')
                 <li id="modelos" class="nav-item">
                     <a class="nav-link" href="{{ route('admin-modelo-vehiculos') }}">
                         <i class="fas fa-car"></i>
@@ -172,7 +154,7 @@
                 </li>
                 @endcan -->
 
-            @can('notes')
+            @can('notas')
             <li id="notas" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-notas') }}">
                     <i class="fas fa-file"></i>
@@ -180,7 +162,7 @@
             </li>
             @endcan
 
-            @can('sales')
+            @can('ventas')
             <li id="ventas" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-ventas') }}">
                     <i class="fas fa-shopping-cart"></i>
@@ -189,7 +171,7 @@
             </li>
             @endcan
 
-            @can('simple-quotations')
+            @can('cotizaciones_simples')
             <li id="cotizaciones" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-cotizacion-express') }}">
                     <i class="fas fa-file-signature"></i>
@@ -197,7 +179,7 @@
             </li>
             @endcan
             
-            @can('quotations')
+            @can('cotizaciones')
             <li id="cotizaciones" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-cotizaciones-formales') }}">
                     <i class="fas fa-file-signature"></i>
@@ -205,7 +187,7 @@
             </li>
             @endcan
 
-            @can('shippings')
+            @can('envios')
             <li id="envios" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-envios') }}">
                 <i class="fas fa-shipping-fast"></i>
@@ -215,7 +197,7 @@
 
             
 
-            @can('bills')
+            @can('boletas')
             <li id="bills" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-boleta') }}">
                     <i class="fas fa-file-signature"></i>
@@ -223,7 +205,7 @@
             </li>
             @endcan
 
-            @can('imports')
+            @can('importaciones')
             <li id="imports" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-importaciones') }}">
                     <i class="fas fa-file-signature"></i>
@@ -231,7 +213,7 @@
             </li>
             @endcan
 
-            @can('users')
+            @can('usuarios')
             <li id="users" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-usuarios') }}">
                     <i class="fas fa-users"></i>
@@ -239,7 +221,7 @@
             </li>
             @endcan
 
-            @can('mechanic-users')
+            @can('usuarios_mecanicos')
             <li id="mechanic-users" class="nav-item">
                 <a class="nav-link" href="{{ route('admin-usuariosM') }}">
                     <i class="fas fa-users"></i>

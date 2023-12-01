@@ -1,22 +1,13 @@
 require('bootstrap')
-window.Vue = require('vue')
+import Vue from 'vue';
 
 // Vue.config.devtools = false
 // Vue.config.debug = false
 // Vue.config.silent = true
 
 
-import {
-    ValidationProvider
-} from 'vee-validate'
+import { ValidationProvider } from 'vee-validate'
 import Vue2Filters from 'vue2-filters'
-import Datepicker from 'vuejs-datepicker'
-
-
-
-// Register it globally
-// main.js or any entry file.
-
 import vSelect from 'vue-select'
 
 Vue.component('v-select', vSelect)
@@ -24,7 +15,6 @@ Vue.component('ValidationProvider', ValidationProvider)
 Vue.use(Vue2Filters)
 
 import store from './components/store/index'
-import Axios from 'axios'
 
 Vue.component('vehicle-mechanic-component', require('./components/VehicleMechanic/Index.vue').default)
 Vue.component('vehicle-component', require('./components/Vehicle/Index.vue').default)
@@ -56,6 +46,11 @@ Vue.component('sales-component', require('./components/Sales/Index.vue').default
 Vue.component('utilidad-component', require('./components/Utilidad/Index.vue').default)
 Vue.component('envios-component', require('./components/Quotationclient/ListarQuotationShipping.vue').default)
 
+Vue.component('ordentrabajos-component', require('./components/OrdenTrabajos/Index.vue').default)
+Vue.component('checklist-component', require('./components/Check-List/Index.vue').default)
+
+Vue.component('lista-precios-component', require('./components/ListaPrecios/Index.vue').default)
+
 /**
  * Boleta components
  */
@@ -72,6 +67,3 @@ new Vue({
         });
     }
 });
-
-
-

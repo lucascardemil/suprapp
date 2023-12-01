@@ -6,19 +6,12 @@ import VeeValidate, {
     Validator
 } from 'vee-validate'
 
-//Validator.localize('en', es) // changes the locale
+Validator.localize('en', es) // changes the locale
 
 Vue.use(Vuex)
 Vue.use(require('vue-moment'))
 Vue.use(VeeValidate, {
     classes: true,
-})
-
-var example1 = new Vue({
-    el: '#app',
-    data: {
-        counter: 0
-    }
 })
 
 import state from './state';

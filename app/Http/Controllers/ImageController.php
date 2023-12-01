@@ -87,15 +87,17 @@ class ImageController extends Controller
 
         foreach ($uploadedFile as $file){
             $filename = time().'.'.$file->getClientOriginalExtension();
-            $path = storage_path('app/public/vehicles/'.$filename);
+            // $path = public_path().'/images/vehicles/'.$filename;
+            $path = getcwd().'/images/vehicles/'.$filename;
+
+
             $img = $manager->make($file->getRealPath());
             $img->resize(1000,1000, function($constraint){
                 $constraint->aspectRatio();
             })->save($path);
-            //url de comercialsupra.cl/registro
-            //$url = url('storage/img/vehicles/'.$filename);
-            //url original sin subcarpeta
-            $url = url('storage/vehicles/'.$filename);
+
+            $url = '/images/vehicles/'.$filename;
+
             Image::create(['detail_vehicle_id' => $id, 'url' => $url]);
 
             array_push($arreglo, $path);

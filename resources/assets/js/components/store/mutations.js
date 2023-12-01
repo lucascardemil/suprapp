@@ -24,6 +24,13 @@ var urlQuotationusers = 'quotationusers'
 var urlVehicle = 'vehicles'
 var urlVehicleUser = 'vehicles-user'
 var urlDetailVehicle = 'detailvehicles'
+var urlOrdenTrabajo = 'ordentrabajo'
+var urlTrabajo = 'trabajos'
+var urlObservacion = 'observaciones'
+var urlFotosOrdenTrabajo = 'fotosordentrabajo'
+var urlSubirFotosOrdenTrabajo = 'subirfotosordentrabajo'
+var urlSubirObservacion = 'subirobservacion'
+var urlEliminarObservacion = 'eliminarobservacion'
 var urlUpload = 'upload'
 
 var urlVehicleBrand = 'vehiclebrands'
@@ -60,6 +67,7 @@ var urlCreateQuotationUserExpress = 'quotationuserexpress'
 var urlPendingQuotations = 'pendingquotations'
 
 var urlCreateQuotationShipping = 'quotationshipping'
+var urlCreateFacebookShipping = 'facebookshipping'
 
 var urlNote = 'notes'
 
@@ -120,6 +128,31 @@ var urlUpdateUtilidadDefect = 'update-utilidad-defect'
 var urlUtilidadDefect = 'utilidad-defect'
 var urlDescuentoDefect = 'descuento-defect'
 
+var urlCrearCheckList = 'crearCheckList'
+var urlCheckListCategorias = 'checkListCategorias'
+var urlCrearIntervenciones = 'crearIntervenciones'
+var urlFinalizarFormatoCheckList = 'finalizarFormatoCheckList'
+var urlMostrarFormatoCheckList = 'mostrarFormatoCheckList'
+var urlEditarCategoria = 'editarCategoria'
+var urlEditarIntervecion = 'editarIntervencion'
+var urlCrearCategoria = 'crearCategoria'
+var urlCrearIntervencion = 'crearIntervencion'
+var urlAgregarObservacionCheckList = 'agregarObservacionCheckList'
+var urlGuardarCheckListVehicle = 'guardarCheckListVehicle'
+var urlCheckListVehicles = 'checklistvehicles'
+var urlMostrarCheckListVehicles = 'mostrarCheckListVehicles'
+
+var urlMostrarCheckList = 'mostrarCheckList'
+
+var urlMostrarCondiciones = 'mostrarCondiciones'
+var urlMostrarObservaciones = 'mostrarObservaciones'
+var urlCheckListRoles = 'roleschecklists'
+
+var urlCrearFormatoCheckList = 'crearFormatoCheckList'
+
+var urlFlete = 'update-flete-defect'
+var urlFleteDefect = 'flete-defect'
+
 export default { //used for changing the state
     /******************************* */
     /****** sección vehiculos **** */
@@ -127,7 +160,7 @@ export default { //used for changing the state
     getVehicles(state, page) {
         var url = urlVehicle + '?page=' + page + '&patent=' + state.searchVehicle.patent + '&name=' + state.searchVehicle.name + '&year=' + state.searchVehicle.year
         axios.get(url).then(response => {
-            
+
             state.vehicles = response.data.vehicles.data
             state.pagination = response.data.pagination
         });
@@ -212,13 +245,13 @@ export default { //used for changing the state
     requestPartsVehicle(state) {
 
         axios.post('quotation-mechanic', {
-                patentchasis: state.formCotizacion.patentchasis.toUpperCase(),
-                brand: state.formCotizacion.brand,
-                model: state.formCotizacion.model,
-                year: state.formCotizacion.year,
-                engine: state.formCotizacion.engine,
-                description: state.formCotizacion.description
-            })
+            patentchasis: state.formCotizacion.patentchasis.toUpperCase(),
+            brand: state.formCotizacion.brand,
+            model: state.formCotizacion.model,
+            year: state.formCotizacion.year,
+            engine: state.formCotizacion.engine,
+            description: state.formCotizacion.description
+        })
             .then(response => {
                 $('#requestParts').modal('hide')
                 toastr.success('Solicitud ingresada con éxito')
@@ -231,10 +264,644 @@ export default { //used for changing the state
 
 
     },
+    modalOrdenTrabajo(state, vehicle) {
+        state.newOrdenTrabajo.vehicle_id = vehicle.id
+        state.newOrdenTrabajo.km_old = vehicle.km
+        state.newOrdenTrabajo.km = vehicle.km
+        $("#createOrdenTrabajo").modal('show')
+    },
+
+
+    modalFotosOrdenTrabajo(state, id) {
+        state.newOrdenTrabajo.vehicle_id = id
+        $("#modalFotosOrdenTrabajo").modal('show')
+    },
+
+    modalObservacion(state, id) {
+        state.newOrdenTrabajo.vehicle_id = id
+        $("#modalObservacion").modal('show')
+    },
+
+
+    guardarOrdenTrabajo(state) {
+        var url = urlOrdenTrabajo
+
+        if (state.newOrdenTrabajo.km < state.newOrdenTrabajo.km_old) {
+            toastr.error('El kilometraje no puede ser menor actual')
+        } else {
+            axios.post(url, {
+                vehicle_id: state.newOrdenTrabajo.vehicle_id,
+                km: state.newOrdenTrabajo.km,
+                descripcion: state.newOrdenTrabajo.descripcion,
+            }).then(response => {
+                state.newOrdenTrabajo.descripcion = ''
+                state.newOrdenTrabajo.km = 0
+                state.errorsLaravel = []
+                toastr.success('Se creo la orden de trabajo correctamente')
+                // $('#createOrdenTrabajo').modal('hide')
+
+                state.trabajos = response.data
+
+                axios.get('client-vehicles')
+                    .then((response) => {
+                        state.vehicles = response.data
+                    })
+
+            })
+                .catch(error => {
+                    toastr.error(error.response.data)
+                })
+        }
+
+    },
+
+    removeTrabajo(state, id) {
+        var url = urlOrdenTrabajo + '/' + id
+        axios.delete(url).then(response => {
+            toastr.success('Orden de trabajo eliminada con éxito')
+            state.trabajos = response.data
+        })
+    },
+
+    removeObservacion(state, id) {
+        var url = urlEliminarObservacion + '/' + id
+        axios.delete(url).then(response => {
+            toastr.success('Observacion eliminada con éxito')
+            $('#modalObservacion').modal('hide')
+        })
+    },
+
+    getTrabajos(state, id) {
+        var url = urlTrabajo + '/' + id
+        axios.get(url).then(response => {
+            state.trabajos = response.data
+        })
+    },
+
+    getOrdenesTrabajos(state) {
+        var url = urlOrdenTrabajo
+        axios.get(url).then(response => {
+            state.ordenestrabajos = response.data
+        })
+    },
+
+    getObservaciones(state, id) {
+        var url = urlObservacion + '/' + id
+        axios.get(url).then(response => {
+            state.observaciones = response.data
+        })
+    },
+
+
+    getFotosOrdenTrabajo(state, id) {
+        var url = urlFotosOrdenTrabajo + '/' + id
+        axios.get(url).then(response => {
+            state.trabajos = response.data
+        })
+    },
+
+    AgregarFotosOrdenTrabajo(state) {
+        for (let i = 0; i < state.attachment.length; i++) {
+            state.form.append('pics[]', state.attachment[i])
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+
+        //vehicle_id: state.newOrdenTrabajo.vehicle_id = id,
+
+        var url = urlSubirFotosOrdenTrabajo
+        if (state.attachment.length > 0) {
+
+            state.form.append('id', state.newOrdenTrabajo.vehicle_id)
+            $("#files").val(null)
+
+            axios.post(url, state.form, config).then(response => {
+                state.newOrdenTrabajo.vehicle_id = ''
+                state.errorsLaravel = []
+                $('#modalFotosOrdenTrabajo').modal('hide')
+                toastr.success('Imagen(es) subida(s) con éxito')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        }
+
+    },
+
+    subirFotosOrdenTrabajo(state, evt) {
+        //console.log(e)
+        //let selectedFile = e.target.files[0]
+        state.form = new FormData()
+
+        state.images = []
+        state.attachment = []
+        let selectedFiles = evt.target.files
+
+        if (!selectedFiles.length) {
+            return false
+        }
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+            state.attachment.push(selectedFiles[i])
+        }
+    },
+
+
+    AgregarObservacion(state) {
+
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+
+        //vehicle_id: state.newOrdenTrabajo.vehicle_id = id,
+
+        var url = urlSubirObservacion
+        if (state.attachment.length > 0 && state.newOrdenTrabajo.observacion != '') {
+
+            for (let i = 0; i < state.attachment.length; i++) {
+                state.form.append('pics_observacion[]', state.attachment[i])
+            }
+
+            state.form.append('id', state.newOrdenTrabajo.vehicle_id)
+            state.form.append('observacion', state.newOrdenTrabajo.observacion)
+            $("#filesObservacion").val(null)
+
+            axios.post(url, state.form, config).then(response => {
+                state.newOrdenTrabajo.vehicle_id = ''
+                state.newOrdenTrabajo.observacion = ''
+                state.attachment.length = []
+                state.errorsLaravel = []
+                $('#modalObservacion').modal('hide')
+                toastr.success('Se ingreso la observacion correctamente')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        }
+
+    },
+
+    subirFotosObservacion(state, evt) {
+        //console.log(e)
+        //let selectedFile = e.target.files[0]
+        state.form = new FormData()
+
+        state.images = []
+        state.attachment = []
+        let selectedFiles = evt.target.files
+
+        if (!selectedFiles.length) {
+            return false
+        }
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+            state.attachment.push(selectedFiles[i])
+        }
+    },
+
+
+    modalCrearFormatoCheckList(state, id) {
+        // state.newOrdenTrabajo.vehicle_id = id
+        $("#CrearFormatoCheckList").modal('show')
+    },
+
+    agregarCategoria(state) {
+        state.checklists.push({
+            categoria: state.checkListForm.categoria
+        })
+        state.checkListForm.categoria = ''
+    },
+
+    crearCheckList(state) {
+        if (state.checklists.length == 0) {
+            toastr.error('¡Error, Agregue una categoria!')
+        } else {
+            var url = urlCrearCheckList
+            axios.post(url, {
+                checklists: state.checklists,
+            }).then(response => {
+
+                var url = urlCheckListCategorias + '/' + response.data
+                axios.get(url).then(response => {
+                    state.categorias = response.data
+                })
+
+                $('#CrearFormatoCheckList').modal('hide')
+                $('#CrearIntervencionCheckList').modal({ backdrop: 'static', keyboard: false })
+            })
+                .catch(error => {
+                    toastr.error(error.response.data)
+                })
+        }
+    },
+
+    modalIntervencion(state, id) {
+        state.intervencionForm.id_categoria = id
+        $("#IntervencionCheckList").modal('show')
+    },
+
+    agregarIntervencion(state) {
+        state.intervenciones.push({
+            id_categoria: state.intervencionForm.id_categoria,
+            intervencion: state.intervencionForm.intervencion
+        })
+        state.intervencionForm.intervencion = ''
+    },
+
+    modalCerrarIntervencion(state) {
+        $('#CrearIntervencionCheckList').modal({ backdrop: 'static', keyboard: false })
+        $("#IntervencionCheckList").modal('hide')
+    },
+
+    guardarIntervenciones(state) {
+        if (state.intervenciones.length == 0) {
+            toastr.error('¡Error, Agregue una intervención!')
+        } else {
+            var url = urlCrearIntervenciones
+            axios.post(url, {
+                intervenciones: state.intervenciones,
+            }).then(response => {
+                // var url = urlCheckListIntervenciones + '/' + response.data
+                // axios.get(url).then(response => {
+                //     state.intervenciones = response.data
+                // })
+
+                var url = urlCheckListCategorias + '/' + response.data[0].check_list_id
+                axios.get(url).then(response => {
+                    state.categorias = response.data
+                })
+
+
+
+                state.intervenciones = []
+                $('#CrearIntervencionCheckList').modal({ backdrop: 'static', keyboard: false })
+                $("#IntervencionCheckList").modal('hide')
+                toastr.success('Se agrego la intervención correctamente')
+            })
+                .catch(error => {
+                    toastr.error(error.response.data)
+                })
+        }
+    },
+
+    eliminarIntervencion(state, data) {
+        state.intervenciones.splice(state.intervenciones.indexOf(data.id))
+    },
+    eliminarCategoria(state, data) {
+        state.checklists.splice(state.checklists.indexOf(data.id))
+    },
+
+    finalizarFormatoCheckList(state) {
+        var url = urlFinalizarFormatoCheckList
+        axios.get(url).then(response => {
+            if (response.data.intervenciones.length == 0) {
+                toastr.error('¡Error, Agregue una intervención!')
+            } else {
+                state.checklists = []
+                state.categorias = []
+                state.intervenciones = []
+                $("#CrearIntervencionCheckList").modal('hide')
+            }
+        })
+    },
+
+    modalMostrarFormatoCheckList(state) {
+        axios.get(urlMostrarFormatoCheckList).then(response => {
+            state.formatchecklists = response.data
+        }).catch(error => {
+            toastr.error(error.response.data)
+        })
+        $("#MostrarFormatoCheckList").modal('show')
+    },
+
+    modalEditarCategoria(state, formatchecklist) {
+        state.editarCategoriaForm.categoria = formatchecklist.categoria
+        state.editarCategoriaForm.id_categoria = formatchecklist.id
+        $('#EditarCategoriaCheckList').modal('show')
+    },
+
+    editarCategoriaCheckList(state) {
+        var url = urlEditarCategoria
+        axios.post(url, {
+            id_categoria: state.editarCategoriaForm.id_categoria,
+            categoria: state.editarCategoriaForm.categoria,
+        }).then(response => {
+            var url = urlMostrarFormatoCheckList
+            axios.get(url).then(response => {
+                state.formatchecklists = response.data
+            })
+            $('#EditarCategoriaCheckList').modal('hide')
+        })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
+
+    },
+
+    modalEditarIntervencion(state, intervenciones) {
+        state.editarIntervencionForm.intervencion = intervenciones.intervencion
+        state.editarIntervencionForm.id_intervencion = intervenciones.id
+        $('#EditarIntervencionCheckList').modal('show')
+    },
+
+    editarIntervencionCheckList(state) {
+        var url = urlEditarIntervecion
+        axios.post(url, {
+            id_intervencion: state.editarIntervencionForm.id_intervencion,
+            intervencion: state.editarIntervencionForm.intervencion,
+        }).then(response => {
+            var url = urlMostrarFormatoCheckList
+            axios.get(url).then(response => {
+                state.formatchecklists = response.data
+            })
+            $('#EditarIntervencionCheckList').modal('hide')
+        })
+            .catch(error => {
+                toastr.error(error.response.data)
+            })
+
+    },
+
+    modalAgregarCategoria(state) {
+        $('#AgregarCategoria').modal({ backdrop: 'static', keyboard: false })
+    },
+
+    modalAgregarIntervencion(state, id) {
+        state.intervencionForm.id_categoria = id
+        $('#AgregarIntervencion').modal({ backdrop: 'static', keyboard: false })
+    },
+
+    crearCategoria(state) {
+        if (state.checklists.length == 0) {
+            toastr.error('¡Error, Agregue una categoria!')
+        } else {
+            var url = urlCrearCategoria
+            axios.post(url, {
+                checklists: state.checklists,
+            }).then(response => {
+                state.formatchecklists = response.data
+                state.checklists = []
+                $('#AgregarCategoria').modal('hide')
+                toastr.success('Se agrego la categoria correctamente')
+            })
+                .catch(error => {
+                    toastr.error(error.response.data)
+                })
+        }
+    },
+
+    crearIntervencion(state, id) {
+        if (state.intervenciones.length == 0) {
+            toastr.error('¡Error, Agregue una intervención!')
+        } else {
+            var url = urlCrearIntervencion + '/' + id
+            axios.post(url, {
+                intervenciones: state.intervenciones,
+            }).then(response => {
+
+                var url = urlMostrarFormatoCheckList
+                axios.get(url).then(response => {
+                    state.formatchecklists = response.data
+                })
+                state.intervenciones = []
+                $('#AgregarIntervencion').modal('hide')
+                toastr.success('Se agrego la intervención correctamente')
+            })
+                .catch(error => {
+                    toastr.error(error.response.data)
+                })
+        }
+    },
+
+    cerrarCategoria(state) {
+        $('#AgregarCategoria').modal('hide') -
+            $('#MostrarFormatoCheckList').modal('show')
+    },
+
+
+    cerrarIntervencion(state) {
+        $('#AgregarIntervencion').modal('hide')
+        $('#MostrarFormatoCheckList').modal('show')
+    },
+
+    modalCheckList(state, vehicle) {
+        state.id_vehicle = vehicle.id
+        state.km_old = vehicle.km
+        var url = urlMostrarCheckList + '/' + state.id_vehicle
+        axios.get(url).then(response => {
+            state.formatchecklists = response.data
+        })
+        $('#CheckListVehicle').modal('show')
+    },
+
+    modalObservacionVehicleCheckList(state, data) {
+        state.columnaObservacion.id_intervencion = data.id_intervencion
+        state.columnaObservacion.id_vehicle = data.id_vehicle
+        $('#AgregarObservacionCheckList').modal('show')
+    },
+
+    subirFotosObservacionCheckList(state, evt) {
+        state.form = new FormData()
+
+        state.images = []
+        state.attachment = []
+        let selectedFiles = evt.target.files
+
+        if (!selectedFiles.length) {
+            return false
+        }
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+            state.attachment.push(selectedFiles[i])
+        }
+    },
+
+
+    agregarObservacionCheckList(state) {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+
+        var url = urlAgregarObservacionCheckList
+        if (state.attachment.length > 0 && state.columnaObservacion.observacion != '') {
+
+            for (let i = 0; i < state.attachment.length; i++) {
+                state.form.append('imagenes_checklist[]', state.attachment[i])
+            }
+
+            state.form.append('id_intervencion_checklist', state.columnaObservacion.id_intervencion)
+            state.form.append('id_vehicle_checklist', state.columnaObservacion.id_vehicle)
+            state.form.append('observacion_checklist', state.columnaObservacion.observacion)
+            $("#filesObservacion").val(null)
+
+            axios.post(url, state.form, config).then(response => {
+                state.columnaObservacion.id_intervencion = ''
+                state.columnaObservacion.observacion = ''
+                state.columnaObservacion.id_vehicle = ''
+                state.attachment.length = []
+                state.errorsLaravel = []
+                $('#AgregarObservacionCheckList').modal('hide')
+                toastr.success('La observacion se agrego correctamente')
+                toastr.success('La imagen se agrego correctamente')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        } else {
+            toastr.error('¡Error, Agregue una observacion!')
+        }
+
+    },
+
+
+
+    setCheckExisteSi(state, value) {
+        state.checkExisteSi = value
+
+        state.columnaExiste.push({
+            id_intervencion: state.checkExisteSi,
+            existe: 'si'
+        })
+
+        $("input[name='estado" + value + "']").prop('disabled', false);
+    },
+
+    setcheckExisteNo(state, value) {
+        state.checkExisteNo = value
+
+        state.columnaExiste.push({
+            id_intervencion: state.checkExisteNo,
+            existe: 'no',
+        })
+
+        $("input[name='estado" + value + "']").prop('disabled', true);
+
+    },
+
+
+    setCheckEstadoBueno(state, value) {
+        state.checkEstadoBueno = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoBueno,
+            estado: 'bueno',
+        })
+    },
+    setCheckEstadoRegular(state, value) {
+        state.checkEstadoRegular = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoRegular,
+            estado: 'regular',
+        })
+    },
+    setCheckEstadoMalo(state, value) {
+        state.checkEstadoMalo = value
+
+        state.columnaEstado.push({
+            id_intervencion: state.checkEstadoMalo,
+            estado: 'malo',
+        })
+    },
+
+    setKilometraje(state, value) {
+        state.kilometraje = value
+    },
+
+
+    guardarCheckList(state) {
+        var url = urlGuardarCheckListVehicle
+
+        if (state.kilometraje <= state.km_old) {
+            toastr.error('El kilometraje no puede ser menor o igual al actual')
+        } else {
+            axios.post(url, {
+                id_vehicle: state.id_vehicle,
+                existe: state.columnaExiste,
+                estado: state.columnaEstado,
+                kilometraje: state.kilometraje
+            }).then(response => {
+                state.columnaExiste = [];
+                state.columnaEstado = [];
+                $('input[type="radio"]').prop('checked', false);
+                $('#CheckListVehicle').modal('hide')
+                toastr.success('El check list se ingreso correctamente')
+            }).catch(error => {
+                state.errorsLaravel = error.response.data
+            })
+        }
+    },
+
+    getCheckListVehicles(state) {
+        var url = urlCheckListVehicles
+        axios.get(url).then(response => {
+            state.checklistvehicles = response.data
+        })
+    },
+
+    modalMostrarCheckListVehicle(state, id) {
+        state.id_checklist = id
+        var url = urlMostrarCheckListVehicles + '/' + id
+        axios.get(url).then(response => {
+            state.mostrarchecklistvehicles = response.data
+        })
+        $("#MostrarCheckListVehicle").modal({ backdrop: 'static', keyboard: false })
+    },
+
+    mostrarCondiciones(state, data) {
+        var url = urlMostrarCondiciones
+        axios.get(url, {
+            params: {
+                id_categoria: data.id_categoria
+            }
+        }).then(response => {
+            state.intervenciones = response.data
+        })
+    },
+
+    modalMostrarObservacion(state, data) {
+        var url = urlMostrarObservaciones
+        axios.get(url, {
+            params: {
+                id_intervencion: data.id_intervencion,
+                id_vehicle: data.id_vehicle
+            }
+        }).then(response => {
+            state.observaciones = response.data
+        })
+        $('#MostrarObservacion').modal('show')
+    },
+
+    cerrarMostrarObservacion(state) {
+        $('#MostrarObservacion').modal('hide')
+    },
+
+    cerrarMostrarCheckListVehicle(state) {
+        $('.collapse').collapse("hide")
+    },
+
+    getCheckListRoles(state) {
+        var url = urlCheckListRoles
+        axios.get(url).then(response => {
+            state.roleschecklists = response.data
+        })
+    },
+
+
+
     modalDetailVehicle(state, vehicle) {
-        state.newDetailVehicle.vehicle_id = vehicle.id
+        state.newDetailVehicle.vehicle_id = vehicle[0].id
+        state.newDetailVehicle.rol = vehicle[1]
+        state.newDetailVehicle.km = vehicle[0].km
         $("#createDetail").modal('show')
     },
+
     createDetailVehicle(state) {
         for (let i = 0; i < state.attachment.length; i++) {
             state.form.append('pics[]', state.attachment[i])
@@ -250,7 +917,7 @@ export default { //used for changing the state
         axios.post(url, {
             vehicle_id: state.newDetailVehicle.vehicle_id,
             km: state.newDetailVehicle.km,
-            note: state.newDetailVehicle.note
+            note: state.newDetailVehicle.note,
         }).then(response => {
             state.newDetailVehicle.vehicle_id = ''
             state.newDetailVehicle.km = ''
@@ -258,27 +925,29 @@ export default { //used for changing the state
             state.details = []
             state.errorsLaravel = []
 
-            var url2 = urlUpload
+
             $('#createDetail').modal('hide')
-            toastr.success('Detalle del vehículo generado con éxito, subiendo imagen(es)')
-            state.form.append('id', response.data)
-            $("#files").val(null)
+            toastr.success('Detalle del vehículo generado con éxito')
+
+
             if (state.attachment.length > 0) {
+                var url2 = urlUpload
+                state.form.append('id', response.data)
                 axios.post(url2, state.form, config).then(response => {
-                        toastr.success('Imagen(es) subida(s) con éxito')
-                    })
-                    .catch(response => {
-                        //console.log(response)
-                    })
+                    toastr.success('Imagen(es) subida(s) con éxito')
+                    $("#files").val(null)
+                }).catch(error => {
+                    toastr.error(error.response.data)
+                })
             }
 
         }).catch(error => {
-            state.errorsLaravel = error.response.data
+            toastr.error(error.response.data)
         })
 
     },
     onFileChange(state, evt) {
-        state.import_file = evt.target.files[0] 
+        state.import_file = evt.target.files[0]
     },
     createProductsPagos(state) {
         let formData = new FormData();
@@ -291,12 +960,12 @@ export default { //used for changing the state
         axios.post(url, formData, {
             headers: { 'content-type': 'multipart/form-data' }
         }).then(response => {
-            if(response.status === 200) {
+            if (response.status === 200) {
                 $('#createProducts').modal('hide')
                 toastr.success('Los Productos se subieron correctamente!')
             }
         }).catch(error => {
-            $('#createProducts').modal('hide')  
+            $('#createProducts').modal('hide')
             toastr.error(error.response.data)
         });
     },
@@ -320,14 +989,14 @@ export default { //used for changing the state
             state.fillVehicle.color = ''
             state.fillVehicle.km = ''
             state.selectedVBrand.label = '',
-            state.selectedVBrand.value = '',
-            state.selectedVModel.label = '',
-            state.selectedVModel.value = '',
-            state.selectedVYear.label = '',
-            state.selectedVYear.value = '',
-            state.selectedVEngine.label = '',
-            state.selectedVEngine.value = '',
-            state.errorsLaravel = []
+                state.selectedVBrand.value = '',
+                state.selectedVModel.label = '',
+                state.selectedVModel.value = '',
+                state.selectedVYear.label = '',
+                state.selectedVYear.value = '',
+                state.selectedVEngine.label = '',
+                state.selectedVEngine.value = '',
+                state.errorsLaravel = []
             $('#edit').modal('hide')
             toastr.success('Vehículo actualizado con éxito')
         }).catch(error => {
@@ -407,7 +1076,7 @@ export default { //used for changing the state
         }).then(response => {
             state.newVehiculoTipo = {
                 tipo_vehiculo: ''
-                },
+            },
                 state.errorsLaravel = []
             $('#create').modal('hide')
             toastr.success('Tipo de vehiculo creado con éxito')
@@ -436,7 +1105,7 @@ export default { //used for changing the state
     },
     getVehicleBrands(state, page) {
         var url = 'vehiclebrands-all?page=' + page
-    
+
         axios.get(url).then(response => {
             state.vehiclebrands = response.data.vehiclebrands.data
             state.pagination_marca = response.data.pagination_marca
@@ -451,10 +1120,10 @@ export default { //used for changing the state
             //tipo_id: state.selectedVehiculoTipo.value
         }).then(response => {
             state.newVehicleBrand = {
-                    brand: ''
-                    //model: '',
-                    //tipo_id: ''
-                },
+                brand: ''
+                //model: '',
+                //tipo_id: ''
+            },
                 state.errorsLaravel = []
             $('#create').modal('hide')
             toastr.success('Marca y Modelo generado con éxito')
@@ -498,10 +1167,10 @@ export default { //used for changing the state
             tipo_id: state.selectedVehiculoTipo.value
         }).then(response => {
             state.newVehicleModelo = {
-                    model: '',
-                    brand_id: '',
-                    tipo_id: ''
-                },
+                model: '',
+                brand_id: '',
+                tipo_id: ''
+            },
                 state.errorsLaravel = []
             $('#create').modal('hide')
             toastr.success('Modelo generado con éxito')
@@ -530,11 +1199,11 @@ export default { //used for changing the state
         state.fillVehicleModel.tipo_id = state.selectedVehiculoTipo.value
         axios.put(url, state.fillVehicleModel).then(response => {
             state.fillVehicleModel = {
-                    id: '',
-                    model: '',
-                    brand_id: '',
-                    tipo_id: ''
-                },
+                id: '',
+                model: '',
+                brand_id: '',
+                tipo_id: ''
+            },
                 state.errorsLaravel = []
             $('#edit_modelo').modal('hide')
             toastr.success('Modelo actualizado con éxito')
@@ -553,7 +1222,7 @@ export default { //used for changing the state
                 v_id: '',
                 v_year: ''
             },
-            state.errorsLaravel = []
+                state.errorsLaravel = []
             $('#create').modal('hide')
             toastr.success('Modelo generado con éxito')
         }).catch(error => {
@@ -605,7 +1274,7 @@ export default { //used for changing the state
                 year_id: '',
                 v_engine: ''
             },
-            state.errorsLaravel = []
+                state.errorsLaravel = []
             $('#create').modal('hide')
             toastr.success('Motor agregado con éxito')
         }).catch(error => {
@@ -618,10 +1287,10 @@ export default { //used for changing the state
         //state.fillVehicleMotor.year_id = state.selectedVehicleYear.value
         axios.put(url, state.fillVehicleMotor).then(response => {
             state.fillVehicleMotor = {
-                    id: '',
-                    //year_id: '',
-                    v_engine: ''
-                },
+                id: '',
+                //year_id: '',
+                v_engine: ''
+            },
                 state.errorsLaravel = []
             $('#edit_motor').modal('hide')
             toastr.success('Motor actualizado con éxito')
@@ -784,7 +1453,7 @@ export default { //used for changing the state
     /******************************* */
     /****** sección detalles **** */
     /******************************* */
-    
+
     createDetail(state) {
         var url = urlDetail
         var priceSet = state.newDetail.price
@@ -967,9 +1636,9 @@ export default { //used for changing the state
         var day = state.searchQuotationClient.day
         var month = state.searchQuotationClient.month
         var year = state.searchQuotationClient.year
-        
+
         var url = urlQuotationclient + '?page=' + page + '&id=' + id + '&razonSocial=' + razonSocial + '&client=' + client + '&vehicle=' + vehicle + '&day=' + day + '&month=' + month + '&year=' + year
-        
+
         axios.get(url).then(response => {
             state.quotationclients = response.data.quotationclients.data
             state.pagination = response.data.pagination
@@ -984,7 +1653,7 @@ export default { //used for changing the state
         var day = state.searchQuotationClientForm.day
         var month = state.searchQuotationClientForm.month
         var year = state.searchQuotationClientForm.year
-        
+
         var url = urlQuotationclientform + '?page=' + page + '&id=' + id + '&razonSocial=' + razonSocial + '&client=' + client + '&vehicle=' + vehicle + '&day=' + day + '&month=' + month + '&year=' + year
 
 
@@ -995,7 +1664,7 @@ export default { //used for changing the state
     },
 
     getQuotationlinkenvio(state) {
-        var url = 'quotationlinkenvio' 
+        var url = 'quotationlinkenvio'
         axios.get(url).then(response => {
             state.linkenvio.url = window.location.host + "/cotizar-envio/" + response.data
         });
@@ -1008,16 +1677,66 @@ export default { //used for changing the state
         axios.get(url).then(response => {
             state.quotationshipping = response.data.quotationshipping.data
             state.pagination_shipping = response.data.pagination_shipping
+
+            // state.quotationshipping.forEach(shipping => {  
+            //     if(shipping.enviado > 0){
+            //         state.checkEnviado = shipping.id
+            //     }else{
+            //         state.checkEnviado = 0
+            //     }
+            // })
+
         });
     },
 
 
-    // getQuotationShipping(state) {
-    //     var url = 'quotationshipping'
-    //     axios.get(url).then(response => {
-    //         state.quotationshipping = response.data
-    //     });
-    // },
+    setcheckRealizado(state, value) {
+        state.checkRealizado = value
+
+        var url = 'checkRealizado'
+        axios.post(url, {
+            check: state.checkRealizado
+        }).then(response => {
+            state.checkRealizado = [];
+            state.errorsLaravel = [];
+            toastr.success('El trabajo se realizo correctamente')
+        }).catch(error => {
+            state.errorsLaravel = error.response.data
+        })
+    },
+
+    deleteRealizado(state, id) {
+        var url = 'deleteRealizado/' + id
+        axios.post(url, {
+            check: id
+        }).then(response => {
+            toastr.error('El trabajo no se a realizado')
+        })
+    },
+
+    setCheckEnviado(state, value) {
+        state.checkEnviado = value
+
+        var url = 'checkEnviado'
+        axios.post(url, {
+            check: state.checkEnviado
+        }).then(response => {
+            state.checkEnviado = [];
+            state.errorsLaravel = [];
+            toastr.success('El producto se envio correctamente')
+        }).catch(error => {
+            state.errorsLaravel = error.response.data
+        })
+    },
+
+    deleteEnviado(state, id) {
+        var url = 'deleteEnviado/' + id
+        axios.post(url, {
+            check: id
+        }).then(response => {
+            toastr.error('El producto no se a enviado')
+        })
+    },
 
 
 
@@ -1035,7 +1754,7 @@ export default { //used for changing the state
         $('#modalCreateUserMechanic').modal('show')
     },
     getQuotationforms(state) {
-        var url =  urlQuotationforms + '/' + state.idforms
+        var url = urlQuotationforms + '/' + state.idforms
         axios.get(url).then(response => {
             state.quotationforms = response.data
         });
@@ -1081,9 +1800,11 @@ export default { //used for changing the state
     },
     createQuotationclient(state) {
         var url = urlQuotationclient
-        if(state.newQuotationclient.cliente_part == true){
+
+        if ((state.selectedClient.value === "" && state.newQuotationclient.client_text !== "") || state.newQuotationclient.cliente_part == true) {
             state.selectedClient.value = 1
         }
+
         axios.post(url, {
             client_id: state.selectedClient.value,
             state: 'Pendiente',
@@ -1091,14 +1812,16 @@ export default { //used for changing the state
             client_text: state.newQuotationclient.client_text,
             cliente_part: state.newQuotationclient.cliente_part,
             url: state.newQuotationclient.url,
-            vehicle: state.selectedVBrand.label + ' ' + state.selectedVModel.label + ' ' +  state.selectedVYear.label + ' ' +  state.selectedVEngine.label
+            vehicle: state.selectedVBrand.label + ' ' + state.selectedVModel.label + ' ' + state.selectedVYear.label + ' ' + state.selectedVEngine.label,
+            ppu: state.newQuotationclient.ppu
         }).then(response => {
             state.newQuotationclient = {
                 client_id: '',
                 client_text: '',
                 state: '',
                 payment: '',
-                url:''
+                url: '',
+                ppu: ''
             }
             state.errorsLaravel = []
             toastr.success('Cotización formal generada con éxito')
@@ -1139,6 +1862,11 @@ export default { //used for changing the state
         state.fillQuotationShipping.id = id
         $('#modalQuotationShipping').modal('show')
     },
+    editFacebook(state, facebookshipping) {
+        state.fillFacebookShipping.id = facebookshipping.id
+        state.fillFacebookShipping.url = facebookshipping.url
+        $('#modalEditFacebook').modal('show')
+    },
     deleteQuotationclient(state, id) {
         var url = urlQuotationclient + '/' + state.idQuotationclient
         axios.delete(url).then(response => {
@@ -1167,11 +1895,11 @@ export default { //used for changing the state
         var url = urlQuotationclientPdfIva + '/' + state.idQuotationclient
         window.location.href = url;
     },
-    
+
     /******************************* */
     /****** sección detalles de cotizaciones de clientes**** */
     /******************************* */
-    
+
     createDetailclient(state) {
         var url = urlDetailclient
 
@@ -1594,39 +2322,39 @@ export default { //used for changing the state
         var url = urlDetailimport + '/' + id
         axios.put(url, state.fillDetailimport).then(response => {
             state.fillDetailimport = {
-                    id: '',
-                    import_id: '',
-                    product: '',
-                    detail: '',
-                    price: 1,
-                    quantity: 1,
-                    usa: 0,
-                    seguro: 1,
-                    valorem: 0,
-                    aditional: 0,
-                    embarque: 0,
-                    fee: 0,
-                    fleteUsa: 0,
-                    bankusa: 0,
-                    bankchile: 0,
-                    transferencia: 0,
-                    otro: 0,
-                    aduana1: 0,
-                    aduana2: 0,
-                    manipuleo: 0,
-                    bodega: 0,
-                    guia: 0,
-                    retiro: 0,
-                    fleteChile: 0,
-                    percentage: 0,
-                    internacional: 0,
-                    nacional: 0,
-                    costoTotal: 0,
-                    valueChile: 0,
-                    unitario: 0,
-                    utility: 0,
-                    total: 0
-                },
+                id: '',
+                import_id: '',
+                product: '',
+                detail: '',
+                price: 1,
+                quantity: 1,
+                usa: 0,
+                seguro: 1,
+                valorem: 0,
+                aditional: 0,
+                embarque: 0,
+                fee: 0,
+                fleteUsa: 0,
+                bankusa: 0,
+                bankchile: 0,
+                transferencia: 0,
+                otro: 0,
+                aduana1: 0,
+                aduana2: 0,
+                manipuleo: 0,
+                bodega: 0,
+                guia: 0,
+                retiro: 0,
+                fleteChile: 0,
+                percentage: 0,
+                internacional: 0,
+                nacional: 0,
+                costoTotal: 0,
+                valueChile: 0,
+                unitario: 0,
+                utility: 0,
+                total: 0
+            },
                 state.errorsLaravel = []
             $('#editDetailImport').modal('hide')
             toastr.success('Detalle actualizado con éxito')
@@ -1719,9 +2447,9 @@ export default { //used for changing the state
         var url = urlProduct
         //state.newAllUtilidad.select = state.checkedSelect2
         axios.post(url, {
-            check : state.checkedSelect2,
-            pago : state.selectedPago.label,
-            utilidad : state.selectedPago.utilidad
+            check: state.checkedSelect2,
+            pago: state.selectedPago.label,
+            utilidad: state.selectedPago.utilidad
         }).then(response => {
             state.newAllUtilidad = {
                 check: [],
@@ -1735,10 +2463,12 @@ export default { //used for changing the state
         })
     },
 
-    updateRole(state, id) {
-        var url = urlRoles + '/' + id
+    updateRole(state, data) {
+        var url = urlRoles + '/' + data.id
+
         state.fillRole.special = state.checkedSpecialRole
         state.fillRole.permissions = state.checkedPermissions
+
         axios.put(url, state.fillRole).then(response => {
             state.fillRole = {
                 id: '',
@@ -1756,7 +2486,7 @@ export default { //used for changing the state
     createDescuento(state) {
         var url = urlDescuento
         axios.post(url, {
-            descuento: state.newDescuento.descuento
+            descuento: parseInt(state.newDescuento.descuento)
         }).then(response => {
             state.newDescuento = {
                 descuento: 0
@@ -1824,8 +2554,8 @@ export default { //used for changing the state
         var url = urlTipoDePago + '/' + id
         axios.put(url, {
             id: state.fillTipoPago.id,
-            pago : state.selectedPago.label,
-            utilidad : state.selectedPago.utilidad
+            pago: state.selectedPago.label,
+            utilidad: state.selectedPago.utilidad
         }).then(response => {
             state.fillTipoPago = {
                 id: '',
@@ -1840,8 +2570,8 @@ export default { //used for changing the state
         })
     },
 
-    
-   
+
+
 
     getProducts(state, page) {
         var url = urlProduct + '?page=' + page + '&name=' + state.searchProduct.name
@@ -1850,7 +2580,7 @@ export default { //used for changing the state
             state.pagination = response.data.pagination
         });
     },
-    
+
     createProduct(state) {
         var url = urlProduct
         axios.post(url, {
@@ -1925,7 +2655,7 @@ export default { //used for changing the state
             state.pagination = response.data.pagination
         });
     },
-    
+
     createCode(state) {
         var url = urlCode
         state.newCode.client_id = state.selectedClient.value
@@ -1965,48 +2695,29 @@ export default { //used for changing the state
     },
     editCode(state, code) {
         state.fillCode.id = code.id
-        state.fillCode.client_id = code.client_id
-        state.fillCode.product_id = code.product_id
+        state.fillCode.product = code.product.name
         state.fillCode.codebar = code.codebar
+        state.fillCode.detail = code.product.detail
         state.fillCode.atributo = code.atributo
         state.fillCode.is_activate = code.is_activate
         state.fillCode.utilidad = code.productpagos.utilidad
-
-        
-
-        state.optionsProduct.forEach(product => {
-            if (product.value == state.fillCode.product_id) {
-                state.selectedProductCode.value = product.value
-                state.selectedProductCode.label = product.label
-            }
-        })
-
-        state.optionsClient.forEach(client => {
-            if (client.value == state.fillCode.client_id) {
-                state.selectedClientCode.value = client.value
-                state.selectedClientCode.label = client.label
-            }
-        })
-
-       
+        state.fillCode.flete = code.productpagos.flete
 
         $("#edit").modal('show')
     },
     updateCode(state, id) {
         var url = urlCode + '/' + id
 
-        state.fillCode.client_id = state.optionsClient.value
-        state.fillCode.product_id = state.optionsProduct.value
-
         axios.put(url, state.fillCode).then(response => {
             state.fillCode = {
                 id: '',
-                client_id: '',
-                product_id: '',
+                product: '',
                 codebar: '',
+                detail: '',
                 atributo: 0,
                 is_activate: 1,
-                utilidad: 0
+                utilidad: 0,
+                flete: 0
             }
             state.errorsLaravel = []
             $('#edit').modal('hide')
@@ -2167,7 +2878,7 @@ export default { //used for changing the state
         })
     },
 
-    
+
 
     editUser(state, user) {
         state.fillUser.id = user.id
@@ -2338,35 +3049,19 @@ export default { //used for changing the state
         })
     },
     editRole(state, role) {
-        var permissions = []
         state.checkedSpecialRole = ''
         state.checkedPermissions = []
         state.fillRole.id = role.id
         state.fillRole.name = role.name
         state.fillRole.description = role.description
         state.checkedSpecialRole = role.special
+
         role.permissions.forEach(permission => {
-            permissions.push(permission.id)
+            state.checkedPermissions.push(permission.id)
         })
-        state.checkedPermissions = permissions
+
+
         $("#edit").modal('show')
-    },
-    updateRole(state, id) {
-        var url = urlRoles + '/' + id
-        state.fillRole.special = state.checkedSpecialRole
-        state.fillRole.permissions = state.checkedPermissions
-        axios.put(url, state.fillRole).then(response => {
-            state.fillRole = {
-                id: '',
-                name: '',
-                description: ''
-            }
-            state.errorsLaravel = [];
-            $('#edit').modal('hide')
-            toastr.success('Rol actualizado con éxito')
-        }).catch(error => {
-            state.errorsLaravel = error.response.data
-        })
     },
     deleteRole(state, id) {
         var url = urlRoles + '/' + id
@@ -2388,13 +3083,18 @@ export default { //used for changing the state
     //     });
     // },
     editCantCliVehi(state, user) {
-        state.fillCantCliVehi.id = user.id
-        //state.cantCliVehiAdmin.cant_client = user.cant_client
-        //state.cantCliVehiAdmin.cant_vehicle = user.cant_vehicle
-        state.fillCantCliVehi.cant_client = user.cant_client
-        state.fillCantCliVehi.cant_vehicle = user.cant_vehicle
-        state.fillCantCliVehi.rol = user.roles[0].name
-        $("#editCantCliVehi").modal('show')
+
+        if (user.roles[0] === undefined) {
+            toastr.error('Debe asignar un rol a este usuario')
+        } else {
+            state.fillCantCliVehi.id = user.id
+            //state.cantCliVehiAdmin.cant_client = user.cant_client
+            //state.cantCliVehiAdmin.cant_vehicle = user.cant_vehicle
+            state.fillCantCliVehi.cant_client = user.cant_client
+            state.fillCantCliVehi.cant_vehicle = user.cant_vehicle
+            state.fillCantCliVehi.rol = user.roles[0].name
+            $("#editCantCliVehi").modal('show')
+        }
     },
     editCantVehicle(state, user) {
         state.fillCantVehicle.id = user.id
@@ -2409,12 +3109,12 @@ export default { //used for changing the state
     },
     editarUtilidad(state, user) {
         state.fillTipoPago.id = user.id
-        if(user.productpagos != null){
+        if (user.productpagos != null) {
             state.selectedPago.label = user.productpagos.forma_pago
-        }else{
+        } else {
             state.selectedPago.label = ""
         }
-        
+
         $("#editUtilidad").modal('show')
     },
     editUserRoles(state, user) {
@@ -2423,7 +3123,7 @@ export default { //used for changing the state
         state.checkedRoles = []
         state.fillUserRoles.id = user.id
         state.fillUserRoles.name = user.name
-        user.roles.forEach(role => {   
+        user.roles.forEach(role => {
             roles.push(role.id)
         })
         state.checkedRoles = roles
@@ -2432,6 +3132,7 @@ export default { //used for changing the state
     updateUserRoles(state, id) {
         var url = urlUserRoles + '/' + id;
         axios.put(url, state.checkedRoles).then(response => {
+            console.log(response);
             state.checkedRoles = []
             $('#editRoles').modal('hide')
             toastr.success('Roles asignados con éxito')
@@ -2453,6 +3154,19 @@ export default { //used for changing the state
             state.errorsLaravel = error.response.data
         })
     },
+    updateFacebookShipping(state, id) {
+        var url = urlCreateFacebookShipping + '/' + id
+        axios.put(url, state.fillFacebookShipping).then(response => {
+            state.fillFacebookShipping = {
+                url: ''
+            }
+            state.errorsLaravel = [];
+            $('#modalEditFacebook').modal('hide')
+            toastr.success('Se agrego la url correctamente')
+        }).catch(error => {
+            state.errorsLaravel = error.response.data
+        })
+    },
     getAllPermissions(state) {
         var url = urlAllPermissions
         axios.get(url).then(response => {
@@ -2470,21 +3184,21 @@ export default { //used for changing the state
             });
         }
 
-        state.checkedSelect2 = state.checkedSelect2;  
+        state.checkedSelect2 = state.checkedSelect2;
     },
     setCheckedSelect2(state, value) {
-        state.checkedSelect2 = value;  
+        state.checkedSelect2 = value;
     },
     setSpecialRole(state, value) {
         if (value === 'no-access') {
             state.checkedPermissions = []
-            $('input[name="permission"]').prop('disabled', true)
-        }else if(value === 'all-access'){
-            state.checkedPermissions = [1,2,3,4,5,6,7,9,8,10,11,12,13,14,15,16,17,18,19]
-            $('input[name="permission"]').prop('disabled', true)
-        }else{
+        } else if (value === 'all-access') {
             state.checkedPermissions = []
-            $('input[name="permission"]').prop('disabled', false) 
+            state.permissions.forEach(permission => {
+                state.checkedPermissions.push(permission.id)
+            })
+        } else {
+            state.checkedPermissions = state.checkedPermissions
         }
         state.checkedSpecialRole = value
     },
@@ -2528,7 +3242,7 @@ export default { //used for changing the state
             });
         });
     },
-    
+
     allUsers(state) {
         var url = urlAllUser
         axios.get(url).then(response => {
@@ -2830,16 +3544,16 @@ export default { //used for changing the state
             description: state.formCotizacion.description
         }).then(response => {
             state.formCotizacion = {
-                    name: '',
-                    email: '',
-                    phone: '',
-                    patentchasis: '',
-                    brand: '',
-                    model: '',
-                    year: '',
-                    engine: '',
-                    description: ''
-                },
+                name: '',
+                email: '',
+                phone: '',
+                patentchasis: '',
+                brand: '',
+                model: '',
+                year: '',
+                engine: '',
+                description: ''
+            },
                 state.errorsLaravel = []
             alert('Solicitud ingresada con éxito')
             return true
@@ -2878,7 +3592,7 @@ export default { //used for changing the state
                 engine: '',
                 description: ''
             },
-            state.errorsLaravel = []
+                state.errorsLaravel = []
             toastr.success('Solicitud ingresada con éxito')
         }).catch(error => {
             state.errorsLaravel = error.response.data
@@ -2891,7 +3605,7 @@ export default { //used for changing the state
         var cadena = window.location.href
         var id = cadena.split("/")
 
-        
+
 
         axios.post(url, {
             id: id[4],
@@ -2936,7 +3650,7 @@ export default { //used for changing the state
         var year = state.searchQuotationClient.year
 
         var url = urlPendingQuotations + '?page=' + page + '&id=' + state.searchQuotationClient.id + '&client=' + state.searchQuotationClient.client_text + '&day=' + day + '&month=' + month + '&year=' + year
-        
+
         axios.get(url).then(response => {
             state.pendingQuotations = response.data.quotations.data
             state.pagination = response.data.pagination
@@ -2957,7 +3671,8 @@ export default { //used for changing the state
                     code_id: productsale.code_id,
                     quantity: productsale.quantity,
                     inventory_id: productsale.inventory_id,
-                    utilidad: productsale.utilidad
+                    utilidad: productsale.utilidad,
+                    code: productsale.codebar
                 })
             });
         });
@@ -2967,6 +3682,7 @@ export default { //used for changing the state
         if (state.selectedProductSale != null) {
             state.productForm.product = state.selectedProductSale.label
             state.productForm.price = state.selectedProductSale.price
+            state.productForm.code = state.selectedProductSale.code
 
             state.productForm.code_id = state.selectedProductSale.code_id
             state.productForm.inventory_id = state.selectedProductSale.inventory_id
@@ -2976,7 +3692,7 @@ export default { //used for changing the state
 
             var total = Math.round(parseFloat(state.productForm.price) * parseFloat(state.productForm.quantity))
 
-            var total_utilidad = Math.round( total * parseFloat(state.productForm.utility / 100))
+            var total_utilidad = Math.round(total * parseFloat(state.productForm.utility / 100))
 
             state.productForm.value = Math.round(total + total_utilidad)
 
@@ -2989,10 +3705,10 @@ export default { //used for changing the state
         }
     },
 
-    sumTotalProductSale(state) {        
+    sumTotalProductSale(state) {
         var total = Math.round(parseFloat(state.productForm.price) * parseFloat(state.productForm.quantity))
 
-        var total_utilidad = Math.round( total * parseFloat(state.productForm.utility / 100))
+        var total_utilidad = Math.round(total * parseFloat(state.productForm.utility / 100))
 
         state.productForm.value = Math.round(total + total_utilidad)
 
@@ -3008,7 +3724,8 @@ export default { //used for changing the state
                     label: product.name,
                     value: product.id,
                     price: product.price,
-                    utilidad: product.utilidad
+                    utilidad: product.utilidad,
+                    codigo: product.detail
                 })
             });
         });
@@ -3019,6 +3736,7 @@ export default { //used for changing the state
             state.newDetailclient.product = state.selectedProduct.label
             state.productForm.product = state.selectedProduct.label
             state.newDetailclient.price = state.selectedProduct.price
+            state.newDetailclient.detail = state.selectedProduct.codigo
 
             state.newDetailclient.percentage = state.selectedProduct.utilidad
 
@@ -3026,14 +3744,14 @@ export default { //used for changing the state
                 ((parseFloat(state.newDetailclient.percentage) / 100) + 1) +
                 parseFloat(state.newDetailclient.aditional) -
                 parseFloat(state.newDetailclient.price)) *
-            parseFloat(state.newDetailclient.quantity)))
+                parseFloat(state.newDetailclient.quantity)))
 
             state.newDetailclient.total = Math.round(parseFloat(((
-                    parseFloat(state.newDetailclient.price) *
-                    ((parseFloat(state.newDetailclient.percentage) / 100) + 1)) +
+                parseFloat(state.newDetailclient.price) *
+                ((parseFloat(state.newDetailclient.percentage) / 100) + 1)) +
                 parseFloat(state.newDetailclient.aditional) +
                 parseFloat(state.newDetailclient.transport)) *
-            parseFloat(state.newDetailclient.quantity)))
+                parseFloat(state.newDetailclient.quantity)))
 
         } else {
             state.newDetailclient.product = ''
@@ -3089,7 +3807,7 @@ export default { //used for changing the state
         }
     },*/
 
-    
+
     /****** sección paginacion **** */
     /******************************* */
     paginate(state, page) {
@@ -3127,32 +3845,32 @@ export default { //used for changing the state
         state.fillDetailclient.total = state.fillDetailclient.price
         state.fillDetailclient.totalIVA = Math.round(state.fillDetailclient.total * 1.19)
     },
-    sumTotalProduct(state) {        
+    sumTotalProduct(state) {
         state.newDetailclient.utility = Math.round(parseFloat((parseFloat(state.newDetailclient.price) *
-                ((parseFloat(state.newDetailclient.percentage) / 100) + 1) +
-                parseFloat(state.newDetailclient.aditional) -
-                parseFloat(state.newDetailclient.price)) *
+            ((parseFloat(state.newDetailclient.percentage) / 100) + 1) +
+            parseFloat(state.newDetailclient.aditional) -
+            parseFloat(state.newDetailclient.price)) *
             parseFloat(state.newDetailclient.quantity)))
 
         state.newDetailclient.total = Math.round(parseFloat(((
-                    parseFloat(state.newDetailclient.price) *
-                    ((parseFloat(state.newDetailclient.percentage) / 100) + 1)) +
-                parseFloat(state.newDetailclient.aditional) +
-                parseFloat(state.newDetailclient.transport)) *
+            parseFloat(state.newDetailclient.price) *
+            ((parseFloat(state.newDetailclient.percentage) / 100) + 1)) +
+            parseFloat(state.newDetailclient.aditional) +
+            parseFloat(state.newDetailclient.transport)) *
             parseFloat(state.newDetailclient.quantity)))
     },
     sumTotalEditProduct(state) {
         state.fillDetailclient.utility = Math.round(parseFloat((parseFloat(state.fillDetailclient.price) *
-                ((parseFloat(state.fillDetailclient.percentage) / 100) + 1) +
-                parseFloat(state.fillDetailclient.aditional) -
-                parseFloat(state.fillDetailclient.price)) *
+            ((parseFloat(state.fillDetailclient.percentage) / 100) + 1) +
+            parseFloat(state.fillDetailclient.aditional) -
+            parseFloat(state.fillDetailclient.price)) *
             parseFloat(state.fillDetailclient.quantity)))
 
         state.fillDetailclient.total = Math.round(parseFloat(((
-                    parseFloat(state.fillDetailclient.price) *
-                    ((parseFloat(state.fillDetailclient.percentage) / 100) + 1)) +
-                parseFloat(state.fillDetailclient.aditional) +
-                parseFloat(state.fillDetailclient.transport)) *
+            parseFloat(state.fillDetailclient.price) *
+            ((parseFloat(state.fillDetailclient.percentage) / 100) + 1)) +
+            parseFloat(state.fillDetailclient.aditional) +
+            parseFloat(state.fillDetailclient.transport)) *
             parseFloat(state.fillDetailclient.quantity)))
         state.fillDetailclient.totalIVA = Math.round(state.fillDetailclient.total * 1.19)
     },
@@ -3176,7 +3894,7 @@ export default { //used for changing the state
 
             detailImport.embarque = parseFloat(percentage / 100 * embarque) * parseFloat(state.detailImport.dolar)
 
-            detailImport.seguro = parseFloat( percentage / 100 * seguro ) * parseFloat(state.detailImport.dolar)
+            detailImport.seguro = parseFloat(percentage / 100 * seguro) * parseFloat(state.detailImport.dolar)
 
             detailImport.fee = parseFloat(percentage / 100 * fee) * parseFloat(state.detailImport.dolar)
 
@@ -3187,7 +3905,7 @@ export default { //used for changing the state
             detailImport.bankchile = parseFloat(percentage / 100 * bankchile) * parseFloat(state.detailImport.dolar)
 
             detailImport.transferencia = parseInt(percentage / 100 * transferencia) * parseFloat(state.detailImport.dolar)
-                
+
             detailImport.otro = parseInt(percentage / 100 * otro) * parseFloat(state.detailImport.dolar)
 
 
@@ -3204,10 +3922,10 @@ export default { //used for changing the state
             if (detailImport.valorem == 1) {
 
                 detailImport.total = parseFloat(parseFloat(detailImport.price_dolar) *
-                        parseFloat(seguro) *
-                        parseFloat(usa) *
-                        parseFloat(detailImport.quantity)
-                    ) +
+                    parseFloat(seguro) *
+                    parseFloat(usa) *
+                    parseFloat(detailImport.quantity)
+                ) +
                     parseFloat(detailImport.embarque) +
                     //parseFloat( detailImport.seguro ) +
                     parseFloat(detailImport.fee) +
@@ -3226,10 +3944,10 @@ export default { //used for changing the state
             if (detailImport.valorem == 0) {
 
                 detailImport.total = parseFloat(parseFloat(detailImport.price_dolar) *
-                        parseFloat(seguro) *
-                        parseFloat(usa) *
-                        parseFloat(detailImport.quantity)
-                    ) +
+                    parseFloat(seguro) *
+                    parseFloat(usa) *
+                    parseFloat(detailImport.quantity)
+                ) +
                     parseFloat(detailImport.embarque) +
                     parseFloat(detailImport.fee) +
                     parseFloat(detailImport.fleteUsa) +
@@ -3239,7 +3957,7 @@ export default { //used for changing the state
                     parseFloat(detailImport.otro)
             }
 
-            var totalInternacional = 
+            var totalInternacional =
                 parseFloat(detailImport.embarque) +
                 parseFloat(detailImport.fee) +
                 parseFloat(detailImport.fleteUsa) +
@@ -3248,7 +3966,7 @@ export default { //used for changing the state
                 parseFloat(detailImport.transferencia) +
                 parseFloat(detailImport.otro)
 
-            var totalNacional = 
+            var totalNacional =
                 parseFloat(state.detailImportNacional.aduana1) +
                 parseFloat(state.detailImportNacional.aduana2) +
                 parseFloat(state.detailImportNacional.manipuleo) +
@@ -3257,7 +3975,7 @@ export default { //used for changing the state
                 parseFloat(state.detailImportNacional.retiro) +
                 parseFloat(state.detailImportNacional.fleteChile)
 
-        
+
             detailImport.internacional = totalInternacional
             detailImport.nacional = parseFloat(percentage / 100 * totalNacional)
 
@@ -3280,12 +3998,12 @@ export default { //used for changing the state
                 parseFloat(detailImport.total / detailImport.quantity)
         })
     },
-    sumTotalImport(state) {},
+    sumTotalImport(state) { },
 
     addToCart(state) {
-        if(state.productForm.quantity > state.selectedProductSale.quantity){
+        if (state.productForm.quantity > state.selectedProductSale.quantity) {
             toastr.error('¡Error, Supera la cantidad disponibles!')
-        }else{
+        } else {
             state.cart.push({
                 product: {
                     label: state.selectedProductSale.label,
@@ -3393,9 +4111,9 @@ export default { //used for changing the state
     },
 
     newSale(state) {
-        if(state.formapago == ''){
+        if (state.formapago == '') {
             toastr.error('¡Error, Selecione la forma de pago!')
-        }else{
+        } else {
             let saleDetails = {
                 //client_id: 5, //particular
                 total: state.cartTotal,
@@ -3427,35 +4145,69 @@ export default { //used for changing the state
     allSalesCalendar(state, page) {
         axios.get('all-sales?page=' + page + '&calendar=' + state.calendar.search)
             .then(response => {
-                state.sales = response.data.sales.data
+
+
+                const groupedData = {};
+
+                response.data.sales.data.forEach((entry) => {
+                    const saleId = entry.sale_id;
+                    if (!groupedData[saleId]) {
+                        groupedData[saleId] = {
+                            sale_id: saleId,
+                            descuento: entry.descuento,
+                            total: entry.total,
+                            fecha_sale_create: entry.fecha_sale_create,
+                            products: [],
+                        };
+                    }
+
+                    const productInfo = {
+                        id: entry.product_id,
+                        name: entry.name,
+                        forma_pago: entry.forma_pago,
+                        descuento: entry.descuento,
+                        price: entry.price,
+                        quantity: entry.quantity,
+                        utility: entry.utility,
+                    };
+
+                    groupedData[saleId].products.push(productInfo);
+                });
+
+                // Creating the final formatted result
+                const formattedResult = Object.values(groupedData);
+
+                state.sales = formattedResult
                 state.pagination = response.data.pagination
-                // //esto se debe arreglar
-                // //encontrar una forma de guardar los nombres de los productos en el query de ventas
-                // state.sales.forEach(sale => {
-                //     sale.products.forEach(product => {
-                //         axios.get('product-search/' + product.code_id)
-                //             .then(response => {
-                //                 product.code_id = response.data.name
-                //             })
-                //     })
-                // })
             })
             .catch(error => {
-                //console.log(error.response.data)
+                console.log(error.response.data)
             })
     },
 
-    cierreCajaZ(state){
-        if(state.calendar.search){
+    cierreCajaZ(state) {
+        if (state.calendar.search) {
             var url = urlCierreCajaZ + '/' + state.calendar.search
-            window.location.href = url;
+            axios.get(url)
+                .then(response => {
+                    if (response.data.error !== 0) {
+                        window.location.href = url;
+                    } else {
+                        toastr.error('No hay ventas en esta fecha')
+                    }
+                }).catch(error => {
+                    console.log(error.response.data)
+                })
+
+        } else {
+            toastr.warning('Seleccione un fecha')
         }
     },
 
 
     allSales(state, page) {
         state.calendar.search = ''
-        axios.get('all-sales?page=' +  page  + '&calendar=')
+        axios.get('all-sales?page=' + page + '&calendar=')
             .then(response => {
                 state.sales = response.data.sales.data
                 state.pagination = response.data.pagination
@@ -3484,7 +4236,11 @@ export default { //used for changing the state
     eliminarVenta(state, id) {
         var url = urlAnularSale + '/' + id
         axios.delete(url).then(response => {
-            toastr.success('La Venta fue anulada con éxito')
+            toastr.success('La Venta se esta anulando', 'Espere.', {
+                progressBar: true,
+                closeDuration: 6000,
+                timeOut: 6000 // Adjust the timeOut according to your preference
+            });
         })
     },
 
@@ -3593,9 +4349,9 @@ export default { //used for changing the state
     },
 
     createMechanicClient(state) {
-          
-        axios.post('mechanic-client/' + state.idforms,{
-        // axios.post('mechanic-client',{
+
+        axios.post('mechanic-client/' + state.idforms, {
+            // axios.post('mechanic-client',{
             name: state.newUser.name,
             email: state.newUser.email,
             password: state.newUser.password,
@@ -3616,7 +4372,7 @@ export default { //used for changing the state
 
     createMechanicClient2(state) {
 
-        axios.post('mechanic-client2',{
+        axios.post('mechanic-client2', {
             name: state.newUser.name,
             email: state.newUser.email,
             password: state.newUser.password,
@@ -3681,14 +4437,14 @@ export default { //used for changing the state
     },
 
     getQuotationUsers(state) {
-        var url =  urlQuotationusers + '/' + state.idUser
+        var url = urlQuotationusers + '/' + state.idUser
         axios.get(url).then(response => {
             state.quotationusers = response.data
         });
     },
 
     getQuotationUsersMechanic(state) {
-        var url =  'quotationUserMechanic/' + state.idforms
+        var url = 'quotationUserMechanic/' + state.idforms
         axios.get(url).then(response => {
             state.quotationUserMechanic = response.data
         });
@@ -3756,7 +4512,7 @@ export default { //used for changing the state
     crearArreglo(state) {
         var sumaTotal = 0
         var sumaTotalBoleta = 0
-        if(state.data2.precio >= 180){
+        if (state.data2.precio >= 180) {
             state.arrayBoleta.push({
                 precio: state.data2.precio,
                 total: sumaTotalBoleta == 0 ? state.data2.precio : sumaTotalBoleta
@@ -3769,5 +4525,27 @@ export default { //used for changing the state
             sumaTotalBoleta: state.sumaTotalBoleta
             state.data2.precio = ''
         }
+    },
+
+    updateFleteDefect(state) {
+        var url = urlFlete
+        axios.put(url, state.newFlete).then(response => {
+            state.newFlete.flete = response.data
+            state.errorsLaravel = []
+            $('#create').modal('hide')
+            toastr.success('El flete se actualizo correctamente')
+        }).catch(error => {
+            toastr.error(error.response.data)
+        })
+    },
+
+    fleteDefect(state) {
+        var url = urlFleteDefect
+        axios.get(url).then(response => {
+            response.data.forEach((flete) => {
+                state.newFlete.flete = flete.flete
+                state.newDetailclient.transport = flete.flete
+            });
+        });
     },
 }

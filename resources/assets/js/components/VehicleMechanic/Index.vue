@@ -28,6 +28,8 @@
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,26 +61,44 @@
                                 @click.prevent="detailVehicle( { vehicleLocal } )"
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title="Detalle">
+                                title="Informacion">
                                 <i class="fas fa-info"></i>
                             </a>
                         </td>
                         <td width="10px">
                             <a href="#" class="btn btn-success btn-sm"
-                                @click.prevent="modalDetailVehicle( { vehicleLocal } )"
+                                @click.prevent="modalDetailVehicle( { vehicleLocal, rol: 'mechanic'} )"
                                 data-toggle="tooltip"
                                 data-placement="top"
-                                title="Detalle">
+                                title="Detalle de vehiculo">
                                 <i class="fas fa-plus-circle"></i>
                             </a>
                         </td>
-                        <td>
+                        <td width="10px">
                             <a href="#" class="btn btn-primary btn-sm"
                                 @click.prevent="modalRequestParts( { vehicleLocal } )"
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title="Cotizar Repuestos">
                                 <i class="fas fa-cog"></i>
+                            </a>
+                        </td>
+                        <td width="10px">
+                            <a href="#" class="btn btn-success btn-sm"
+                                @click.prevent="modalOrdenTrabajo( { vehicleLocal } )"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Orden de trabajo">
+                                <i class="fas fa-wrench"></i>
+                            </a>
+                        </td>
+                        <td width="10px">
+                            <a href="#" class="btn btn-success btn-sm"
+                                @click.prevent="modalCheckList( { vehicleLocal } )"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Check List">
+                                <i class="fas fa-clipboard-check"></i>
                             </a>
                         </td>
                     </tr>
@@ -127,7 +147,8 @@
         <Imagenes></Imagenes>
         <AgregarDetalle></AgregarDetalle>
         <RequestParts></RequestParts>
-
+        <OrdenTrabajo></OrdenTrabajo>
+        <CheckListVehicle></CheckListVehicle>
     </div>
 
 </template>
@@ -142,16 +163,18 @@ import Detalle from '../Vehicle/Detalle'
 import Imagenes from '../Vehicle/Imagenes'
 import AgregarDetalle from '../Vehicle/AgregarDetalle'
 import RequestParts from '../Vehicle/RequestParts'
+import OrdenTrabajo from '../OrdenTrabajos/OrdenTrabajo'
+import CheckListVehicle from '../Check-List/CheckListVehicle'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle, RequestParts },
+    components: { Agregar, Editar, Detalle, Imagenes, AgregarDetalle, RequestParts, OrdenTrabajo, CheckListVehicle },
     computed:{
         ...mapState(['vehicles', 'pagination', 'offset', 'searchVehicle', 'errorsLaravel']),
         ...mapGetters(['isActived', 'pagesNumber'])
     },
     methods:{
-        ...mapActions(['getClientVehicles', 'editVehicle', 'detailVehicle', 'modalDetailVehicle', 'changePageVehicle', 'modalRequestParts'])
+        ...mapActions(['getClientVehicles', 'editVehicle', 'detailVehicle', 'modalDetailVehicle', 'modalOrdenTrabajo', 'changePageVehicle', 'modalRequestParts', 'modalCheckList'])
     },
     created(){
         loadProgressBar();

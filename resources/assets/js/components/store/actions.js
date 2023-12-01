@@ -59,18 +59,203 @@ export default { //methods
         }, 200)
     },
     modalDetailVehicle(context, data) {
-        context.commit('modalDetailVehicle', data.vehicleLocal)
+        context.commit('modalDetailVehicle', [data.vehicleLocal, data.rol])
     },
-    createDetailVehicle(context) {
+    modalOrdenTrabajo(context, data) {
+        context.commit('modalOrdenTrabajo', data.vehicleLocal)
+        context.commit('getTrabajos', data.vehicleLocal.id)
+    },
+    modalFotosOrdenTrabajo(context, data) {
+        context.commit('modalFotosOrdenTrabajo', data.id)
+        context.commit('getFotosOrdenTrabajo', data.id)
+    },
+    modalObservacion(context, data) {
+        context.commit('modalObservacion', data.id)
+        context.commit('getObservaciones', data.id)
+    },
+    removeTrabajo(context, data) {
+        context.commit('removeTrabajo', data.id)
+        context.commit('getOrdenesTrabajos')
+        // context.commit('getTrabajos', data.vehicle_id)
+    },
+    removeObservacion(context, data) {
+        context.commit('removeObservacion', data.id)
+    },
+    guardarOrdenTrabajo(context, data) {
+        context.commit('guardarOrdenTrabajo', data.km_old)
+        // context.commit('getTrabajos', data.id)
+        // context.commit('getClientVehicles')
+    },
+
+    getOrdenesTrabajos(context, data) {
+        context.commit('getOrdenesTrabajos', data)
+    },
+
+    getObservaciones(context, data) {
+        context.commit('getObservaciones', data)
+    },
+
+    AgregarFotosOrdenTrabajo(context) {
+        context.commit('AgregarFotosOrdenTrabajo')
+    },
+
+    AgregarObservacion(context) {
+        context.commit('AgregarObservacion')
+    },
+    createDetailVehicle(context, data) {
         context.commit('createDetailVehicle')
+        if(data == 'mechanic'){
+            setTimeout(function () {
+                context.commit('getClientVehicles')
+            }, 1000)
+            
+        }else{
+            context.commit('getVehicles')
+        }
     },
+
+
+    modalCrearFormatoCheckList(context) {
+        context.commit('modalCrearFormatoCheckList')
+    },
+
+    modalCrearIntervencionCheckList(context) {
+        context.commit('modalCrearIntervencionCheckList')
+    },
+
+    modalIntervencion(context, data) {
+        context.commit('modalIntervencion', data.id)
+    },
+    modalCerrarIntervencion(context) {
+        context.commit('modalCerrarIntervencion')
+    },
+
+    agregarCategoria(context, data) {
+        context.commit('agregarCategoria', data)
+    },
+
+    agregarIntervencion(context) {
+        context.commit('agregarIntervencion')
+    },
+
+    guardarIntervenciones(context, data) {
+        context.commit('guardarIntervenciones', data)
+    },
+
+    eliminarIntervencion(context, data) {
+        context.commit('eliminarIntervencion', data)
+    },
+    eliminarCategoria(context, data) {
+        context.commit('eliminarCategoria', data)
+    },
+
+    crearCheckList(context, data) {
+        context.commit('crearCheckList', data)
+    },
+
+    finalizarFormatoCheckList(context) {
+        context.commit('finalizarFormatoCheckList')
+    },
+
+    modalMostrarFormatoCheckList(context, data) {
+        context.commit('modalMostrarFormatoCheckList', data)
+    },
+
+    modalEditarCategoria(context, data) {
+        context.commit('modalEditarCategoria', data.formatchecklist)
+    },
+
+    editarCategoriaCheckList(context, data) {
+        context.commit('editarCategoriaCheckList', data)
+    },
+
+    modalEditarIntervencion(context, data) {
+        context.commit('modalEditarIntervencion', data.intervenciones)
+    },
+
+    editarIntervencionCheckList(context, data) {
+        context.commit('editarIntervencionCheckList', data)
+    },
+
+    modalAgregarCategoria(context) {
+        context.commit('modalAgregarCategoria')
+    },
+    modalAgregarIntervencion(context, data) {
+        context.commit('modalAgregarIntervencion', data.id)
+    },
+
+    crearCategoria(context, data) {
+        context.commit('crearCategoria', data)
+        context.commit('getCheckListVehicles')
+    },
+
+    crearIntervencion(context, data) {
+        context.commit('crearIntervencion', data.id)
+    },
+
+    modalCheckList(context, data) {
+        context.commit('modalCheckList', data.vehicleLocal)
+    },
+
+    guardarCheckList(context, data) {
+        context.commit('guardarCheckList', data)
+        context.commit('getClientVehicles', 1)
+    },
+
+    modalObservacionVehicleCheckList(context, data) {
+        context.commit('modalObservacionVehicleCheckList', data)
+    },
+
+    agregarObservacionCheckList(context, data) {
+        context.commit('agregarObservacionCheckList', data)
+    },
+
+    subirFotosObservacionCheckList(context, data) {
+        context.commit('subirFotosObservacionCheckList', data.evt)
+    },
+
+    getCheckListVehicles(context, data) {
+        context.commit('getCheckListVehicles', data)
+    },
+
+    modalMostrarCheckListVehicle(context, data) {
+        context.commit('modalMostrarCheckListVehicle', data.id)
+    },
+
+    mostrarCondiciones(context, data) {
+        context.commit('mostrarCondiciones', data)
+    },
+
+    modalMostrarObservacion(context, data) {
+        context.commit('modalMostrarObservacion', data)
+    },
+
+    cerrarMostrarObservacion(context) {
+        context.commit('cerrarMostrarObservacion')
+    },
+
+    cerrarMostrarCheckListVehicle(context) {
+        context.commit('cerrarMostrarCheckListVehicle')
+    },
+
     createProductsPagos(context) {
         context.commit('createProductsPagos')
         setTimeout(function () {
             context.commit('getProducts', 1)
         }, 1000)
     },
-    
+
+    cerrarCategoria(context) {
+        context.commit('cerrarCategoria')
+    },
+    cerrarIntervencion(context) {
+        context.commit('cerrarIntervencion')
+    },
+
+    getCheckListRoles(context) {
+        context.commit('getCheckListRoles')
+    },
+
     modalRequestParts(context, data) {
         context.commit('modalRequestParts', data.vehicleLocal)
     },
@@ -201,6 +386,12 @@ export default { //methods
         context.commit('getVehiculoMotors', data.page)
     },
     /********************************** */
+    subirFotosObservacion(context, data) {
+        context.commit('subirFotosObservacion', data.evt)
+    },
+    subirFotosOrdenTrabajo(context, data) {
+        context.commit('subirFotosOrdenTrabajo', data.evt)
+    },
     fileChange(context, data) {
         context.commit('fileChange', data.evt)
     },
@@ -306,10 +497,19 @@ export default { //methods
         context.commit('getQuotationShipping', data.page)
     },
 
+    deleteEnviado(context, data) {
+        context.commit('deleteEnviado', data.id)
+        context.commit('getQuotationShipping', 1)
+    },
+
+    deleteRealizado(context, data) {
+        context.commit('deleteRealizado', data.id)
+        context.commit('getOrdenesTrabajos')
+    },
     // getQuotationShipping(context, data) {
     //     context.commit('getQuotationShipping', data)
     // },
-    
+
     createQuotationclient(context) {
         context.commit('createQuotationclient')
         setTimeout(function () {
@@ -335,6 +535,9 @@ export default { //methods
     showQuotationShipping(context, data) {
         context.commit('showQuotationShipping', data.id)
     },
+    editFacebook(context, data) {
+        context.commit('editFacebook', data.quotationshippingLocal)
+    },
     deleteQuotationclient(context, data) {
         context.commit('deleteQuotationclient', data.id)
         setTimeout(function () {
@@ -348,19 +551,19 @@ export default { //methods
         }, 1000)
     },
     generarRecibo(context, data) {
-        context.commit('generarRecibo' , data.id)
+        context.commit('generarRecibo', data.id)
     },
     eliminarVenta(context, data) {
-        context.commit('eliminarVenta' , data.id)
+        context.commit('eliminarVenta', data.id)
         setTimeout(function () {
-            context.commit('allSalesCalendar')
-        }, 1000)
+            context.commit('allSalesCalendar', 1)
+        }, 6000)
     },
     pdfQuotationclient(context) {
         context.commit('pdfQuotationclient')
     },
     pdfQuotationShipping(context, data) {
-        context.commit('pdfQuotationShipping' , data.id)
+        context.commit('pdfQuotationShipping', data.id)
     },
     pdfIvaQuotationclient(context) {
         context.commit('pdfIvaQuotationclient')
@@ -443,7 +646,7 @@ export default { //methods
         context.commit('getQuotationforms')
     },
     showModalDetailUserMechanic(context, data) {
-        context.commit('showModalDetailUserMechanic' , data.id)
+        context.commit('showModalDetailUserMechanic', data.id)
     },
     createDetail(context) {
         context.commit('createDetail')
@@ -631,7 +834,7 @@ export default { //methods
         context.commit('createDescuento')
         context.commit('descuentoDefect')
     },
-    
+
 
     createTipoPago(context) {
         context.commit('createTipoPago')
@@ -879,7 +1082,7 @@ export default { //methods
         context.commit('getAllPermissions')
     },
     updateRole(context, data) {
-        context.commit('updateRole', data.id)
+        context.commit('updateRole', data)
         context.commit('getRoles', 1)
     },
     updateProductsUtilidad(context, data) {
@@ -920,6 +1123,12 @@ export default { //methods
     },
     updateQuotationShipping(context, data) {
         context.commit('updateQuotationShipping', data.id)
+        setTimeout(function () {
+            context.commit('getQuotationShipping', 1)
+        }, 1000)
+    },
+    updateFacebookShipping(context, data) {
+        context.commit('updateFacebookShipping', data.id)
         setTimeout(function () {
             context.commit('getQuotationShipping', 1)
         }, 1000)
@@ -1104,7 +1313,7 @@ export default { //methods
     },
     setProduct(context, data) {
         context.commit('setProduct', data)
-        
+
         // context.commit('setCode', { label:'', value:'' })
         // context.commit('allCodes')
     },
@@ -1217,24 +1426,24 @@ export default { //methods
     agregarFormaPago(context, data) {
         context.commit('agregarFormaPago', data)
     },
-    
+
 
     allSalesCalendar(context, data) {
         context.commit('allSalesCalendar', data.page)
-        
+
     },
 
     cierreCajaZ(context) {
         context.commit('cierreCajaZ')
     },
-    
+
     allSales(context, data) {
         context.commit('allSales', data.page)
     },
 
     calendar(context) {
         context.commit('calendar')
-    },    
+    },
 
     searchCode(context) {
         context.commit('searchCode')
@@ -1345,4 +1554,15 @@ export default { //methods
     crearArreglo(context) {
         context.commit('crearArreglo')
     },
+
+    updateFleteDefect(context){
+        context.commit('updateFleteDefect')
+        setTimeout(function () {
+            context.commit('getCodes', 1)
+        }, 500)
+    },
+
+    fleteDefect(context){
+        context.commit('fleteDefect')
+    }
 }

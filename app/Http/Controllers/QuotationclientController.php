@@ -237,8 +237,35 @@ class QuotationclientController extends Controller
 
         if(isset($data['cliente_part'])){
             $clients = Client::where('user_id', '=', \Auth::user()->id)->where('type', '=', 'Cliente Particular')->get();
-            foreach ($clients as $client) {
-                $quotation_id = Quotationclient::create(
+
+            if($clients->count() == 0){
+                $client_id= Client::create([
+                    'user_id' => \Auth::user()->id,
+                    'type' => 'Cliente Particular',
+                    'rut' => null,
+                    'razonSocial' => 'Cliente Particular',
+                    'phone' => null,
+                    'telefono' => null,
+                    'email' => null,
+                    'address' => null,
+                    'comuna' => null,
+                    'giro' => 'Cliente Particular',
+                ])->id;
+
+                $quotation_id = Quotationclient::create([
+                        'user_id' => \Auth::user()->id,
+                        'client_id' => $client_id,
+                        'state' => 'Pendiente',
+                        'payment' => 'Contado',
+                        'client_text' => $data['client_text'],
+                        'vehicle' => $data['vehicle'],
+                        'generado' => $data['generado'],
+                        'url' => $data['url'],
+                        'ppu' => $data['ppu']
+                ])->id;
+            }else{
+                foreach ($clients as $client) {
+                    $quotation_id = Quotationclient::create(
                     [
                         'user_id' => \Auth::user()->id,
                         'client_id' => $client->id,
@@ -247,8 +274,10 @@ class QuotationclientController extends Controller
                         'client_text' => $data['client_text'],
                         'vehicle' => $data['vehicle'],
                         'generado' => $data['generado'],
-                        'url' => $data['url']
+                        'url' => $data['url'],
+                        'ppu' => $data['ppu']
                     ])->id;
+                }
             }
         }else{
             $quotation_id = Quotationclient::create(
@@ -260,7 +289,8 @@ class QuotationclientController extends Controller
                     'client_text' => $data['client_text'],
                     'vehicle' => $data['vehicle'],
                     'generado' => $data['generado'],
-                    'url' => $data['url']
+                    'url' => $data['url'],
+                    'ppu' => $data['ppu']
                 ])->id; 
         }   
         

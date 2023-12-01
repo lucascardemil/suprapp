@@ -134,6 +134,7 @@ export default { //data
     },
     /*** sección componentes de vehiculos */
     vehicles: [],
+    rol: '',
     vehicle: {
         id: '',
         user_id: '',
@@ -174,8 +175,54 @@ export default { //data
     newDetailVehicle: {
         vehicle_id: '',
         km: '',
-        note: ''
+        note: '',
+        rol: ''
     },
+    newOrdenTrabajo: {
+        vehicle_id: 0,
+        km: 0,
+        km_old: 0,
+        descripcion: '',
+        observacion: ''
+    },
+    checkListForm:{
+        categoria: '',
+    },
+    intervencionForm:{
+        id_categoria: 0,
+        intervencion: '',
+    },
+    editarCategoriaForm:{
+        id_categoria: 0,
+        categoria: ''
+    },
+    editarIntervencionForm:{
+        id_intervencion: 0,
+        intervencion: ''
+    },
+    columnaExiste:[],
+    columnaEstado:[],
+    columnaObservacion:{
+        id_intervencion: 0,
+        id_vehicle: 0,
+        observacion: '',
+        imagenes: []
+    },
+    mostrarchecklistvehicles:[],
+    checklistvehicles:[],
+    checklists:[],
+    formatchecklists:[],
+    editarIntervenciones:[],
+    categorias:[],
+    ordenestrabajos:[],
+    intervenciones:[],
+    condiciones: [],
+    id_checklist: 0,
+    id_vehicle: 0,
+    trabajos:[],
+    observaciones:[],
+    roleschecklists:[],
+    km_old: 0,
     /**********************************/
     vehiculotipos: [],
     vehiculotipo: {
@@ -326,6 +373,10 @@ export default { //data
     quotationclients: [],
     quotationclientsform: [],
     quotationshipping: [],
+    checkEnviado: [],
+    checkRealizado: [],
+    
+    
     newQuotationclient: {
         client_id: '',
         state: '',
@@ -335,7 +386,8 @@ export default { //data
         url: '',
         vehicle: '',
         generado: '',
-        generado_client: ''
+        generado_client: '',
+        ppu: ''
     },
     fillQuotationclient: {
         id: '',
@@ -480,7 +532,7 @@ export default { //data
         detail: '',
         price: 1,
         quantity: 1,
-        percentage: 35,
+        percentage: 0,
         aditional: 0,
         transport: 0,
         utility: 0,
@@ -708,12 +760,13 @@ export default { //data
     },
     fillCode: {
         id: '',
-        client_id: '',
-        product_id: '',
+        product: '',
         codebar: '',
+        detail: '',
         atributo: 0,
         is_activate: 1,
-        utilidad: 0
+        utilidad: 0,
+        flete: 0
     },
     searchCode: {
         codebar: ''
@@ -936,6 +989,11 @@ export default { //data
         id: '',
         direccion: ''
     },
+    fillFacebookShipping: {
+        id: '',
+        url: ''
+    },
+    facebookshipping: [],
     checkedRoles: [],
     permissions: [],
     checkedSpecialRole: '',
@@ -953,7 +1011,9 @@ export default { //data
     optionsCode: [],
     optionsPrice: [],
     cart: [],
-    formapago: '',
+    trabajos: [],
+    orden_trabajo: [],
+    formapago: 'CONTADO',
     aplicardescuento: 0,
     selectedCode: {
         label: '',
@@ -978,7 +1038,7 @@ export default { //data
     },
     cartValue: 0,
     cartTotal: 0,
-    sales: [],
+    sales: '',
     searchFecha: [],
     productSearch: [],
     productSales: [],
@@ -1004,5 +1064,6 @@ export default { //data
         precio: ''
     },
     arrayBoleta: [],
+    newFlete: { flete: 0 }
 
 }

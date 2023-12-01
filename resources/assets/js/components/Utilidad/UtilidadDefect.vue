@@ -17,7 +17,7 @@ export default {
         ...mapState(['newUtilidad'])
     },
     created(){
-        this.$store.dispatch('utilidadDefect')
+        this.$store.dispatch('fleteDefect')
     }
 }
 </script>

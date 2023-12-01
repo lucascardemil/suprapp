@@ -22,6 +22,14 @@
                     <br>
                     <span>Repuestos Automotrices, Repuestos Maquinarias, Importaciones</span>
                     <br>
+                    <span>Direccion: Avda. Ruben Jimenez 601, Coquimbo</span>
+                    <br>
+                    <span>Email: ventas@comercialsupra.cl</span>
+                    <br>
+                    <span>Vendedor: Alvaro Perez</span>
+                    <br>
+                    <span>Cel: +56989483379 - +56973887034</span>
+                    <br>
                     <br>
                 </td>
                 <td class="text-center" COLSPAN="2">
@@ -41,6 +49,16 @@
                     <span style="font-size:14px">COMERCIAL SUPRA E.I.R.L</span>
                     <br>
                     <span>Repuestos Automotrices, Repuestos Maquinarias, Importaciones</span>
+                    <br>
+                    <span>Repuestos Automotrices, Repuestos Maquinarias, Importaciones</span>
+                    <br>
+                    <span>Direccion: Avda. Ruben Jimenez 601, Coquimbo</span>
+                    <br>
+                    <span>Email: ventas@comercialsupra.cl</span>
+                    <br>
+                    <span>Vendedor: Alvaro Perez</span>
+                    <br>
+                    <span>Cel: +56989483379 - +56973887034</span>
                     <br>
                     <br>
                 </td>
@@ -76,6 +94,14 @@
                     <span>E-mail: </span> <b><span>{{ $client->email }}</span></b>
                     <br>
                     <span>Teléfono: </span> <b><span>{{ $client->phone }}</span></b>
+                    @endif
+                    @if($quotation->ppu != '')
+                    <br>
+                    <span>PPU/N°Interno: </span> <b><span>{{ $quotation->ppu }}</span></b>
+                    @endif
+                    @if($quotation->vehicle != '')
+                    <br>
+                    <span>Vehículo: </span> <b><span>{{ $quotation->vehicle }}</span></b>
                     @endif
                 </td>
             </tr>

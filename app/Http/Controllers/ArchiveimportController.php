@@ -80,7 +80,8 @@ class ArchiveimportController extends Controller
         $filename = str_replace("http://localhost:8000/dummy/", "", $image->url);
 
 
-        unlink(public_path() .'/dummy/'. $filename );
+        // unlink(public_path() .'/dummy/'. $filename );
+        unlink(getcwd() .'/dummy/'. $filename );
 
         $image->delete();
 

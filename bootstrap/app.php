@@ -41,6 +41,10 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+$app->bind('path.suprapp', function(){
+    return realpath('./../public/suprapp/');
+});
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

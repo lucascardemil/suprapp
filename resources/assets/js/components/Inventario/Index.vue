@@ -2,11 +2,13 @@
     <div>
         <h5 class="text-white">
             Inventario
-            <a href="#" class="btn btn-success pull-right btn-sm" data-toggle="modal" data-target="#create" title="Agregar"><i class="fas fa-plus-circle"></i></a>
+            <a href="#" class="btn btn-success pull-right btn-sm" data-toggle="modal" data-target="#create"
+                title="Agregar"><i class="fas fa-plus-circle"></i></a>
         </h5>
         <div class="row mt-3">
             <div class="col-lg-3">
-                <input type="text" v-model="search.name" @keyup="getCodes" class="form-control" placeholder="Filtrar Producto...">
+                <input type="text" v-model="search.name" @keyup="getCodes" class="form-control"
+                    placeholder="Filtrar Producto...">
             </div>
         </div>
         <table class="table table-borderless table-dark table-hover table-striped mt-3 table-sm">
@@ -23,25 +25,23 @@
                 </tr>
             </thead>
             <tbody v-for="codeLocal in rows" :key="codeLocal.id">
-                <tr class="accordion-toggle" data-toggle="collapse" :data-target="'#stock'+codeLocal.id">
+                <tr class="accordion-toggle" data-toggle="collapse" :data-target="'#stock' + codeLocal.id">
                     <td>{{ codeLocal.id }}</td>
                     <td>{{ codeLocal.product.name }}</td>
                     <td>{{ codeLocal.codebar }}</td>
                     <td>{{ codeLocal.client.name }}</td>
                     <td></td>
-                    <!-- <td>{{ codeLocal.inventories[0].price | currency('$', 0, { thousandsSeparator: '.' })}}</td>
-                    <td>{{ codeLocal.inventories[0].quantity }}</td>
-                    <td>{{ totalInventario(codeLocal.inventories[0]) | currency('$', 0, { thousandsSeparator: '.' })}}</td> -->
                     <td></td>
                     <td>{{ totalUnidades(codeLocal) }}</td>
-                    <td>{{ totalPrecio(codeLocal) | currency('$', 0, { thousandsSeparator: '.' })}}</td>
+                    <td :class="getCellColor(codeLocal)">{{ totalPrecio(codeLocal) | currency('$', 0,
+                        { thousandsSeparator: '.' }) }}</td>
                 </tr>
-                <tr v-for="inventario in codeLocal.inventories" :key="inventario.id" :id="'stock'+inventario.code_id" class="accordian-body collapse">
+                <tr v-for="inventario in codeLocal.inventories" :key="inventario.id" :id="'stock' + inventario.code_id"
+                    class="accordian-body collapse">
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <!-- <td>{{ inventario.fecha_fact }}</td> -->
                     <td v-if="inventario.fecha_fact != null">{{ inventario.fecha_fact }}</td>
                     <td v-else></td>
 
@@ -49,41 +49,39 @@
                     <td>{{ inventario.price | currency('$', 1) }}</td>
                     <td>{{ inventario.quantity }}</td>
                     <td>{{ totalInventario(inventario) | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
-                </tr> 
+                </tr>
             </tbody>
         </table>
 
         <nav>
             <ul class="pagination">
                 <li class="page-item" v-if="pagination.current_page > 1">
-                    <a class="page-link border-light bg-dark" href="#"
-                        @click.prevent="changePageCode({page: 1})">
+                    <a class="page-link border-light bg-dark" href="#" @click.prevent="changePageCode({ page: 1 })">
                         <span>Primera</span>
                     </a>
                 </li>
                 <li class="page-item" v-if="pagination.current_page > 1">
                     <a class="page-link border-light bg-dark" href="#"
-                        @click.prevent="changePageCode({page: pagination.current_page - 1})">
+                        @click.prevent="changePageCode({ page: pagination.current_page - 1 })">
                         <span>Atrás</span>
                     </a>
                 </li>
-                <li class="page-item" v-for="page in pagesNumber"
-                    v-bind:class="[ page == isActived ? 'active' : '' ]" :key="page">
-                    <a class="page-link border-light bg-dark" href="#"
-                        @click.prevent="changePageCode({page})">
+                <li class="page-item" v-for="page in pagesNumber" v-bind:class="[page == isActived ? 'active' : '']"
+                    :key="page">
+                    <a class="page-link border-light bg-dark" href="#" @click.prevent="changePageCode({ page })">
                         {{ page }}
                     </a>
                 </li>
                 <li class="page-item" v-if="pagination.current_page < pagination.last_page">
                     <a class="page-link border-light bg-dark" href="#"
-                        @click.prevent="changePageCode({page: pagination.current_page + 1})">
+                        @click.prevent="changePageCode({ page: pagination.current_page + 1 })">
                         <span>Siguiente</span>
                     </a>
                 </li>
 
                 <li class="page-item" v-if="pagination.current_page < pagination.last_page">
                     <a class="page-link border-light bg-dark" href="#"
-                        @click.prevent="changePageCode({page:pagination.last_page})">
+                        @click.prevent="changePageCode({ page: pagination.last_page })">
                         <span>Última</span>
                     </a>
                 </li>
@@ -93,8 +91,8 @@
             <h3 class="text-white">Total Cantidad Inventario: {{ allInventory.quantity | currency('', 0, { thousandsSeparator: '.' })  }}</h3>
             <h3 class="text-white">Total Costo Inventario: ${{ allInventory.price | currency('', 0, { thousandsSeparator: '.' })  }}</h3>
         </div> -->
-	<Agregar />
-  </div>
+        <Agregar />
+    </div>
 </template>
 
 <script>
@@ -105,7 +103,7 @@ import Agregar from './Agregar'
 export default {
     data() {
         return {
-            //search: '',
+            search_value: '',
             sortMethod: 'asc'
         }
     },
@@ -113,52 +111,80 @@ export default {
     computed: {
         rows() {
             return this.codes
-            .sort((a, b) => {
-                let modifier = 1;
-                if(this.sortMethod.localeCompare('desc')) modifier = -1;
-                if(typeof(a.inventories[0].price) !== 'undefined') return 0;
-                if(this.totalInventario(a.inventories[0]) < this.totalInventario(b.inventories[0])) return -1 * modifier;
-                if(this.totalInventario(a.inventories[0]) > this.totalInventario(b.inventories[0])) return 1 * modifier;
-                return 0;
-            })
-            // .filter(code => {
-            //     return code.product.name.toLowerCase().includes(this.search.toLowerCase())
-            // })
+                .sort((a, b) => {
+                    let modifier = 1;
+                    if (this.sortMethod.localeCompare('desc')) modifier = -1;
+                    if (typeof (a.inventories[0].price) !== 'undefined') return 0;
+                    if (this.totalInventario(a.inventories[0]) < this.totalInventario(b.inventories[0])) return -1 * modifier;
+                    if (this.totalInventario(a.inventories[0]) > this.totalInventario(b.inventories[0])) return 1 * modifier;
+                    return 0;
+                })
+                .filter(code => {
+                    return code.product.name.toLowerCase().includes(this.search_value.toLowerCase())
+                })
         },
-        ...mapState(['codes', 'search','pagination', 'offset', 'errorsLaravel', 'allInventory']),
+        ...mapState(['codes', 'search', 'pagination', 'offset', 'errorsLaravel', 'allInventory']),
         ...mapGetters(['isActived', 'pagesNumber'])
     },
-    methods:{
+    methods: {
         sortBy() {
-            this.sortMethod = this.sortMethod==='asc'?'desc':'asc';
+            this.sortMethod = this.sortMethod === 'asc' ? 'desc' : 'asc';
         },
         ...mapActions(['crearInventarioUsuario', 'getCodes', 'changePageCode']),
-        totalInventario(item){
+        totalInventario(item) {
             return item.price * item.quantity
         },
-        totalUnidades(item){
+        totalUnidades(item) {
             let total = 0
-            for (let i = 0; i<item.inventories.length; i++){
-                if (item.inventories[i].code_id == item.id){
+            for (let i = 0; i < item.inventories.length; i++) {
+                if (item.inventories[i].code_id == item.id) {
                     total += parseInt(item.inventories[i].quantity)
                 }
             }
             return total
         },
-        totalPrecio(item){
+        totalPrecio(item) {
             let total = 0
-            for (let i = 0; i<item.inventories.length; i++){
-                if (item.inventories[i].code_id == item.id){
+
+            for (let i = 0; i < item.inventories.length; i++) {
+                if (item.inventories[i].code_id == item.id) {
                     total += parseInt(item.inventories[i].price * item.inventories[i].quantity)
                 }
             }
+
             return total
         },
+        getCellColor(item) {
+            let uniquePrices = new Set();
+
+            if (item.inventories.length > 1) {
+                for (let i = 0; i < item.inventories.length; i++) {
+                    if (item.inventories[i].code_id == item.id) {
+                        uniquePrices.add(item.inventories[i].price);
+                    }
+                }
+
+                if (uniquePrices.size === 1) {
+                    return 'even-cell-color';
+                } else {
+                    return 'odd-cell-color';
+                }
+            }
+        },
     },
-    created(){
+    created() {
         loadProgressBar()
         this.$store.dispatch('getCodes', { page: 1 })
-        // this.$store.dispatch('allInventories')
     }
 }
 </script>
+
+<style>
+.even-cell-color {
+    background-color: green;
+}
+
+.odd-cell-color {
+    background-color: red;
+}
+</style>
