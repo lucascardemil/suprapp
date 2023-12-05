@@ -169,7 +169,7 @@ export default {
             if (item.productpagos) {
                 if (item.productpagos.product_id === item.product_id) {
                     flete = parseInt(item.productpagos.flete);
-                    utilidad = parseInt(item.productpagos.utilidad) / 100;
+                    utilidad = (parseInt(item.productpagos.utilidad) / 100) + 1;
                 }
             }
 
@@ -180,29 +180,35 @@ export default {
             return ((((sumatoriaPrecios / cantidadPrecios) * 1.19) * utilidad) + flete);
         },
         encontrarPrecioCompraMasAlto(item) {
-            let precioMasAlto = 0;
             let flete = 0;
             let utilidad = 0;
 
-            for (let i = 0; i < item.inventories.length; i++) {
-                if (item.inventories[i].code_id === item.id && item.inventories[i].price > precioMasAlto) {
-                    precioMasAlto = item.inventories[i].price;
+            let uniquePrices = new Set();
+
+            if (item.inventories.length > 1) {
+                for (let i = 0; i < item.inventories.length; i++) {
+                    if (item.inventories[i].code_id == item.id && item.inventories[i].quantity > 0) {
+                        uniquePrices.add(item.inventories[i].price);
+                    }
                 }
             }
 
             if (item.productpagos) {
                 if (item.productpagos.product_id === item.product_id) {
                     flete = parseInt(item.productpagos.flete);
-                    utilidad = parseInt(item.productpagos.utilidad) / 100;
+                    utilidad = (parseInt(item.productpagos.utilidad) / 100) + 1;
                 }
             }
 
 
-            if (precioMasAlto === 0) {
+            if (uniquePrices.size === 0) {
                 return 0;
             }
 
-            return (((precioMasAlto * 1.19) * utilidad) + flete);
+
+            const valorMasAlto = Math.max(...[...uniquePrices].map(Number));
+
+            return (((valorMasAlto * 1.19) * utilidad) + flete);
         }
 
 

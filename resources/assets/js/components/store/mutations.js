@@ -1778,31 +1778,32 @@ export default { //used for changing the state
         var url = urlQuotationclientDetails + '/' + state.idQuotationclient
         axios.get(url).then(response => {
             state.detailclients = response.data
-            var totalUtilidad = 0
-            var totalTransporte = 0
-            var totalAdicional = 0
-            var total = 0
+            let totalAdicional = 0
+            let totalTransporte = 0
+            let totalUtilidad = 0
+            let tota_iva = 0
+            let total_neto = 0
+
             state.detailclients.forEach(detailclient => {
-                //total += parseInt(detailclient.price) *
-                /*state.newDetailclient.quotationclient_id = detailclient.quotationclient_id
-                state.newDetailclient.product = detailclient.product
-                state.newDetailclient.price = detailclient.price
-                state.newDetailclient.quantity = detailclient.quantity
-                state.newDetailclient.percentage = detailclient.percentage
-                state.newDetailclient.aditional = detailclient.aditional
-                state.newDetailclient.transport = detailclient.transport
-                state.newDetailclient.utility = detailclient.utility
-                state.newDetailclient.total = detailclient.total*/
+                let percentage = (parseInt(detailclient.percentage) / 100) + 1
+                let flete = parseInt(detailclient.transport)
+                let aditional = parseInt(detailclient.aditional)
+                let quantity = parseInt(detailclient.quantity)
+                let price_neto = Math.round(parseInt(detailclient.price * percentage) + aditional  + flete * quantity)
+
+                detailclient['price_neto'] = price_neto
+                total_neto += price_neto
+                tota_iva += detailclient.total
                 totalUtilidad += parseInt(detailclient.utility)
                 totalTransporte += parseInt(detailclient.transport)
                 totalAdicional += parseInt(detailclient.aditional)
-                total += parseInt(detailclient.total)
             })
-            state.totalUtilidad = totalUtilidad
-            state.totalTransporte = totalTransporte
+
             state.totalAdicional = totalAdicional
-            state.totalQuotationclient = total
-            state.totalQuotationclientIVA = Math.round(parseInt(total * 1.19))
+            state.totalTransporte = totalTransporte
+            state.totalUtilidad = totalUtilidad
+            state.totalQuotationclient = total_neto
+            state.totalQuotationclientIVA = tota_iva
         });
     },
     createQuotationclient(state) {
@@ -2757,12 +2758,15 @@ export default { //used for changing the state
         })
     },
 
-    updateUtilidadDefect(state) {
+    updateUtilidadDefect(state, context) {
         var url = urlUpdateUtilidadDefect
 
         axios.put(url, state.newUtilidad).then(response => {
-            state.errorsLaravel = []
-            toastr.success('Utilidad por defecto a sido actualizado con éxito')
+            if (response.data > 0) {
+                context.commit('getCodes', 1);
+                state.errorsLaravel = []
+                toastr.success('Utilidad por defecto a sido actualizado con éxito')
+            }
         }).catch(error => {
             state.errorsLaravel = error.response.data
         })
@@ -3732,7 +3736,8 @@ export default { //used for changing the state
                     value: product.id,
                     price: product.price,
                     utilidad: product.utilidad,
-                    codigo: product.detail
+                    codigo: product.detail,
+                    flete: product.flete
                 })
             });
         });
@@ -3744,21 +3749,27 @@ export default { //used for changing the state
             state.productForm.product = state.selectedProduct.label
             state.newDetailclient.price = state.selectedProduct.price
             state.newDetailclient.detail = state.selectedProduct.codigo
-
             state.newDetailclient.percentage = state.selectedProduct.utilidad
+            state.newDetailclient.transport = state.selectedProduct.flete
 
-            state.newDetailclient.utility = Math.round(parseFloat((parseFloat(state.newDetailclient.price) *
+            state.newDetailclient.utility = Math.round(parseFloat((
+                parseFloat(state.newDetailclient.price) *
                 ((parseFloat(state.newDetailclient.percentage) / 100) + 1) +
                 parseFloat(state.newDetailclient.aditional) -
                 parseFloat(state.newDetailclient.price)) *
                 parseFloat(state.newDetailclient.quantity)))
 
-            state.newDetailclient.total = Math.round(parseFloat(((
-                parseFloat(state.newDetailclient.price) *
-                ((parseFloat(state.newDetailclient.percentage) / 100) + 1)) +
-                parseFloat(state.newDetailclient.aditional) +
-                parseFloat(state.newDetailclient.transport)) *
-                parseFloat(state.newDetailclient.quantity)))
+
+
+            let percentage = (parseInt(state.newDetailclient.percentage) / 100) + 1
+            let flete = parseInt(state.newDetailclient.transport)
+            let aditional = parseFloat(state.newDetailclient.aditional)
+            let quantity = parseFloat(state.newDetailclient.quantity)
+            let price = parseFloat(state.newDetailclient.price)
+
+            let total = Math.round(price + aditional * quantity)
+
+            state.newDetailclient.total = Math.round(((total * 1.19) * percentage) + flete)
 
         } else {
             state.newDetailclient.product = ''
@@ -4534,13 +4545,14 @@ export default { //used for changing the state
         }
     },
 
-    updateFleteDefect(state) {
+    updateFleteDefect(state, context) {
         var url = urlFlete
         axios.put(url, state.newFlete).then(response => {
-            state.newFlete.flete = response.data
-            state.errorsLaravel = []
-            $('#create').modal('hide')
-            toastr.success('El flete se actualizo correctamente')
+            if (response.data > 0) {
+                context.commit('getCodes', 1);
+                state.errorsLaravel = []
+                toastr.success('El flete se actualizo correctamente')
+            }
         }).catch(error => {
             toastr.error(error.response.data)
         })

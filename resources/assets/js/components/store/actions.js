@@ -931,10 +931,8 @@ export default { //methods
         context.commit('getCodeInventories')
     },
     updateUtilidadDefect(context) {
-        context.commit('updateUtilidadDefect')
-        setTimeout(function () {
-            context.commit('getCodes', 1)
-        }, 500)
+        context.commit('updateUtilidadDefect', context)
+        // context.commit('getCodes', 1)
     },
 
     /************************************************* */
@@ -1556,10 +1554,7 @@ export default { //methods
     },
 
     updateFleteDefect(context){
-        context.commit('updateFleteDefect')
-        setTimeout(function () {
-            context.commit('getCodes', 1)
-        }, 500)
+        context.commit('updateFleteDefect', context)
     },
 
     fleteDefect(context){

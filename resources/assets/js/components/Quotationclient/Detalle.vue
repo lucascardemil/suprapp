@@ -52,7 +52,7 @@
                                                         v-model="newDetailclient.price" @keyup="sumTotalProduct" required>
 
                                                 </div>
-  
+
                                                 <div class="col-lg-1">
                                                     <label for="cantidad">Cantidad</label>
                                                     <input type="number" name="quantity" class="form-control" required
@@ -152,15 +152,12 @@
                                             </td>
 
 
-                                            <td>{{ detailLocal.total | currency('', 0, { thousandsSeparator: '.' }) }}</td>
-                                            <th>{{ Math.round(detailLocal.total * 1.19) | currency('', 0, {
-                                                thousandsSeparator: '.'
-                                            }) }}</th>
-
+                                            <td>{{ detailLocal.price_neto | currency('', 0, { thousandsSeparator: '.' }) }}</td>
+                                            <th>{{ detailLocal.total | currency('', 0, { thousandsSeparator: '.' }) }}</th>
                                             <td>
                                                 <a href="#" class="btn btn-warning btn-sm"
-                                                    @click.prevent="editDetailclient({ detailLocal })"
-                                                    data-toggle="tooltip" data-placement="top" title="Editar">
+                                                    @click.prevent="editDetailclient({ detailLocal })" data-toggle="tooltip"
+                                                    data-placement="top" title="Editar">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
@@ -180,32 +177,18 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>Total: {{ totalAdicional | currency('', 0, { thousandsSeparator: '.' }) }}
-                                            </td>
-                                            <td>Total: {{ totalTransporte | currency('', 0, { thousandsSeparator: '.' }) }}
-                                            </td>
-                                            <td>Total: {{ totalUtilidad | currency('', 0, { thousandsSeparator: '.' }) }}
-                                            </td>
-                                            <td>Total: {{ totalQuotationclient | currency('', 0, {
+                                            <th>Total: {{ totalAdicional | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </th>
+                                            <th>Total: {{ totalTransporte | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </th>
+                                            <th>Total: {{ totalUtilidad | currency('', 0, { thousandsSeparator: '.' }) }}
+                                            </th>
+                                            <th>Total: {{ totalQuotationclient | currency('', 0, {
                                                 thousandsSeparator: '.'
-                                            }) }}</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Total + IVA: {{ totalQuotationclientIVA | currency('', 0, {
+                                            }) }}</th>
+                                            <th>Total + IVA: {{ totalQuotationclientIVA | currency('', 0, {
                                                 thousandsSeparator: '.'
-                                            }) }}</td>
+                                            }) }}</th>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -241,14 +224,14 @@ export default {
     components: { SelectProduct },
     computed: {
         ...mapState(['detailclients', 'totalQuotationclient', 'totalUtilidad', 'totalTransporte', 'totalAdicional',
-            'totalQuotationclientIVA', 'newDetailclient', 'totalDetailclient', 'errorsLaravel']),
+            'totalQuotationclientIVA', 'newDetailclient', 'totalDetailclient', 'totalProductIvaFlete','errorsLaravel']),
         ...mapGetters([])
     },
     methods: {
         ...mapActions(['createDetailclient', 'editDetailclient', 'deleteDetailclient',
             'pdfQuotationclient', 'pdfIvaQuotationclient', 'sumTotalProduct'])
     },
-    created(){
+    created() {
         this.$store.dispatch('fleteDefect')
     }
 }

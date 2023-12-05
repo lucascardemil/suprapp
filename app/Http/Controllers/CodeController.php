@@ -165,26 +165,32 @@ class CodeController extends Controller
     public function updateUtilidadDefect(Request $request)
     {
         $idUser = Auth::id();
-        
-        TipoPago::where('pago', 'DEFECTO')->update([
-            'utilidad' => $request->utilidad
-        ]);
 
-        $codes = Code::with('client', 'product')
-        ->whereHas('client', function ($query) use($idUser) {
-            $query->where('clients.user_id', '=', $idUser);
-        })->get();
-
-        foreach($codes as $code){
-
-            ProductPago::where('product_id', $code->product_id)->update([
-                'forma_pago' => 'DEFECTO',
+        try {
+            TipoPago::where('pago', 'DEFECTO')->update([
                 'utilidad' => $request->utilidad
             ]);
 
+            $codes = Code::with('client', 'product')
+                ->whereHas('client', function ($query) use ($idUser) {
+                    $query->where('clients.user_id', '=', $idUser);
+                })->get();
+
+            foreach ($codes as $code) {
+                ProductPago::where('product_id', $code->product_id)->update([
+                    'forma_pago' => 'DEFECTO',
+                    'utilidad' => $request->utilidad
+                ]);
+            }
+
+            // Retorna true si todo se completó sin errores
+            return true;
+        } catch (\Exception $e) {
+            // Manejar errores si es necesario y retorna false
+            return false;
         }
-        return;
     }
+
 
     public function utilidadDefect()
     {
@@ -197,24 +203,31 @@ class CodeController extends Controller
     public function updateFleteDefect(Request $request)
     {
         $idUser = Auth::id();
+
+        try {
         
-        Flete::updateOrCreate([
-            'flete' => $request->flete
-        ]);
-
-        $codes = Code::with('client', 'product')
-        ->whereHas('client', function ($query) use($idUser) {
-            $query->where('clients.user_id', '=', $idUser);
-        })->get();
-
-        foreach($codes as $code){
-
-            ProductPago::where('product_id', $code->product_id)->update([
+            Flete::updateOrCreate([
                 'flete' => $request->flete
             ]);
 
+            $codes = Code::with('client', 'product')
+            ->whereHas('client', function ($query) use($idUser) {
+                $query->where('clients.user_id', '=', $idUser);
+            })->get();
+
+            foreach($codes as $code){
+
+                ProductPago::where('product_id', $code->product_id)->update([
+                    'flete' => $request->flete
+                ]);
+
+            }
+            // Retorna true si todo se completó sin errores
+            return true;
+        } catch (\Exception $e) {
+            // Manejar errores si es necesario y retorna false
+            return false;
         }
-        return $request->flete;
     }
 
     public function fleteDefect()

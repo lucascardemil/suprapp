@@ -426,6 +426,7 @@ export default { //data
     totalAdicional: 0,
     totalQuotationclient: 0,
     totalQuotationclientIVA: 0,
+    totalProductIvaFlete: 0,
     /********************************* */
     /************************************ */
     /*** sección componentes de cotizaciones para importaciones*/

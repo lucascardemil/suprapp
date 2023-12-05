@@ -57,16 +57,12 @@
                                         <input 
                                                 type="text"
                                                 name="url"
-                                                class="form-control" v-model="newQuotationclient.url">
+                                                class="form-control" v-model="newQuotationclient.url" required>
                                     </div>
 
                                     <div class="col-12 mb-3">
                                         <label for="pago">Forma de Pago</label>
-                                        <!-- <input required
-                                                
-                                                type="text"
-                                                name="pago"
-                                                class="form-control" v-model="newQuotationclient.payment"> -->
+
                                         <SelectTiposPagos/>
                                         
                                         
@@ -106,7 +102,7 @@
                                         <div class="col mb-3">
                                             <label for="url">P.P.U / N° Interno</label>
                                             <input type="text" name="ppu" class="form-control"
-                                                v-model="newQuotationclient.ppu">
+                                                v-model="newQuotationclient.ppu" required>
                                         </div>
                                     </div>
                                 </div>
