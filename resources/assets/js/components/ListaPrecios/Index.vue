@@ -36,8 +36,10 @@
 
                     <td>{{ calcularPromedioPreciosCompra(codeLocal) | currency('$', 0,
                         { thousandsSeparator: '.' }) }}</td>
-                    <td>{{ encontrarPrecioCompraMasAlto(codeLocal) | currency('$', 0,
-                        { thousandsSeparator: '.' }) }}</td>
+                    <td v-if="calcularPrecioCompraMasAlto(codeLocal) !== calcularPromedioPreciosCompra(codeLocal)">{{
+                        calcularPrecioCompraMasAlto(codeLocal) | currency('$', 0,
+                            { thousandsSeparator: '.' }) }}</td>
+                    <td v-else></td>
 
                 </tr>
                 <tr v-for="inventario in codeLocal.inventories" :key="inventario.id" :id="'stock' + inventario.code_id"
@@ -152,16 +154,16 @@ export default {
         },
         calcularPromedioPreciosCompra(item) {
             let sumatoriaPrecios = 0;
-            let cantidadPrecios = 0;
+            let cantidadProductos = 0;
             let flete = 0;
             let utilidad = 0;
 
 
             if (item.inventories.length > 0) {
                 for (let i = 0; i < item.inventories.length; i++) {
-                    if (item.inventories[i].code_id === item.id) {
-                        sumatoriaPrecios += parseInt(item.inventories[i].price);
-                        cantidadPrecios++;
+                    if (item.inventories[i].code_id === item.id && item.inventories[i].quantity > 0) {
+                        sumatoriaPrecios += parseInt(item.inventories[i].price * item.inventories[i].quantity);
+                        cantidadProductos += item.inventories[i].quantity;
                     }
                 }
             }
@@ -173,19 +175,22 @@ export default {
                 }
             }
 
-            if (cantidadPrecios === 0) {
+            if (cantidadProductos === 0) {
                 return 0;
             }
 
-            return ((((sumatoriaPrecios / cantidadPrecios) * 1.19) * utilidad) + flete);
+            let price_total = ((((sumatoriaPrecios / cantidadProductos) * 1.19) * utilidad) + flete)
+            let price_round = this.roundedPrice(price_total)
+
+            return price_round;
         },
-        encontrarPrecioCompraMasAlto(item) {
+        calcularPrecioCompraMasAlto(item) {
             let flete = 0;
             let utilidad = 0;
 
             let uniquePrices = new Set();
 
-            if (item.inventories.length > 1) {
+            if (item.inventories.length > 0) {
                 for (let i = 0; i < item.inventories.length; i++) {
                     if (item.inventories[i].code_id == item.id && item.inventories[i].quantity > 0) {
                         uniquePrices.add(item.inventories[i].price);
@@ -207,10 +212,16 @@ export default {
 
 
             const valorMasAlto = Math.max(...[...uniquePrices].map(Number));
+            let price_formatted = (((valorMasAlto * 1.19) * utilidad) + flete)
 
-            return (((valorMasAlto * 1.19) * utilidad) + flete);
+            let price_round = this.roundedPrice(price_formatted)
+
+            return price_round;
+        },
+        roundedPrice(price) {
+            const rounded = Math.ceil(price / 10) * 10;
+            return rounded;
         }
-
 
     },
     created() {

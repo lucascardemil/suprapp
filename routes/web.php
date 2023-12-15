@@ -214,6 +214,7 @@ Route::get('products-all-sale', 'SaleController@all');
 Route::get('generar-recibo-sale/{id}', 'SaleController@generarRecibo');
 Route::get('cierre-caja-z/{fecha}', 'SaleController@cierreCajaZ');
 Route::delete('anular-sale/{id}', 'SaleController@anularSale');
+Route::get('search-inventory/{code}', 'SaleController@search_inventory');
 
 
 

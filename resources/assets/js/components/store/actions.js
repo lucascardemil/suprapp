@@ -1559,5 +1559,5 @@ export default { //methods
 
     fleteDefect(context){
         context.commit('fleteDefect')
-    }
+    },
 }

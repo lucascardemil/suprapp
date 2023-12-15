@@ -1789,7 +1789,7 @@ export default { //used for changing the state
                 let flete = parseInt(detailclient.transport)
                 let aditional = parseInt(detailclient.aditional)
                 let quantity = parseInt(detailclient.quantity)
-                let price_neto = Math.round(parseInt(detailclient.price * percentage) + aditional  + flete * quantity)
+                let price_neto = Math.round(parseInt(detailclient.price * percentage) + aditional + flete * quantity)
 
                 detailclient['price_neto'] = price_neto
                 total_neto += price_neto
@@ -2661,6 +2661,8 @@ export default { //used for changing the state
         axios.get(url).then(response => {
             state.codes = response.data.codes.data
             state.pagination = response.data.pagination
+        }).catch(error => {
+            console.error('Error fetching codes:', error);
         });
     },
 
@@ -3678,9 +3680,9 @@ export default { //used for changing the state
                 state.optionsProductSale.push({
                     label: productsale.name,
                     value: productsale.id,
-                    price: productsale.price,
+                    price: parseInt(productsale.total_price),
                     code_id: productsale.code_id,
-                    quantity: productsale.quantity,
+                    quantity: parseInt(productsale.total_quantity),
                     inventory_id: productsale.inventory_id,
                     utilidad: productsale.utilidad,
                     code: productsale.codebar
@@ -3803,27 +3805,6 @@ export default { //used for changing the state
             state.newDetailimport.detail = ''
         }
     },
-    /*allProductsImport(state){
-        var url = urlAllProduct
-        axios.get(url).then(response => {
-            state.optionsProduct = []
-            response.data.forEach((product) => {
-                state.optionsProduct.push( { label: product.name, value: product.detail } )
-            });
-        });
-    },
-    setProductImport(state, product) {
-        state.selectedProductImport = product
-        if(state.selectedProductImport != null)
-        {
-            state.newDetailimport.product = state.selectedProductImport.label
-            state.newDetailimport.detail = state.selectedProductImport.value
-        }
-        else{
-            state.newDetailimport.product = ''
-            state.newDetailimport.detail = ''
-        }
-    },*/
 
 
     /****** sección paginacion **** */
@@ -4016,50 +3997,41 @@ export default { //used for changing the state
                 parseFloat(detailImport.total / detailImport.quantity)
         })
     },
-    sumTotalImport(state) { },
 
     addToCart(state) {
         if (state.productForm.quantity > state.selectedProductSale.quantity) {
             toastr.error('¡Error, Supera la cantidad disponibles!')
         } else {
-            state.cart.push({
-                product: {
-                    label: state.selectedProductSale.label,
-                    value: state.selectedProductSale.value,
-                    price: state.selectedProductSale.price,
-                    code_id: state.selectedProductSale.code_id,
-                    inventory_id: state.selectedProductSale.inventory_id
-                },
-                // code: {
-                //     label: state.selectedCode.label,
-                //     value: state.selectedCode.value
-                // },
-                // price: {
-                //     label: state.selectedPrice.label,
-                //     value: state.selectedPrice.value
-                // },
-                utility: state.productForm.utility,
-                quantity: state.productForm.quantity,
-                value: state.productForm.value,
-                total: state.productForm.total
-            })
-            state.cartValue += state.productForm.value
-            state.cartTotal += state.productForm.total
 
-            state.aplicardescuento = 0
-
-            state.productForm = {
-                product_id: 0,
-                code_id: 0,
-                inventory_id: 0,
-                price: 0,
-                utility: 35,
-                quantity: 1,
-                value: 0,
-                total: 0,
-                code: '',
-                product: '',
-                max_quantity: 99
+            if (state.cart.length > 0) {
+                state.cart.forEach(cart => {
+                    if (cart.product.code_id === state.selectedProductSale.code_id) {
+                        cart.quantity += parseInt(state.productForm.quantity)
+                        cart.value += state.productForm.value
+                        cart.total += state.productForm.total
+                        state.cartValue += state.productForm.value
+                        state.cartTotal += state.productForm.total
+                        state.selectedProductSale.quantity = parseInt(state.selectedProductSale.quantity - state.productForm.quantity)
+                    }
+                })
+            } else {
+                state.cart.push({
+                    product: {
+                        label: state.selectedProductSale.label,
+                        value: state.selectedProductSale.value,
+                        price: state.selectedProductSale.price,
+                        code_id: state.selectedProductSale.code_id,
+                        inventory_id: state.selectedProductSale.inventory_id
+                    },
+                    utility: parseInt(state.productForm.utility),
+                    quantity: parseInt(state.productForm.quantity),
+                    value: state.productForm.value,
+                    total: state.productForm.total
+                })
+                state.cartValue += state.productForm.value
+                state.cartTotal += state.productForm.total
+                state.selectedProductSale.quantity = parseInt(state.selectedProductSale.quantity - state.productForm.quantity)
+                state.aplicardescuento = 0
             }
         }
     },
@@ -4150,7 +4122,22 @@ export default { //used for changing the state
                         state.cart = []
                         state.cartTotal = 0
                         state.cartValue = 0
-                        toastr.success('Venta generada con exito!')
+
+                        state.productForm = {
+                            product_id: 0,
+                            code_id: 0,
+                            inventory_id: 0,
+                            price: 0,
+                            utility: 35,
+                            quantity: 1,
+                            value: 0,
+                            total: 0,
+                            code: '',
+                            product: '',
+                            max_quantity: 99
+                        },
+
+                            toastr.success('Venta generada con exito!')
                         $('#create').modal('hide')
                     })
                     .catch(error => {
@@ -4306,6 +4293,7 @@ export default { //used for changing the state
     removeFromCart(state, data) {
         let product = state.cart.find(p => p.product.label == data.id)
 
+        state.selectedProductSale.quantity = state.selectedProductSale.quantity + product.quantity
         state.cartValue = state.cartValue - product.value
         state.cartTotal = state.cartTotal - product.total
 
