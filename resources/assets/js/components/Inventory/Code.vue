@@ -75,29 +75,15 @@
                 </form>
             </div>
             <div class="tab-pane fade" id="pills-utility" role="tabpanel" aria-labelledby="pills-utility-tab">
-                <form action="POST" v-on:submit.prevent="updateUtilidadDefect">
-                    <div class="form-row">
-                        <div class="form-group col-lg-6">
-                            <label for="utilidad">Utilidad</label>
-                            <UtilidadDefect></UtilidadDefect>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-plus-square"></i> Guardar
-                    </button>
-
-
-                </form>
+                <UtilidadDefect></UtilidadDefect>
             </div>
             <div class="tab-pane fade" id="pills-freight" role="tabpanel" aria-labelledby="pills-freight-tab">
                 <FleteDefect></FleteDefect>
             </div>
-
         </div>
         <div class="row mt-3">
             <div class="col-lg-6">
-                <input type="text" v-model="search" class="form-control" placeholder="Filtrar Producto...">
+                <input type="text" v-model="search.name" @keyup="getCodes" class="form-control" placeholder="Filtrar Producto...">
             </div>
         </div>
         <div class="table-responsive">
@@ -193,21 +179,21 @@ import FleteDefect from '../Flete/FleteDefect'
 export default {
     data() {
         return {
-            search: ''
+            search_value: ''
         }
     },
     components: { SelectProduct, SelectProvider, EditarCode, EliminarCode, Inventory, EliminarInventory, UtilidadDefect, FleteDefect },
     computed: {
         rows() {
             return this.codes.filter(code => {
-                return code.product.name.toLowerCase().includes(this.search.toLowerCase())
+                return code.product.name.toLowerCase().includes(this.search_value.toLowerCase())
             })
         },
-        ...mapState(['codes', 'selectedPago', 'newProduct', 'newCode', 'pagination', 'offset', 'errorsLaravel', 'allInventory']),
+        ...mapState(['codes', 'search', 'selectedPago', 'newProduct', 'newCode', 'pagination', 'offset', 'errorsLaravel', 'allInventory']),
         ...mapGetters(['isActived', 'pagesNumber'])
     },
     methods: {
-        ...mapActions(['updateUtilidadDefect', 'createProduct', 'getCodes', 'createCode', 'editCode', 'modalDeleteCode', 'modalInventory', 'changePageCode'])
+        ...mapActions(['createProduct', 'getCodes', 'createCode', 'editCode', 'modalDeleteCode', 'modalInventory', 'changePageCode'])
     },
     created() {
         loadProgressBar()

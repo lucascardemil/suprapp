@@ -141,13 +141,12 @@
                         <td class="text-center" COLSPAN="7">{{ $detail->product }}</td>
                         <td COLSPAN="2">{{ $detail->days }}</td>
                         @if($detail->quantity > 0)
-                            <td COLSPAN="1">$ {{ round($detail->total * 1.19 / $detail->quantity, -1) }}</td>
-                            
+                            <td COLSPAN="1">$ {{ ceil(($detail->total / $detail->quantity) / 10) * 10 }}</td>
                         @else
                             <td class="text-center">$ {{ 0 }}</td>
                         @endif
-                        <td class="text-center">$ {{ round($detail->total * 1.19, -1) }}</td>
-                        <?php $totalServicio += round($detail->total * 1.19, -1) ?>
+                        <td class="text-center">$ {{ ceil($detail->total / 10) * 10 }}</td>
+                        <?php $totalServicio += ceil($detail->total / 10) * 10 ?>
                         <?php $contador = $contador + 1 ?>
 
                 </tr>
@@ -192,7 +191,7 @@
                 </td>
                 <td class="text-center" COLSPAN="2">
                     <span style="font-size:14px">
-                        $ {{ round($totalServicio, -1) }}
+                        $ {{ ceil($totalServicio / 10) * 10 }}
                     </span>
                 </td>
             </tr>

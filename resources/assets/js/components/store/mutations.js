@@ -1789,7 +1789,7 @@ export default { //used for changing the state
                 let flete = parseInt(detailclient.transport)
                 let aditional = parseInt(detailclient.aditional)
                 let quantity = parseInt(detailclient.quantity)
-                let price_neto = Math.round(parseInt(detailclient.price * percentage) + aditional + flete * quantity)
+                let price_neto = Math.round(parseInt((detailclient.price * percentage) + aditional + flete / 1.19) * quantity)
 
                 detailclient['price_neto'] = price_neto
                 total_neto += price_neto
@@ -1939,9 +1939,9 @@ export default { //used for changing the state
                 product: '',
                 price: 0,
                 quantity: 1,
-                percentage: 35,
+                percentage: state.newDetailclient.percentage,
                 aditional: 0,
-                transport: 0,
+                transport: transportSet,
                 utility: 0,
                 total: 0
             }
@@ -1962,8 +1962,8 @@ export default { //used for changing the state
         state.fillDetailclient.aditional = detailclient.aditional
         state.fillDetailclient.transport = detailclient.transport
         state.fillDetailclient.utility = detailclient.utility
-        state.fillDetailclient.total = detailclient.total
-        state.fillDetailclient.totalIVA = Math.round(detailclient.total * 1.19)
+        state.fillDetailclient.total = detailclient.price_neto
+        state.fillDetailclient.totalIVA = detailclient.total
         state.fillDetailclient.days = detailclient.days
 
         $("#editDetailClient").modal('show')
@@ -2000,8 +2000,10 @@ export default { //used for changing the state
             aditional: state.fillDetailclient.aditional,
             transport: state.fillDetailclient.transport,
             utility: state.fillDetailclient.utility,
-            total: state.fillDetailclient.total
+            total: state.fillDetailclient.totalIVA
         }
+
+        // console.log(detailclient)
         axios.put(url, detailclient).then(response => {
             state.fillDetailclient = {
                 id: '',
@@ -2762,7 +2764,6 @@ export default { //used for changing the state
 
     updateUtilidadDefect(state, context) {
         var url = urlUpdateUtilidadDefect
-
         axios.put(url, state.newUtilidad).then(response => {
             if (response.data > 0) {
                 context.commit('getCodes', 1);
@@ -2770,8 +2771,18 @@ export default { //used for changing the state
                 toastr.success('Utilidad por defecto a sido actualizado con éxito')
             }
         }).catch(error => {
-            state.errorsLaravel = error.response.data
+            toastr.error(error.response.data)
         })
+    },
+
+    utilidadDefect(state) {
+        var url = urlUtilidadDefect
+        axios.get(url).then(response => {
+            response.data.forEach((pago) => {
+                state.newUtilidad.utilidad = pago.utilidad
+                state.newDetailclient.percentage = pago.utilidad
+            });
+        });
     },
     /******************************* */
     /****** sección inventariado **** */
@@ -3236,15 +3247,6 @@ export default { //used for changing the state
     },
     setPagos(state, pago) {
         state.selectedPago = pago
-    },
-
-    utilidadDefect(state) {
-        var url = urlUtilidadDefect
-        axios.get(url).then(response => {
-            response.data.forEach((pago) => {
-                state.newUtilidad.utilidad = pago.utilidad
-            });
-        });
     },
 
     descuentoDefect(state) {
@@ -3769,9 +3771,7 @@ export default { //used for changing the state
             let quantity = parseFloat(state.newDetailclient.quantity)
             let price = parseFloat(state.newDetailclient.price)
 
-            let total = Math.round(price + aditional * quantity)
-
-            state.newDetailclient.total = Math.round(((total * 1.19) * percentage) + flete)
+            state.newDetailclient.total = Math.round(((price * percentage * 1.19) + aditional + flete) * quantity);
 
         } else {
             state.newDetailclient.product = ''
@@ -3845,33 +3845,29 @@ export default { //used for changing the state
         state.fillDetailclient.totalIVA = Math.round(state.fillDetailclient.total * 1.19)
     },
     sumTotalProduct(state) {
-        state.newDetailclient.utility = Math.round(parseFloat((parseFloat(state.newDetailclient.price) *
-            ((parseFloat(state.newDetailclient.percentage) / 100) + 1) +
-            parseFloat(state.newDetailclient.aditional) -
-            parseFloat(state.newDetailclient.price)) *
-            parseFloat(state.newDetailclient.quantity)))
+        let percentage = (parseInt(state.newDetailclient.percentage) / 100) + 1
+        let flete = parseInt(state.newDetailclient.transport)
+        let aditional = parseFloat(state.newDetailclient.aditional)
+        let quantity = parseFloat(state.newDetailclient.quantity)
+        let price = parseFloat(state.newDetailclient.price)
 
-        state.newDetailclient.total = Math.round(parseFloat(((
-            parseFloat(state.newDetailclient.price) *
-            ((parseFloat(state.newDetailclient.percentage) / 100) + 1)) +
-            parseFloat(state.newDetailclient.aditional) +
-            parseFloat(state.newDetailclient.transport)) *
-            parseFloat(state.newDetailclient.quantity)))
+        if (state.newDetailclient.quantity != '') {
+            state.newDetailclient.utility = ((price * parseInt(state.newDetailclient.percentage) / 100) * quantity)
+            state.newDetailclient.total = Math.round(((price * percentage * 1.19) + aditional + flete) * quantity)
+        }
     },
     sumTotalEditProduct(state) {
-        state.fillDetailclient.utility = Math.round(parseFloat((parseFloat(state.fillDetailclient.price) *
-            ((parseFloat(state.fillDetailclient.percentage) / 100) + 1) +
-            parseFloat(state.fillDetailclient.aditional) -
-            parseFloat(state.fillDetailclient.price)) *
-            parseFloat(state.fillDetailclient.quantity)))
+        let percentage = (parseInt(state.fillDetailclient.percentage) / 100) + 1
+        let flete = parseInt(state.fillDetailclient.transport)
+        let aditional = parseFloat(state.fillDetailclient.aditional)
+        let quantity = parseFloat(state.fillDetailclient.quantity)
+        let price = parseFloat(state.fillDetailclient.price)
 
-        state.fillDetailclient.total = Math.round(parseFloat(((
-            parseFloat(state.fillDetailclient.price) *
-            ((parseFloat(state.fillDetailclient.percentage) / 100) + 1)) +
-            parseFloat(state.fillDetailclient.aditional) +
-            parseFloat(state.fillDetailclient.transport)) *
-            parseFloat(state.fillDetailclient.quantity)))
-        state.fillDetailclient.totalIVA = Math.round(state.fillDetailclient.total * 1.19)
+        if (state.fillDetailclient.quantity != '') {
+            state.fillDetailclient.utility = ((price * parseInt(state.fillDetailclient.percentage) / 100) * quantity)
+            state.fillDetailclient.total = Math.round(parseInt((price * percentage) + aditional + flete / 1.19) * quantity)
+            state.fillDetailclient.totalIVA = Math.round(((price * percentage * 1.19) + aditional + flete) * quantity)
+        }
     },
     distributionImport(state) {
         state.detailimports.forEach(detailImport => {

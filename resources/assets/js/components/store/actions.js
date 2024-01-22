@@ -934,7 +934,9 @@ export default { //methods
         context.commit('updateUtilidadDefect', context)
         // context.commit('getCodes', 1)
     },
-
+    utilidadDefect(context){
+        context.commit('utilidadDefect')
+    },
     /************************************************* */
     /************************************************ */
     /*************seccion de inventariado************* */
@@ -1137,9 +1139,6 @@ export default { //methods
     },
     allPagos(context) {
         context.commit('allPagos')
-    },
-    utilidadDefect(context) {
-        context.commit('utilidadDefect')
     },
     descuentoDefect(context) {
         context.commit('descuentoDefect')

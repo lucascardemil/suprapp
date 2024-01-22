@@ -233,6 +233,7 @@ export default {
     },
     created() {
         this.$store.dispatch('fleteDefect')
+        this.$store.dispatch('utilidadDefect')
     }
 }
 </script>

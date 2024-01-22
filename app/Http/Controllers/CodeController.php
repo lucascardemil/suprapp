@@ -8,6 +8,7 @@ use App\Inventory;
 use App\TipoPago;
 use App\Atributo;
 use App\ProductPago;
+use App\ProductSale;
 use App\Flete;
 use App\Product;
 use Illuminate\Http\Request;
@@ -25,12 +26,12 @@ class CodeController extends Controller
         $search = request('name');
 
         $codes = Code::with('client', 'product', 'inventories', 'productpagos')
-        ->whereHas('client', function ($query) use($idUser) {
-            $query->where('clients.user_id', '=', $idUser);
-        })
-        ->WhereHas('product', function ($query) use($search) {
-            $query->where('products.name', 'LIKE', '%'.$search.'%');
-        })->orderBy('id', 'DESC')->paginate(20);
+            ->whereHas('client', function ($query) use ($idUser) {
+                $query->where('clients.user_id', '=', $idUser);
+            })
+            ->WhereHas('product', function ($query) use ($search) {
+                $query->where('products.name', 'LIKE', '%' . $search . '%');
+            })->orderBy('id', 'DESC')->paginate(20);
 
         return [
             'pagination' => [
@@ -45,20 +46,23 @@ class CodeController extends Controller
         ];
     }
 
-    public function search ($code) {
-        $search = Code::where('codebar', 'LIKE', '%'.$code.'%')->with(array(
+    public function search($code)
+    {
+        $search = Code::where('codebar', 'LIKE', '%' . $code . '%')->with(array(
             'inventories' => function ($query) {
                 $query->orderBy('inventories.id', 'DESC');
                 $query->where('inventories.quantity', '>', '0');
                 $query->first();
-            }, 'product'))
+            }, 'product'
+        ))
             ->first();
 
         return $search;
     }
 
-    public function product(Code $code) {
-        
+    public function product(Code $code)
+    {
+
         $product = $code->product;
 
         return $product;
@@ -106,14 +110,14 @@ class CodeController extends Controller
         $code->atributo = $request->atributo;
         $code->save();
 
-        if($request->product !== '' || $request->detail !== ''){
+        if ($request->product !== '' || $request->detail !== '') {
             Product::where('id', $code->product_id)->update([
                 'name' => $request->product,
                 'detail' => $request->detail,
             ]);
         }
 
-        if($request->utilidad > 0){
+        if ($request->utilidad > 0) {
             ProductPago::where('product_id', $code->product_id)->update([
                 'forma_pago' => 'DEFECTO',
                 'utilidad' => $request->utilidad,
@@ -122,13 +126,13 @@ class CodeController extends Controller
         }
 
 
-        if($request->atributo > 0){
+        if ($request->atributo > 0) {
             $inventorys = Inventory::where('code_id', $code->id)->get();
-            foreach($inventorys as $inventory){
-                if($request->atributo != $inventory->quantity){
+            foreach ($inventorys as $inventory) {
+                if ($request->atributo != $inventory->quantity) {
                     $cantidad = $inventory->quantity * $request->atributo;
                     $total = $inventory->price * $inventory->quantity;
-                    
+
                     Inventory::where('code_id', $code->id)->update([
                         'quantity' => $cantidad,
                         'price' => $total / $cantidad
@@ -148,10 +152,28 @@ class CodeController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
+        $product = Product::find($id);
+        $codes = $product->codes;
 
-        return;
+        if (count($codes) > 0) {
+            foreach ($codes as $code) {
+                $count_inventory = Inventory::where('code_id', $code->id)->count();
+                $count_product_sale = ProductSale::where('code_id', $code->id)->delete();
+
+                if ($count_inventory > 0) {
+                    Inventory::where('code_id', $code->id)->delete();
+                }
+
+                if ($count_product_sale > 0) {
+                    ProductSale::where('code_id', $code->id)->delete();
+                }
+
+                $code->delete();
+                $product->delete();
+            }
+        }else{
+            $product->delete();
+        }
     }
 
     public function inventories($id)
@@ -205,22 +227,21 @@ class CodeController extends Controller
         $idUser = Auth::id();
 
         try {
-        
+
             Flete::updateOrCreate([
                 'flete' => $request->flete
             ]);
 
             $codes = Code::with('client', 'product')
-            ->whereHas('client', function ($query) use($idUser) {
-                $query->where('clients.user_id', '=', $idUser);
-            })->get();
+                ->whereHas('client', function ($query) use ($idUser) {
+                    $query->where('clients.user_id', '=', $idUser);
+                })->get();
 
-            foreach($codes as $code){
+            foreach ($codes as $code) {
 
                 ProductPago::where('product_id', $code->product_id)->update([
                     'flete' => $request->flete
                 ]);
-
             }
             // Retorna true si todo se completó sin errores
             return true;
@@ -236,7 +257,4 @@ class CodeController extends Controller
 
         return $flete;
     }
-
-    
-
 }
