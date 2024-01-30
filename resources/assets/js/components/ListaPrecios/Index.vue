@@ -19,7 +19,6 @@
                     <th>Fecha Factura</th>
                     <th>Precio</th>
                     <th>Unidades</th>
-
                     <th>Precio Promedio</th>
                     <th>Precio Mas Alto</th>
                 </tr>

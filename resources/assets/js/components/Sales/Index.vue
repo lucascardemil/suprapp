@@ -56,26 +56,21 @@
 								<th>Producto</th>
 								<th>Forma de Pago</th>
 								<th>Descuento</th>
-								<th>Precio</th>
 								<th>Cantidad</th>
-								<th>Utilidad</th>
 								<th>Neto</th>
 								<th>Total</th>
 								<th>Fecha</th>
 							</tr>
 						</thead>
 						<tbody v-for="sale in sales" :key="sale.sale_id">
-							<tr data-toggle="collapse" aria-expanded="false" :aria-controls="'#sale' + sale.sale_id" :data-target="'#sale' + sale.sale_id">
+							<tr data-toggle="collapse" aria-expanded="false" :aria-controls="'#sale' + sale.sale_id"
+								:data-target="'#sale' + sale.sale_id">
 								<td style="width: 25%"></td>
 								<td style="width: 10%"></td>
 								<td></td>
 								<td></td>
 								<td></td>
-								<td></td>
-								<td></td>
-								<td v-if="sale.descuento > 0">{{ sale.total - (sale.total * sale.descuento)
-									| currency('$', 0, { thousandsSeparator: '.' }) }}</td>
-								<td v-else>{{ sale.total | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
+								<td>{{ descuento(sale) | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
 								<td>{{ sale.fecha_sale_create }}</td>
 								<td>
 									<a href="#" class="btn btn-primary btn-sm"
@@ -89,48 +84,14 @@
 									</a>
 								</td>
 							</tr>
-							<tr v-for="product in sale.products" :key="product.sale_id" :id="'sale' + sale.sale_id" class="collapse">
+							<tr v-for="product in sale.products" :key="product.sale_id" :id="'sale' + sale.sale_id"
+								class="collapse">
 								<td style="width: 25%">{{ product.name }}</td>
 								<td style="width: 10%">{{ product.forma_pago }}</td>
 								<td>{{ product.descuento * 100 }}%</td>
-								<td>{{ product.price | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
 								<td>{{ product.quantity }}</td>
-								<td>{{ parseInt(product.utility * 100) + '%' }}</td>
-								<td v-if="product.descuento > 0">
-									{{
-										Math.round(((parseFloat(product.price * product.quantity)) * parseFloat(product.utility)) +
-											parseFloat(product.price * product.quantity)) -
-										(Math.round(((parseFloat(product.price * product.quantity)) * parseFloat(product.utility)) +
-											parseFloat(product.price * product.quantity)) * product.descuento) | currency('$', 0, {
-												thousandsSeparator: '.'
-											})
-									}}
-								</td>
-								<td v-else>
-									{{
-										Math.round(((parseFloat(product.price * product.quantity)) * parseFloat(product.utility)) +
-											parseFloat(product.price * product.quantity)) | currency('$', 0, { thousandsSeparator: '.' })
-									}}
-								</td>
-								<td v-if="product.descuento > 0">
-									{{
-										Math.round((((parseFloat(product.price * product.quantity)) * parseFloat(product.utility)) +
-											parseFloat(product.price * product.quantity)) * 1.19) -
-										(Math.round((((parseFloat(product.price * product.quantity)) * parseFloat(product.utility)) +
-											parseFloat(product.price * product.quantity)) * 1.19) * product.descuento) | currency('$', 0, {
-												thousandsSeparator: '.'
-											})
-									}}
-								</td>
-								<td v-else>
-									{{
-										Math.round((((parseFloat(product.price * product.quantity)) * parseFloat(product.utility)) +
-											parseFloat(product.price * product.quantity)) * 1.19) | currency('$', 0, {
-												thousandsSeparator:
-													'.'
-											})
-									}}
-								</td>
+								<td>{{ neto(product) | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
+								<td>{{ descuento(product) | currency('$', 0, { thousandsSeparator: '.' }) }}</td>
 								<td></td>
 								<td></td>
 							</tr>
@@ -207,7 +168,21 @@ export default {
 		...mapGetters(['isActived', 'pagesNumber'])
 	},
 	methods: {
-		...mapActions(['allSalesCalendar', 'cierreCajaZ', 'allSales', 'changePageSales', 'generarRecibo', 'eliminarVenta'])
+		...mapActions(['allSalesCalendar', 'cierreCajaZ', 'allSales', 'changePageSales', 'generarRecibo', 'eliminarVenta']),
+		neto(product) {
+			const total = Math.round(product.price * product.quantity)
+			const total_utilidad = Math.round(total * product.utility)
+			return Math.round(total + total_utilidad)
+		},
+		descuento(product) {
+			let total_descuento = 0;
+			if(product.descuento > 0){
+				total_descuento = product.total - (product.total * product.descuento)
+			}else{
+				total_descuento = product.total
+			}
+			return total_descuento;
+		}
 	},
 	created() {
 		this.$store.dispatch('allSalesCalendar', { page: 1 })

@@ -36,6 +36,7 @@ class SaleController extends Controller
                 ->join('productsales', 'sales.id', '=', 'productsales.sale_id')
                 ->join('codes', 'productsales.code_id', '=', 'codes.id')
                 ->join('products', 'codes.product_id', '=', 'products.id')
+                ->join('product_pagos', 'products.id', '=', 'product_pagos.product_id')
                 ->select(
                     'clients.*',
                     'productsales.*',
@@ -46,7 +47,9 @@ class SaleController extends Controller
                     'sales.forma_pago',
                     'sales.descuento',
                     'sales.created_at as fecha_sale_create',
-                    'sales.updated_at as fecha_sale_update'
+                    'sales.updated_at as fecha_sale_update',
+                    'product_pagos.flete',
+                    'productsales.total as total_productsale'
                 )
                 ->where('sales.user_id', '=', $idUser)
                 ->orderBy('sales.total', 'DESC')
@@ -59,6 +62,7 @@ class SaleController extends Controller
                 ->join('productsales', 'sales.id', '=', 'productsales.sale_id')
                 ->join('codes', 'productsales.code_id', '=', 'codes.id')
                 ->join('products', 'codes.product_id', '=', 'products.id')
+                ->join('product_pagos', 'products.id', '=', 'product_pagos.product_id')
                 ->select(
                     'clients.*',
                     'productsales.*',
@@ -69,7 +73,9 @@ class SaleController extends Controller
                     'sales.forma_pago',
                     'sales.descuento',
                     'sales.created_at as fecha_sale_create',
-                    'sales.updated_at as fecha_sale_update'
+                    'sales.updated_at as fecha_sale_update',
+                    'product_pagos.flete',
+                    'productsales.total as total_productsale'
                 )
                 ->where('sales.user_id', '=', $idUser)
                 ->whereRaw("DATE_FORMAT(sales.updated_at, '%Y-%m-%d') = ?", [$search])
@@ -115,7 +121,8 @@ class SaleController extends Controller
                 'code_id' => $product['product']['code_id'],
                 'price' => $product['product']['price'],
                 'utility' => floatval($product['utility'] / 100),
-                'quantity' => $product['quantity']
+                'quantity' => $product['quantity'],
+                'total' => $product['total']
             ]);
 
             $inventories = Inventory::where('code_id', $product['product']['code_id'])->orderBy('id', 'ASC')->get();
@@ -232,12 +239,17 @@ class SaleController extends Controller
             ->join('inventories', 'codes.id', '=', 'inventories.code_id')
             ->join('product_pagos', 'products.id', '=', 'product_pagos.product_id')
             ->select(
-                DB::raw('max(inventories.fecha_fact) as max_fecha_fact'),
+                DB::raw('MAX(inventories.fecha_fact) as max_fecha_fact'),
+                'products.id',
                 'products.name',
                 'codes.id as code_id',
                 'inventories.id as inventory_id',
                 'product_pagos.utilidad',
+                'product_pagos.flete',
                 'codes.codebar as codebar',
+                'inventories.price as price',
+                DB::raw('MAX(inventories.price) as max_price'),
+                DB::raw('SUM(inventories.price * inventories.quantity) as total_sum_price'),
                 DB::raw('SUM(inventories.price) as total_price'),
                 DB::raw('SUM(inventories.quantity) as total_quantity') // Suma de las cantidades
             )

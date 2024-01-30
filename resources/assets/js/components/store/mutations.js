@@ -399,8 +399,6 @@ export default { //used for changing the state
     },
 
     subirFotosOrdenTrabajo(state, evt) {
-        //console.log(e)
-        //let selectedFile = e.target.files[0]
         state.form = new FormData()
 
         state.images = []
@@ -454,8 +452,6 @@ export default { //used for changing the state
     },
 
     subirFotosObservacion(state, evt) {
-        //console.log(e)
-        //let selectedFile = e.target.files[0]
         state.form = new FormData()
 
         state.images = []
@@ -1021,8 +1017,6 @@ export default { //used for changing the state
         })
     },
     fileChange(state, evt) {
-        //console.log(e)
-        //let selectedFile = e.target.files[0]
         state.form = new FormData()
 
         state.images = []
@@ -2003,7 +1997,6 @@ export default { //used for changing the state
             total: state.fillDetailclient.totalIVA
         }
 
-        // console.log(detailclient)
         axios.put(url, detailclient).then(response => {
             state.fillDetailclient = {
                 id: '',
@@ -2861,12 +2854,6 @@ export default { //used for changing the state
         });
     },
 
-    // getIdUserRoles(state, user){
-    //     var url = urlUser + '/' + user.id + '/' + urlRoles
-    //     axios.get(url).then(response => {
-    //         state.userRoles = response.data
-    //     });
-    // },
     showUser(state) {
         var url = urlUserId
         axios.get(url).then(response => {
@@ -3099,21 +3086,13 @@ export default { //used for changing the state
             state.roles = response.data
         });
     },
-    // getUserRoles(state, id) {
-    //     var url = urlUser + '/' + id + '/' + urlRoles
-    //     axios.get(url).then(response => {
-    //         state.userRoles = response.data
-    //         $("#showRoles").modal('show')
-    //     });
-    // },
+
     editCantCliVehi(state, user) {
 
         if (user.roles[0] === undefined) {
             toastr.error('Debe asignar un rol a este usuario')
         } else {
             state.fillCantCliVehi.id = user.id
-            //state.cantCliVehiAdmin.cant_client = user.cant_client
-            //state.cantCliVehiAdmin.cant_vehicle = user.cant_vehicle
             state.fillCantCliVehi.cant_client = user.cant_client
             state.fillCantCliVehi.cant_vehicle = user.cant_vehicle
             state.fillCantCliVehi.rol = user.roles[0].name
@@ -3156,7 +3135,6 @@ export default { //used for changing the state
     updateUserRoles(state, id) {
         var url = urlUserRoles + '/' + id;
         axios.put(url, state.checkedRoles).then(response => {
-            console.log(response);
             state.checkedRoles = []
             $('#editRoles').modal('hide')
             toastr.success('Roles asignados con éxito')
@@ -3682,12 +3660,15 @@ export default { //used for changing the state
                 state.optionsProductSale.push({
                     label: productsale.name,
                     value: productsale.id,
-                    price: parseInt(productsale.total_price),
+                    price: parseInt(productsale.price),
+                    total_sum_price: productsale.total_sum_price,
                     code_id: productsale.code_id,
                     quantity: parseInt(productsale.total_quantity),
                     inventory_id: productsale.inventory_id,
                     utilidad: productsale.utilidad,
-                    code: productsale.codebar
+                    flete: productsale.flete,
+                    code: productsale.codebar,
+                    max_price: productsale.max_price
                 })
             });
         });
@@ -3701,17 +3682,29 @@ export default { //used for changing the state
 
             state.productForm.code_id = state.selectedProductSale.code_id
             state.productForm.inventory_id = state.selectedProductSale.inventory_id
-
+            state.productForm.total_sum_price = state.selectedProductSale.total_sum_price
+            state.productForm.max_price = state.selectedProductSale.max_price
+            state.productForm.flete = state.selectedProductSale.flete
             state.productForm.utility = state.selectedProductSale.utilidad
 
-
-            var total = Math.round(parseFloat(state.productForm.price) * parseFloat(state.productForm.quantity))
-
-            var total_utilidad = Math.round(total * parseFloat(state.productForm.utility / 100))
+            const utilidad = parseFloat((state.productForm.utility / 100) + 1)
+            const flete = state.productForm.flete
+            const total = Math.round(parseFloat(state.productForm.price) * parseFloat(state.productForm.quantity))
+            const total_utilidad = Math.round(total * parseFloat(state.productForm.utility / 100))
 
             state.productForm.value = Math.round(total + total_utilidad)
 
-            state.productForm.total = Math.round(state.productForm.value * 1.19)
+            const average_price = ((((state.selectedProductSale.total_sum_price / state.selectedProductSale.quantity) * 1.19) * utilidad) + flete)
+            const high_price = (((state.selectedProductSale.max_price * 1.19) * utilidad) + flete)
+
+            const average_price_rounded = Math.ceil(average_price / 10) * 10;
+            const high_price_rounded = Math.ceil(high_price / 10) * 10;
+
+            if (high_price_rounded !== average_price_rounded) {
+                state.productForm.total = high_price_rounded * parseFloat(state.productForm.quantity)
+            } else {
+                state.productForm.total = average_price_rounded * parseFloat(state.productForm.quantity)
+            }
 
         } else {
             state.productForm.product = ''
@@ -3721,13 +3714,24 @@ export default { //used for changing the state
     },
 
     sumTotalProductSale(state) {
-        var total = Math.round(parseFloat(state.productForm.price) * parseFloat(state.productForm.quantity))
-
-        var total_utilidad = Math.round(total * parseFloat(state.productForm.utility / 100))
+        const utilidad = parseFloat((state.productForm.utility / 100) + 1)
+        const flete = state.productForm.flete
+        const total = Math.round(parseFloat(state.productForm.price) * parseFloat(state.productForm.quantity))
+        const total_utilidad = Math.round(total * parseFloat(state.productForm.utility / 100))
 
         state.productForm.value = Math.round(total + total_utilidad)
 
-        state.productForm.total = Math.round(state.productForm.value * 1.19)
+        const average_price = ((((state.productForm.total_sum_price / state.productForm.quantity) * 1.19) * utilidad) + flete)
+        const high_price = (((state.productForm.max_price * 1.19) * utilidad) + flete)
+
+        const average_price_rounded = Math.ceil(average_price / 10) * 10;
+        const high_price_rounded = Math.ceil(high_price / 10) * 10;
+
+        if (high_price_rounded !== average_price_rounded) {
+            state.productForm.total = high_price_rounded * parseFloat(state.productForm.quantity)
+        } else {
+            state.productForm.total = average_price_rounded * parseFloat(state.productForm.quantity)
+        }
     },
 
     allProducts(state) {
@@ -3833,8 +3837,6 @@ export default { //used for changing the state
             state.newClient.comuna = response.comuna
             state.newClient.giro = response.actividades[0].giro
             state.newClient.activity = response.actividades
-            //result.actividades.forEach(actividad => {
-            //console.log(response)
         });
     },
     sumTotalProductMechanic(state) {
@@ -3980,10 +3982,7 @@ export default { //used for changing the state
 
             detailImport.utility = parseFloat(utilidad) - parseFloat(detailImport.total / detailImport.quantity)
 
-            detailImport.unitario =
-                // parseFloat(detailImport.price_dolar * (usa) * (seguro) )
-                //                                    + parseFloat( detailImport.costTotal / detailImport.quantity)
-                parseFloat(detailImport.total / detailImport.quantity)
+            detailImport.unitario = parseFloat(detailImport.total / detailImport.quantity)
 
         })
     },
@@ -3998,18 +3997,29 @@ export default { //used for changing the state
         if (state.productForm.quantity > state.selectedProductSale.quantity) {
             toastr.error('¡Error, Supera la cantidad disponibles!')
         } else {
-
             if (state.cart.length > 0) {
-                state.cart.forEach(cart => {
-                    if (cart.product.code_id === state.selectedProductSale.code_id) {
-                        cart.quantity += parseInt(state.productForm.quantity)
-                        cart.value += state.productForm.value
-                        cart.total += state.productForm.total
-                        state.cartValue += state.productForm.value
-                        state.cartTotal += state.productForm.total
-                        state.selectedProductSale.quantity = parseInt(state.selectedProductSale.quantity - state.productForm.quantity)
-                    }
-                })
+                const existingCartItem = state.cart.find(cartItem => cartItem.product.code_id === state.selectedProductSale.code_id)
+
+                if (existingCartItem) {
+                    existingCartItem.quantity += parseInt(state.productForm.quantity)
+                    existingCartItem.value += state.productForm.value
+                    existingCartItem.total += state.productForm.total
+                } else {
+                    state.cart.push({
+                        product: {
+                            label: state.selectedProductSale.label,
+                            value: state.selectedProductSale.value,
+                            price: state.selectedProductSale.price,
+                            code_id: state.selectedProductSale.code_id,
+                            inventory_id: state.selectedProductSale.inventory_id,
+                        },
+                        utility: parseInt(state.productForm.utility),
+                        quantity: parseInt(state.productForm.quantity),
+                        value: state.productForm.value,
+                        total: state.productForm.total
+                    })
+                }
+
             } else {
                 state.cart.push({
                     product: {
@@ -4017,18 +4027,21 @@ export default { //used for changing the state
                         value: state.selectedProductSale.value,
                         price: state.selectedProductSale.price,
                         code_id: state.selectedProductSale.code_id,
-                        inventory_id: state.selectedProductSale.inventory_id
+                        inventory_id: state.selectedProductSale.inventory_id,
                     },
                     utility: parseInt(state.productForm.utility),
                     quantity: parseInt(state.productForm.quantity),
                     value: state.productForm.value,
                     total: state.productForm.total
                 })
-                state.cartValue += state.productForm.value
-                state.cartTotal += state.productForm.total
-                state.selectedProductSale.quantity = parseInt(state.selectedProductSale.quantity - state.productForm.quantity)
-                state.aplicardescuento = 0
             }
+
+            state.cartValue += state.productForm.value
+            state.cartTotal += state.productForm.total
+            state.selectedProductSale.quantity = parseInt(state.selectedProductSale.quantity - state.productForm.quantity)
+            state.aplicardescuento = 0
+
+
         }
     },
 
@@ -4054,7 +4067,7 @@ export default { //used for changing the state
                         })
                     })
                 }).catch(error => {
-                    //console.log(error)
+                    toastr.error(error.response.data)
                 })
         }
     },
@@ -4118,6 +4131,9 @@ export default { //used for changing the state
                         state.cart = []
                         state.cartTotal = 0
                         state.cartValue = 0
+                        state.aplicardescuento = 0
+                        state.formapago = 'CONTADO'
+                        state.selectedProductSale = null
 
                         state.productForm = {
                             product_id: 0,
@@ -4130,10 +4146,13 @@ export default { //used for changing the state
                             total: 0,
                             code: '',
                             product: '',
-                            max_quantity: 99
-                        },
+                            max_quantity: 99,
+                            total_sum_price: 0,
+                            max_price: 0,
+                            flete: 0,
+                        }
 
-                            toastr.success('Venta generada con exito!')
+                        toastr.success('Venta generada con exito!')
                         $('#create').modal('hide')
                     })
                     .catch(error => {
@@ -4146,8 +4165,6 @@ export default { //used for changing the state
     allSalesCalendar(state, page) {
         axios.get('all-sales?page=' + page + '&calendar=' + state.calendar.search)
             .then(response => {
-
-
                 const groupedData = {};
 
                 response.data.sales.data.forEach((entry) => {
@@ -4170,6 +4187,8 @@ export default { //used for changing the state
                         price: entry.price,
                         quantity: entry.quantity,
                         utility: entry.utility,
+                        flete: entry.flete,
+                        total: entry.total_productsale
                     };
 
                     groupedData[saleId].products.push(productInfo);
@@ -4182,7 +4201,7 @@ export default { //used for changing the state
                 state.pagination = response.data.pagination
             })
             .catch(error => {
-                console.log(error.response.data)
+                toastr.error(error.response.data)
             })
     },
 
@@ -4197,7 +4216,7 @@ export default { //used for changing the state
                         toastr.error('No hay ventas en esta fecha')
                     }
                 }).catch(error => {
-                    console.log(error.response.data)
+                    toastr.error(error.response.data)
                 })
 
         } else {
@@ -4224,7 +4243,7 @@ export default { //used for changing the state
                 })
             })
             .catch(error => {
-                //console.log(error.response.data)
+                toastr.error(error.response.data)
             })
 
     },
@@ -4245,14 +4264,6 @@ export default { //used for changing the state
         })
     },
 
-
-    // allSales(state) {
-    //     var url = 'all-sales'
-    //     axios.get(url).then(response => {
-    //         state.sales = response.data
-    //     });
-    // },
-
     searchCode(state) {
         if (state.productForm.code !== '') {
             axios.get('code-search/' + state.productForm.code)
@@ -4269,7 +4280,7 @@ export default { //used for changing the state
                     state.productForm.total = Math.round(state.productForm.value * 1.19)
                 })
                 .catch(error => {
-                    //console.log(error)
+                    toastr.error(error.response.data)
                 })
         }
     },

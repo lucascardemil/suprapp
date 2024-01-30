@@ -727,7 +727,7 @@ export default { //data
         utilidad: ''
     },
     newDescuento: {
-        descuento: 0
+        descuento: 0,
     },
     tipospagos:[],
     fillTipoPago: {
@@ -1036,7 +1036,10 @@ export default { //data
         total: 0,
         code: '',
         product: '',
-        max_quantity: 99
+        max_quantity: 99,
+        total_sum_price: 0,
+        max_price: 0,
+        flete: 0,
     },
     cartValue: 0,
     cartTotal: 0,
